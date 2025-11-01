@@ -20,6 +20,9 @@ export default defineConfig([
       'no-var': 'warn',
       // allow `any` types in TypeScript files
       '@typescript-eslint/no-explicit-any': 'off',
+      // warn on unused variables
+      '@typescript-eslint/no-unused-vars': 'warn',
+      'no-unused-vars': 'off', // disable base rule as it can report incorrect errors
     },
     languageOptions: {
       ecmaVersion: 2020,
