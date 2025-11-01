@@ -10,7 +10,8 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import { Toaster } from "./components/ui/sonner";
 import AuthProvider from "./contexts/auth";
 import HomePage from "./pages/home/HomePage";
-import DashboardPage from "./pages/dashboard/Dashboard";
+import DashboardLayout from "./pages/dashboard/DashboardLayout";
+import DashboardHomePage from "./pages/dashboard/DashboardHomePage";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,13 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardPage />
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <DashboardHomePage />,
+      },
+    ],
   },
   {
     path: "/signin",
