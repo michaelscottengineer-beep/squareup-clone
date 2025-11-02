@@ -26,6 +26,7 @@ import {
 import { NavMain } from "./NavMain"
 import { NavUser } from "./NavUser"
 import { TeamSwitcher } from "./TeamSwitcher"
+import { IoPricetagOutline } from "react-icons/io5";
 
 // This is sample data.
 const data = {
@@ -62,15 +63,15 @@ const data = {
     {
       title: "Item & Inventory",
       url: "#",
-      icon: SquareTerminal,
+      icon: IoPricetagOutline,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Item library",
+          url: '#'
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Categories",
+          url: "/dashboard/items/categories",
         },
         {
           title: "Settings",

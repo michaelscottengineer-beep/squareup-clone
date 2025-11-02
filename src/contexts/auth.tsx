@@ -1,4 +1,5 @@
 import { auth } from "@/firebase";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import type { TUser } from "@/types/user";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
@@ -13,8 +14,16 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   useEffect(() => {
     const ubSub = onAuthStateChanged(auth, (userCredential) => {
       console.log(userCredential);
-      
-      setUser(user);
+
+      if (userCredential) {
+        console.log("User is signed in:", userCredential.uid);
+        useCurrentRestaurantId.getState().set("user_" + userCredential.uid);
+      } else {
+        useCurrentRestaurantId.getState().clear();
+        window.location.href = window.location.origin + "/signin";
+      }
+
+      setUser(userCredential);
     });
 
     return ubSub;

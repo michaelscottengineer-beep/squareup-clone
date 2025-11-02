@@ -6,7 +6,7 @@ export default function DashboardPage() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="flex-1">
         <SidebarTrigger />
         <Outlet />
       </main>

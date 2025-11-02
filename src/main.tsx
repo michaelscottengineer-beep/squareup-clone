@@ -12,6 +12,8 @@ import AuthProvider from "./contexts/auth";
 import HomePage from "./pages/home/HomePage";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import DashboardHomePage from "./pages/dashboard/DashboardHomePage";
+import CategoriesHomePage from "./pages/dashboard/item-invetory/categories/CategoriesHomePage";
+import CategoryFormPage from "./pages/dashboard/item-invetory/categories/CategoryFormPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardHomePage />,
+      },
+      {
+        path: "/dashboard/items/categories",
+        element: <CategoriesHomePage />,
+        children: [
+          {
+            path: "/dashboard/items/categories" + "/:cateId",
+            element: <CategoryFormPage />,
+          },
+        ],
       },
     ],
   },
