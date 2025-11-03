@@ -8,7 +8,10 @@ export default function DashboardPage() {
       <AppSidebar />
       <main className="flex-1">
         <SidebarTrigger />
-        <Outlet />
+
+        <div className=" px-10 py-10">
+          <Outlet />
+        </div>
       </main>
     </SidebarProvider>
   );

@@ -11,5 +11,5 @@ export const parseSegments = (...segments: any[]) => {
 };
 
 export function convertFirebaseArrayData<T>(data: { [id: string]: T }) {
-  return Object.entries(data).map(([id, val]) => ({ ...val, id })) ?? [];
+  return (Object.entries(data).map(([id, val]) => ({ ...val, id })) ?? []) as T[];
 }

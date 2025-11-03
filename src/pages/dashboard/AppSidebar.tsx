@@ -67,11 +67,19 @@ const data = {
       items: [
         {
           title: "Item library",
-          url: '#'
+          url: '/dashboard/items/library'
         },
         {
           title: "Categories",
           url: "/dashboard/items/categories",
+        },
+        {
+          title: "Options",
+          url: "/dashboard/items/options",
+        },
+        {
+          title: "Modifiers",
+          url: "/dashboard/items/modifiers",
         },
         {
           title: "Settings",

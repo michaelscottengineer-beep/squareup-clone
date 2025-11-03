@@ -110,7 +110,7 @@ export default function CategoryFormPage() {
     console.log(category);
     const ret = category.val() as TCategoryDocumentData;
     if (!ret) return;
-    form.reset({ ...ret, items: convertFirebaseArrayData(ret.items) });
+    form.reset({ ...ret, items: convertFirebaseArrayData<TItem>(ret.items) });
     console.log(ret, "reset");
   }, [category]);
 

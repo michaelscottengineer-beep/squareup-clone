@@ -14,6 +14,12 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import DashboardHomePage from "./pages/dashboard/DashboardHomePage";
 import CategoriesHomePage from "./pages/dashboard/item-invetory/categories/CategoriesHomePage";
 import CategoryFormPage from "./pages/dashboard/item-invetory/categories/CategoryFormPage";
+import ItemLibraryPage from "./pages/dashboard/item-invetory/items/ItemLibraryPage";
+import NewItemCreationPage from "./pages/dashboard/item-invetory/items/NewItemCreationPage";
+import ModifierHomePage from "./pages/dashboard/item-invetory/modifiers/ModifierPage";
+import ModifierFormPage from "./pages/dashboard/item-invetory/modifiers/ModifierFormPage";
+import OptionsPage from "./pages/dashboard/item-invetory/options/OptionsPage";
+import OptionFormPage from "./pages/dashboard/item-invetory/options/OptionFormPage";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +40,15 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardHomePage />,
       },
+      { path: "/dashboard/items/library", element: <ItemLibraryPage /> },
+      { path: "/dashboard/items/library/new", element: <NewItemCreationPage /> },
+      { path: "/dashboard/items/library/:itemId", element: <NewItemCreationPage /> },
+      { path: "/dashboard/items/modifiers", element: <ModifierHomePage /> },
+      { path: "/dashboard/items/modifiers/new", element: <ModifierFormPage /> },
+      { path: "/dashboard/items/modifiers/:modifierId", element: <ModifierFormPage /> },
+      { path: "/dashboard/items/options", element: <OptionsPage /> },
+      { path: "/dashboard/items/options/new", element: <OptionFormPage /> },
+      { path: "/dashboard/items/options/:optionId", element: <OptionFormPage /> },
       {
         path: "/dashboard/items/categories",
         element: <CategoriesHomePage />,
