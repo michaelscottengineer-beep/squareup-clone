@@ -9,9 +9,11 @@ export type TModifierListItem = {
 
 export type TModifier = {
   id: string;
-  name: string;
-  displayName: string;
-  locations?: string[];
-  kind: "list" | "text";
-  items: TModifierListItem[]
+  basicInfo: {
+    name: string;
+    displayName: string;
+    locations?: string[];
+    kind: "list" | "text";
+  };
+  list: TModifierListItem[];
 };

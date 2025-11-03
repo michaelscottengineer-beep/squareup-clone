@@ -31,7 +31,7 @@ const ModifierHomePage = () => {
       const modifiersRef = ref(db, segments);
 
       const ret = await get(modifiersRef);
-      return convertFirebaseArrayData<TModifier>(ret.val());
+      return ret ? convertFirebaseArrayData<TModifier>(ret.val()) : [];
     },
   });
   if (isLoading)

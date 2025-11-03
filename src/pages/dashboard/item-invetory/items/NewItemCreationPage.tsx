@@ -26,6 +26,8 @@ import {
 import useItemCreationFormData from "@/stores/use-item-creation-form-data";
 import CategoriesSection from "./components/CategoriesSection";
 import { toast } from "sonner";
+import ModifierSelectionDialog from "./ModifierSelectionDialog";
+import ModifierSection from "./ModifierSection";
 
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
@@ -79,24 +81,32 @@ export default function NewItemCreationPage() {
         await set(itemsRef, formData);
       }
 
-      const promise = [
-        formData.categories.map(async (cate) => {
-          const segments = parseSegments(
-            prefix,
-            "allGroups",
-            cate.id,
-            "items",
-            currentItemId
-          );
-          const itemCategoryRef = ref(db, segments);
-          return await set(itemCategoryRef, { ...formData, selected: true });
-        }),
-      ];
-
-      return Promise.all(promise);
+      const promise = formData.categories.map(async (cate) => {
+        const segments = parseSegments(
+          prefix,
+          "allGroups",
+          cate.id,
+          "items",
+          currentItemId
+        );
+        const itemCategoryRef = ref(db, segments);
+        return await set(itemCategoryRef, { ...cate, selected: true });
+      });
+      const promise2 = formData.modifiers.map(async (modifier) => {
+        const segments = parseSegments(
+          prefix,
+          "allModifiers",
+          modifier.id,
+          "items",
+          currentItemId
+        );
+        const itemModifierRef = ref(db, segments);
+        return await set(itemModifierRef, { ...modifier });
+      });
+      return Promise.all([...promise, ...promise2]);
     },
     onSuccess: () => {
-      toast.success(`${itemId ? "Saved" : "Created"} successfully`);
+      toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
     },
     onError: () => [toast.error(`${itemId ? "Saved" : "Created"} error`)],
   });
@@ -108,50 +118,18 @@ export default function NewItemCreationPage() {
     if (!ret) return;
     form.reset({ ...ret });
     useItemCreationFormData.getState().setCategories(ret.categories ?? []);
+    useItemCreationFormData.getState().setModifiers(ret.modifiers ?? []);
     console.log(ret, "reset");
   }, [item]);
 
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setSelectedImage(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setSelectedImage(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const onSubmit = (data: TItem) => {
+    console.log(data);
+    console.log("cate g", useItemCreationFormData.getState().modifiers);
     console.log("cate g", useItemCreationFormData.getState().categories);
     mutation.mutate({
       ...data,
       categories: useItemCreationFormData.getState().categories,
+      modifiers: useItemCreationFormData.getState().modifiers,
     });
   };
 
@@ -187,7 +165,9 @@ export default function NewItemCreationPage() {
             </div>
 
             <div>
-              <h1 className="font-semibold text-2xl mb-8">{itemId ? "Edit item" : "Create item"}</h1>
+              <h1 className="font-semibold text-2xl mb-8">
+                {itemId ? "Edit item" : "Create item"}
+              </h1>
             </div>
 
             <div className="w-full grid grid-cols-3 gap-8">
@@ -242,6 +222,10 @@ export default function NewItemCreationPage() {
                     </FormItem>
                   )}
                 />
+
+                <div>
+                <ModifierSection />
+                </div>
               </div>
 
               <div>

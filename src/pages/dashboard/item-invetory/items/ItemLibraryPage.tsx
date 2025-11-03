@@ -46,7 +46,7 @@ const ItemLibraryPage = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: items, isLoading } = useQuery({
-    queryKey: ["items"],
+    queryKey: ["allItems"],
     queryFn: async () => {
       const path = parseSegments("restaurants", restaurantId, "allItems");
 

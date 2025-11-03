@@ -1,4 +1,5 @@
 import type { TCategory } from "./category";
+import type { TModifier } from "./modifier";
 
 export type TItem = {
   name: string;
@@ -9,7 +10,7 @@ export type TItem = {
   categories: TCategory[],
   description: string;
   image: '',
-
+  modifiers: TModifier[]
 }
 
 export type TItemForm = Omit<TItem, 'id'>

@@ -20,26 +20,26 @@ import { toast } from "sonner";
 
 export const modifierColumns: ColumnDef<TModifier>[] = [
   {
-    accessorKey: "displayName",
+    accessorKey: "basicInfo.displayName",
     header: "Name",
   },
   {
     accessorKey: "kind",
     header: "Type",
-    cell: ({ row }) => <div className="">{row.original.kind}</div>,
+    cell: ({ row }) => <div className="">{row.original.basicInfo.kind}</div>,
   },
   {
     accessorKey: "locations",
     header: "Location",
   },
   {
-    accessorKey: "items",
+    accessorKey: "list",
     header: "Details",
     cell: ({ row }) => (
       <div className="flex flex-col gap-0.5">
-        <div> {row.original.items.map((item) => item.name).join(",")}</div>
+        <div> {row.original.list.map((item) => item.name).join(",")}</div>
 
-        {row.original.items.some((item) => !item.inStock) && (
+        {row.original.list.some((item) => !item.inStock) && (
           <div className="text-red-600 text-xs font-medium">
             Some modifier out of stock
           </div>

@@ -12,6 +12,13 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router";
 
+import { db } from "@/firebase";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import { parseSegments } from "@/utils/helper";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ref, remove } from "firebase/database";
+import { toast } from "sonner";
+
 export const columns: ColumnDef<TItem>[] = [
   {
     accessorKey: "name",
@@ -50,9 +57,58 @@ export const columns: ColumnDef<TItem>[] = [
   {
     id: "actions",
     cell: function Actions({ row }) {
-      const payment = row.original;
       const navigate = useNavigate();
+      const queryClient = useQueryClient();
 
+      const restaurantId = useCurrentRestaurantId((state) => state.id);
+
+      const mutation = useMutation({
+        mutationFn: async () => {
+          const prefix = parseSegments("restaurants", restaurantId);
+
+          const itemRef = ref(
+            db,
+            parseSegments(prefix, "allItems", row.original.id)
+          );
+          await remove(itemRef);
+
+          const deletedModifiers = row.original.modifiers.map(async (m) => {
+            const modifierRef = ref(
+              db,
+              parseSegments(
+                prefix,
+                "allModifiers",
+                m.id,
+                "items",
+                row.original.id
+              )
+            );
+
+            return await remove(modifierRef);
+          });
+
+          const deletedCategories = row.original.modifiers.map(async (m) => {
+            const categoryRef = ref(
+              db,
+              parseSegments(prefix, "allGroups", m.id, "items", row.original.id)
+            );
+            return await remove(categoryRef);
+          });
+
+          return Promise.all([...deletedCategories, ...deletedModifiers]);
+        },
+        onSuccess: () => {
+          toast.success("deleted successfully");
+          queryClient.invalidateQueries({
+            queryKey: ["allItems"],
+          });
+        },
+        onError: (err) => {
+          toast.error("deleted error", {
+            description: err.message,
+          });
+        },
+      });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -69,6 +125,10 @@ export const columns: ColumnDef<TItem>[] = [
               }
             >
               Edit
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => mutation.mutate()}>
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

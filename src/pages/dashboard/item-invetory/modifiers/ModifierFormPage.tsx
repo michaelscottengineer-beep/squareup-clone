@@ -31,7 +31,7 @@ import { useNavigate, useParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
-import { get, push, ref } from "firebase/database";
+import { get, push, ref, set } from "firebase/database";
 import { db } from "@/firebase";
 import { toast } from "sonner";
 import type { TModifier } from "@/types/modifier";
@@ -65,11 +65,13 @@ export default function ModifierFormPage() {
 
   const form = useForm<TModifier>({
     defaultValues: {
-      name: "",
-      displayName: "",
-      kind: "list",
-      locations: [],
-      items: [
+      basicInfo: {
+        name: "",
+        displayName: "",
+        kind: "list",
+        locations: [],
+      },
+      list: [
         {
           name: "",
           price: "0.00",
@@ -85,10 +87,10 @@ export default function ModifierFormPage() {
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "items",
+    name: "list",
   });
 
-  const watchedKind = form.watch("kind");
+  const watchedKind = form.watch("basicInfo.kind");
 
   const { data: modifier } = useQuery({
     queryKey: ["modifiers", "details", modifierId],
@@ -110,13 +112,29 @@ export default function ModifierFormPage() {
 
   const mutation = useMutation({
     mutationFn: async (data: TModifier) => {
-      const modifiersRef = parseSegments(
-        "restaurants",
-        restaurantId,
-        "allModifiers"
-      );
+      let currentModifierId = modifierId ?? null;
+      const prefix = parseSegments("restaurants", restaurantId, "allModifiers");
 
-      return await push(ref(db, modifiersRef), data);
+      if (!currentModifierId) {
+        const newRef = await push(ref(db, prefix));
+        currentModifierId = newRef.key;
+      }
+
+      const basicInfoRef = ref(
+        db,
+        parseSegments(prefix, currentModifierId, "basicInfo")
+      );
+      const listRef = ref(db, parseSegments(prefix, currentModifierId, "list"));
+
+      const promise = [
+        await set(basicInfoRef, data.basicInfo),
+        await set(
+          listRef,
+          data.list
+        ),
+      ];
+
+      return Promise.all(promise);
     },
     onSuccess: () => {
       toast.success("Created successfully");
@@ -140,7 +158,7 @@ export default function ModifierFormPage() {
     mutation.mutate(data);
   };
 
-  console.log("kind", form.getValues("kind"));
+  console.log("kind", form.getValues("basicInfo.kind"));
   return (
     <Dialog
       open={true}
@@ -185,7 +203,7 @@ export default function ModifierFormPage() {
               {/* Name Field */}
               <FormField
                 control={form.control}
-                name="name"
+                name="basicInfo.name"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -203,7 +221,7 @@ export default function ModifierFormPage() {
               {/* Display Name Field */}
               <FormField
                 control={form.control}
-                name="displayName"
+                name="basicInfo.displayName"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -222,7 +240,7 @@ export default function ModifierFormPage() {
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="kind"
+                  name="basicInfo.kind"
                   render={({ field }) => (
                     <FormItem className="w-ful">
                       <FormLabel className="text-sm font-medium">
@@ -312,7 +330,7 @@ export default function ModifierFormPage() {
 
                     <FormField
                       control={form.control}
-                      name={`items.${index}.name`}
+                      name={`list.${index}.name`}
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -328,7 +346,7 @@ export default function ModifierFormPage() {
 
                     <FormField
                       control={form.control}
-                      name={`items.${index}.price`}
+                      name={`list.${index}.price`}
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -345,7 +363,7 @@ export default function ModifierFormPage() {
 
                     <FormField
                       control={form.control}
-                      name={`items.${index}.hideOnline`}
+                      name={`list.${index}.hideOnline`}
                       render={({ field }) => (
                         <FormItem className="flex justify-center">
                           <FormControl>
@@ -362,7 +380,7 @@ export default function ModifierFormPage() {
 
                     <FormField
                       control={form.control}
-                      name={`items.${index}.preSelect`}
+                      name={`list.${index}.preSelect`}
                       render={({ field }) => (
                         <FormItem className="flex justify-center">
                           <FormControl>
@@ -379,7 +397,7 @@ export default function ModifierFormPage() {
 
                     <FormField
                       control={form.control}
-                      name={`items.${index}.inStock`}
+                      name={`list.${index}.inStock`}
                       render={({ field }) => (
                         <FormItem className="flex items-center gap-2">
                           <span className="text-sm">In stock</span>

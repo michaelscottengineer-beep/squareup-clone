@@ -107,13 +107,28 @@ export default function CreateItemForm({
           variant="ghost"
           className="text-foreground font-medium gap-2 pl-0 hover:bg-transparent"
           type="button"
-          onClick={() => append({ name: "", price: "" })}
+          onClick={() =>
+            append({
+              name: "",
+              price: "",
+              categories: [],
+              description: "",
+              image: "",
+              type: "",
+              modifiers: [],
+              selected: false,
+            })
+          }
         >
           <Plus className="h-5 w-5" />
           <span className="underline">Add Item</span>
         </Button>
 
-        <Button type="submit" className="hidden" ref={submitButton.ref}></Button>
+        <Button
+          type="submit"
+          className="hidden"
+          ref={submitButton.ref}
+        ></Button>
       </form>
     </Form>
   );
