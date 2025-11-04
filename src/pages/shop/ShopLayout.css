@@ -1,0 +1,27 @@
+@theme inline {
+  --color-promo-border: linear-gradient(#fff, #fff) padding-box, linear-gradient(90deg, #ff8a00, #ff3d00) border-box;
+  --color-accent-promo: rgb(252, 0, 101)
+}
+
+:root {
+  --primary: rgb(235, 23, 0);
+  --secondary: #333;
+  --secondary-foreground: #fff;
+}
+
+.promo-box {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--color-promo-border);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+@layer components {
+  .promo-box {
+    @apply shadow-[0_4px_10px_rgba(255,85,0,0.25)] hover:shadow-[0_8px_22px_rgba(255,85,0,0.35)];
+  }
+  .shop-container {
+    @apply max-w-[1240px] mx-auto
+  }
+}

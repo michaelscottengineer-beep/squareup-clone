@@ -13,4 +13,9 @@ export type TItem = {
   modifiers: TModifier[]
 }
 
+
+export type TCartItem = TItem & {
+  amount: number;
+  note: string;
+}
 export type TItemForm = Omit<TItem, 'id'>

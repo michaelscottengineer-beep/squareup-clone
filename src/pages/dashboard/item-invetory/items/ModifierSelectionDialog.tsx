@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-import { ArrowLeft, Folder, Plus, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -8,22 +8,12 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useEffect, useRef, useState } from "react";
-import type { TItem, TItemForm } from "@/types/item";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { get, onValue, push, ref, set } from "firebase/database";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { get, ref,  } from "firebase/database";
 import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { toast } from "sonner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useFieldArray, useForm } from "react-hook-form";
+
 import type { TModifier } from "@/types/modifier";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -32,9 +22,12 @@ import { Link } from "react-router";
 import useItemCreationFormData from "@/stores/use-item-creation-form-data";
 
 function ModifierSelectionDialog() {
-  const [selectedModifiers, setSelectedModifiers] = useState<TModifier[]>([]);
+  // const [selectedItems, setSelectedItems] = useState<TModifier[]>([]);
   const restaurantId = useCurrentRestaurantId((state) => state.id);
-
+  const selectedItems = useItemCreationFormData((state) => state.modifiers);
+  const setSelectedItems = useItemCreationFormData(
+    (state) => state.setModifiers
+  );
   const { data: modifiers } = useQuery({
     queryKey: ["modifiers"],
     queryFn: async () => {
@@ -50,35 +43,33 @@ function ModifierSelectionDialog() {
   });
 
   useEffect(() => {
-    setSelectedModifiers(useItemCreationFormData.getState().modifiers);
+    setSelectedItems(useItemCreationFormData.getState().modifiers);
   }, []);
 
   const handleSelectChange = (value: TModifier) => {
     console.log(value);
-    if (!selectedModifiers.includes(value)) {
-      setSelectedModifiers([...selectedModifiers, value]);
+    if (!selectedItems.includes(value)) {
+      setSelectedItems([...selectedItems, value]);
     } else {
-      const referencedArray = [...selectedModifiers];
+      const referencedArray = [...selectedItems];
       const indexOfItemToBeRemoved = referencedArray.indexOf(value);
       referencedArray.splice(indexOfItemToBeRemoved, 1);
-      setSelectedModifiers(referencedArray);
+      setSelectedItems(referencedArray);
     }
   };
   const isOptionSelected = (value: TModifier): boolean => {
-    return selectedModifiers.includes(value) ? true : false;
+    return selectedItems.includes(value) ? true : false;
   };
 
-  console.log("modifiers123,", selectedModifiers);
+  console.log("modifiers123,", selectedItems);
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          variant={"secondary"}
-          className="justify-start gap-3 h-auto hover:bg-muted"
+          variant={selectedItems.length > 0 ? "link" : "secondary"}
+          className="justify-start gap-3 h-auto "
         >
-          <span className="text-base">
-            {selectedModifiers.length > 0 ? "Edit" : "Add"}
-          </span>
+          {selectedItems.length > 0 ? "Edit" : "Add"}
         </Button>
       </DialogTrigger>
       <DialogContent className=" " showCloseButton={false}>
@@ -93,9 +84,7 @@ function ModifierSelectionDialog() {
               <Button
                 className="rounded-full px-5 py-3 w-max"
                 onClick={() =>
-                  useItemCreationFormData
-                    .getState()
-                    .setModifiers(selectedModifiers)
+                  useItemCreationFormData.getState().setModifiers(selectedItems)
                 }
               >
                 Done
@@ -127,7 +116,7 @@ function ModifierSelectionDialog() {
                     {m.list.map((item) => item.name).join(",")}
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <div className="text-sm">locate</div>
                   <Checkbox
                     checked={isOptionSelected(m)}

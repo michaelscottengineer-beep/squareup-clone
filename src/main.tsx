@@ -20,6 +20,7 @@ import ModifierHomePage from "./pages/dashboard/item-invetory/modifiers/Modifier
 import ModifierFormPage from "./pages/dashboard/item-invetory/modifiers/ModifierFormPage";
 import OptionsPage from "./pages/dashboard/item-invetory/options/OptionsPage";
 import OptionFormPage from "./pages/dashboard/item-invetory/options/OptionFormPage";
+import ShopLayout from "./pages/shop/ShopLayout";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "/shop/:shopId", element: <ShopLayout /> },
   {
     path: "/dashboard",
     element: <DashboardLayout />,
@@ -40,15 +42,28 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardHomePage />,
       },
+
       { path: "/dashboard/items/library", element: <ItemLibraryPage /> },
-      { path: "/dashboard/items/library/new", element: <NewItemCreationPage /> },
-      { path: "/dashboard/items/library/:itemId", element: <NewItemCreationPage /> },
+      {
+        path: "/dashboard/items/library/new",
+        element: <NewItemCreationPage />,
+      },
+      {
+        path: "/dashboard/items/library/:itemId",
+        element: <NewItemCreationPage />,
+      },
       { path: "/dashboard/items/modifiers", element: <ModifierHomePage /> },
       { path: "/dashboard/items/modifiers/new", element: <ModifierFormPage /> },
-      { path: "/dashboard/items/modifiers/:modifierId", element: <ModifierFormPage /> },
+      {
+        path: "/dashboard/items/modifiers/:modifierId",
+        element: <ModifierFormPage />,
+      },
       { path: "/dashboard/items/options", element: <OptionsPage /> },
       { path: "/dashboard/items/options/new", element: <OptionFormPage /> },
-      { path: "/dashboard/items/options/:optionId", element: <OptionFormPage /> },
+      {
+        path: "/dashboard/items/options/:optionId",
+        element: <OptionFormPage />,
+      },
       {
         path: "/dashboard/items/categories",
         element: <CategoriesHomePage />,

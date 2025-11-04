@@ -67,6 +67,7 @@ export default function NewItemCreationPage() {
     mutationFn: async (formData: TItem) => {
       let currentItemId = itemId ?? null;
       const prefix = parseSegments("/restaurants/", restaurantId);
+      const itemInfo = { ...formData };
 
       if (!currentItemId) {
         const itemsRef = ref(db, parseSegments(prefix, "allItems"));
@@ -81,6 +82,10 @@ export default function NewItemCreationPage() {
         await set(itemsRef, formData);
       }
 
+              delete (itemInfo as any).categories;
+        delete (itemInfo as any).modifiers;
+
+
       const promise = formData.categories.map(async (cate) => {
         const segments = parseSegments(
           prefix,
@@ -90,8 +95,16 @@ export default function NewItemCreationPage() {
           currentItemId
         );
         const itemCategoryRef = ref(db, segments);
-        return await set(itemCategoryRef, { ...cate, selected: true });
+        console.log({
+          ...itemInfo,
+          selected: true,
+        });
+        return await set(itemCategoryRef, {
+          ...itemInfo,
+          selected: true,
+        });
       });
+
       const promise2 = formData.modifiers.map(async (modifier) => {
         const segments = parseSegments(
           prefix,
@@ -101,14 +114,21 @@ export default function NewItemCreationPage() {
           currentItemId
         );
         const itemModifierRef = ref(db, segments);
-        return await set(itemModifierRef, { ...modifier });
+
+        return await set(itemModifierRef, {
+          ...itemInfo,
+        });
       });
       return Promise.all([...promise, ...promise2]);
     },
     onSuccess: () => {
       toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
     },
-    onError: () => [toast.error(`${itemId ? "Saved" : "Created"} error`)],
+    onError: (err) => {
+      toast.error(`${itemId ? "Saved" : "Created"} error`, {
+        description: err.message,
+      });
+    },
   });
 
   useEffect(() => {
@@ -181,7 +201,7 @@ export default function NewItemCreationPage() {
                         <Input
                           placeholder="Name"
                           {...field}
-                          className="flex-1"
+                          className="flex-1 h-14"
                         />
                       </FormControl>
                       <FormMessage />
@@ -198,7 +218,7 @@ export default function NewItemCreationPage() {
                         <Input
                           placeholder="Price"
                           {...field}
-                          className="flex-1"
+                          className="flex-1 h-14"
                         />
                       </FormControl>
                       <FormMessage />
@@ -215,7 +235,7 @@ export default function NewItemCreationPage() {
                         <Input
                           placeholder="Description"
                           {...field}
-                          className="flex-1"
+                          className="flex-1 h-14"
                         />
                       </FormControl>
                       <FormMessage />
@@ -224,7 +244,7 @@ export default function NewItemCreationPage() {
                 />
 
                 <div>
-                <ModifierSection />
+                  <ModifierSection />
                 </div>
               </div>
 
