@@ -1,9 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { db } from "@/firebase";
@@ -15,7 +11,7 @@ import { get, ref } from "firebase/database";
 import { type ReactNode, useState } from "react";
 
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
-import {  Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import useCart from "@/stores/use-cart";
 import type { TModifierListItem } from "@/types/modifier";
 import { toast } from "sonner";
@@ -52,12 +48,12 @@ const CreationCartItemDialog = ({
       const itemsRef = ref(db, path);
       const snap = await get(itemsRef);
 
-      return snap.val() as TItem;
+      return (snap.val() ? { ...snap.val(), id: snap.key } : null) as TItem;
     },
     enabled: !!restaurantId,
   });
 
-  console.log("zz", curItem?.modifiers?.[0].list);
+  console.log("zz", curItem, curItem?.modifiers?.[0].list);
 
   if (!isShowDialogOnly && !curItem?.modifiers?.length && isOpen) {
     return (
@@ -152,10 +148,14 @@ const CreationCartItemDialog = ({
 interface ActionButtonsProps {
   item: TItem;
   selectedModifier: TModifierListItem | null;
-  onSaveCallback?: () => void
+  onSaveCallback?: () => void;
 }
 
-const ActionButtons = ({ item, selectedModifier, onSaveCallback }: ActionButtonsProps) => {
+const ActionButtons = ({
+  item,
+  selectedModifier,
+  onSaveCallback,
+}: ActionButtonsProps) => {
   const [amount, setAmount] = useState(1);
   const handleMinus = () => {
     if (amount > 1) setAmount(amount - 1);
@@ -175,13 +175,13 @@ const ActionButtons = ({ item, selectedModifier, onSaveCallback }: ActionButtons
         list: selectedModifier ? [selectedModifier] : [],
       })),
     });
-    toast.success('Add new item to cart successfully')
+    toast.success("Add new item to cart successfully");
     onSaveCallback?.();
   };
 
   const total = Number(item.price) * amount;
   const totalWithModifiers =
-    total + (selectedModifier ? Number(selectedModifier.price) * amount : 0) 
+    total + (selectedModifier ? Number(selectedModifier.price) * amount : 0);
   const totalWithPromotion =
     totalWithModifiers - (totalWithModifiers * 20) / 100;
 

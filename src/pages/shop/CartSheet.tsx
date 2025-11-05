@@ -18,6 +18,7 @@ import { ArrowLeftFromLine, ArrowLeftIcon, Plus, X } from "lucide-react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import type { TCartItem } from "@/types/item";
 import CreationCartItemDialog from "./CreationCartItemDialog";
+import CheckoutSheet from "./CheckoutSheet";
 
 const CartSheet = () => {
   const items = useCart((state) => state.items);
@@ -65,11 +66,7 @@ const CartSheet = () => {
           </div>
 
           <div className="flex gap-4 flex-col">
-            <Button className="rounded-full">
-              <div>
-                <span>Checkout</span> <span>${total.toFixed(2)}</span>
-              </div>
-            </Button>
+            <CheckoutSheet />
 
             <Button variant={"outline"} className="rounded-full">
               <Plus /> Add More Items

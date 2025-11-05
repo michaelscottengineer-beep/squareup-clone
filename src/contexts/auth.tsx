@@ -34,4 +34,5 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   );
 };
 
+export { AuthContext };
 export default AuthProvider;

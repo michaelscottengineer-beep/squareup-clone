@@ -21,6 +21,7 @@ import ModifierFormPage from "./pages/dashboard/item-invetory/modifiers/Modifier
 import OptionsPage from "./pages/dashboard/item-invetory/options/OptionsPage";
 import OptionFormPage from "./pages/dashboard/item-invetory/options/OptionFormPage";
 import ShopLayout from "./pages/shop/ShopLayout";
+import SuccessPay from "./pages/checkout/SuccessPage";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     ],
   },
   { path: "/shop/:shopId", element: <ShopLayout /> },
+  { path: "/checkout/success", element: <SuccessPay /> },
   {
     path: "/dashboard",
     element: <DashboardLayout />,

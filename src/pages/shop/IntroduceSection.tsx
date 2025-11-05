@@ -8,6 +8,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import useCart from "@/stores/use-cart";
 import PromotionSheet from "./PromotionSheet";
+import ShippingMeThodSelector from "./ShippingMethodSelector";
+
 
 const IntroduceSection = () => {
   return (
@@ -42,7 +44,7 @@ const IntroduceSection = () => {
           }
         />
 
-        <KindOfOrderSelection />
+        <ShippingMeThodSelector />
       </div>
       <div>
         <img
@@ -55,37 +57,4 @@ const IntroduceSection = () => {
   );
 };
 
-const KindOfOrderSelection = () => {
-  const data = [
-    { icon: MdOutlineTableRestaurant, label: "Dine In" },
-    { icon: PiHandWavingBold, label: "Pickup" },
-    { icon: IoCarSportOutline, label: "Delivery" },
-  ];
-  const [selected, setSelected] = useState(data[0]);
-
-  return (
-    <div className="kind-of-order flex items-center gap-4 my-2 px-1">
-      {data.map((k) => {
-        const isActive = k.label === selected.label;
-
-        return (
-          <Button
-            key={k.label}
-            className={cn(
-              "flex flex-col h-max w-max border-b-2 border-b-transparent items-start gap-2 text-muted-foreground! hover:bg-transparent bg-transparent",
-              {
-                "text-black! border-b-primary rounded-bl-none rounded-br-none":
-                  isActive,
-              }
-            )}
-            onClick={() => setSelected(k)}
-          >
-            <k.icon className="h-6! w-6!" />
-            <span>{k.label}</span>
-          </Button>
-        );
-      })}
-    </div>
-  );
-};
 export default IntroduceSection;

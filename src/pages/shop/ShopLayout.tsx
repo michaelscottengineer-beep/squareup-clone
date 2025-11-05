@@ -52,6 +52,7 @@ const DishSection = () => {
     enabled: !!restaurantId,
   });
 
+  console.log('??', categories, categories && convertFirebaseArrayData<TItem>(categories[0].items ?? {}))
   useEffect(() => {
     console.log("check", useCart.getState().items);
   }, []);
