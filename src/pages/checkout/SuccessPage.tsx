@@ -36,16 +36,16 @@ export default function SuccessPay() {
 
   const { user } = useAuth();
   const orderId = search.get("orderId");
+  const shopId = search.get("shopId");
 
   const { data: order, isLoading } = useQuery({
     queryKey: ["orders", orderId],
     queryFn: async () => {
-      const orderInfoRef = ref(db, parseSegments("orders", user?.uid, orderId));
+      const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", user?.uid, orderId));
       const doc = await get(orderInfoRef);
-
       return { ...doc.val(), id: orderId } as TOrderDocumentData;
     },
-    enabled: !!orderId && !!user?.uid,
+    enabled: !!orderId && !!user?.uid && !!shopId,
   });
 
   const orderDetails = {

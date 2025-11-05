@@ -25,7 +25,7 @@ import { PiHandWavingBold } from "react-icons/pi";
 import { IoCarSportOutline } from "react-icons/io5";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router";
 import { loadStripe } from "@stripe/stripe-js";
 import AddPaymentMethodButton from "./AddPaymentMethodButton";
 import DineInTabsContent from "./DineInTabsContent";
@@ -41,6 +41,7 @@ import { db } from "@/firebase";
 import GratuitySelector from "./GratuitySelector";
 import CostFreeSummary from "./CostFreeSummary";
 import ListCard from "./ListCard";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 
 const data = [
   { icon: MdOutlineTableRestaurant, label: "Dine In" },
@@ -51,6 +52,8 @@ const data = [
 const CheckoutSheet = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+      const { shopId } = useParams(); // Destructure to get the 'slug' parameter
+
   const items = useCart((state) => state.items);
   const form = useForm<TCheckoutFormDataValues & { shippingMethod?: string }>({
     defaultValues: {
@@ -89,7 +92,7 @@ const CheckoutSheet = () => {
   const mutation = useMutation({
     mutationFn: async (orderInfo: Partial<TCheckoutFormDataValues>) => {
       console.log(items);
-      let prefixSegment = parseSegments("orders", user?.uid);
+      let prefixSegment = parseSegments("restaurants", shopId, "allOrders", user?.uid);
       const newOrderRef = push(ref(db, prefixSegment));
       prefixSegment = parseSegments(prefixSegment, newOrderRef.key);
 
@@ -117,7 +120,7 @@ const CheckoutSheet = () => {
       });
 
       const promise2 = [
-        await set(basicInfoRef, { ...orderInfo, status: "pending" }),
+        await set(basicInfoRef, { ...orderInfo, status: "pending", createdAt: new Date().toISOString() }),
       ];
 
       const paymentInfoRef = ref(
@@ -145,6 +148,7 @@ const CheckoutSheet = () => {
           body: JSON.stringify({
             line_items,
             orderId: newOrderRef.key,
+            shopId
           }),
           headers: {
             "Content-Type": "application/json",
