@@ -106,6 +106,21 @@ const CheckoutSheetContent = () => {
       await set(paymentInfoRef, {
         ...orderInfo.paymentInfo,
       });
+
+      const notificationsRef = ref(
+        db,
+        parseSegments("restaurants", shopId, "allNotifications")
+      );
+
+      await push(notificationsRef, {
+        type: "order",
+        urlItem: "/dashboard/orders/" + newOrderRef.key,
+        title: "New order is placed",
+        content: "",
+        items,
+        createdAt: new Date().toISOString(),
+      });
+
       const line_items = items.map((item) => ({
         price_data: {
           currency: "usd",

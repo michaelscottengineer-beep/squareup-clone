@@ -25,6 +25,7 @@ import SuccessPay from "./pages/checkout/SuccessPage";
 import OrderLayout from "./pages/dashboard/orders/OrderLayout";
 import OrderDetail from "./pages/dashboard/orders/OrderDetail";
 import TestUploadImage from "./pages/experiments/TestUploadImage";
+import NotificationLayout from "./pages/notification/NotificationLayout";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
+      { path: "/dashboard/notifications", element: <NotificationLayout /> },
       { path: "/dashboard/orders", element: <OrderLayout /> },
       { path: "/dashboard/orders/:orderId", element: <OrderDetail /> },
       { path: "/dashboard/items/library", element: <ItemLibraryPage /> },

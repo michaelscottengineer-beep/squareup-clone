@@ -104,12 +104,13 @@ const MenuReceiveOrder = () => {
   console.log(receivedOrder);
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton className="font-semibold relative te" onClick={() => {
-        if (receivedOrder) {
-          navigate('/dashboard/orders/' + receivedOrder.id)
+      <SidebarMenuButton
+        className="font-semibold relative te"
+        onClick={() => {
+          navigate("/dashboard/notifications");
           setReceivedOrder(null);
-        }
-      }}>
+        }}
+      >
         <div className="text-red-400">
           {receivedOrder ? "Có đơn hàng mới" : ""}
         </div>
