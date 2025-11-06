@@ -9,7 +9,7 @@ export type TItem = {
   type: string;
   categories: TCategory[],
   description: string;
-  image: '',
+  image: string,
   modifiers: TModifier[]
 }
 

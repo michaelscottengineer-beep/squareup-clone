@@ -8,13 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { get, push, ref, set, update } from "firebase/database";
+import { get, push, ref, set } from "firebase/database";
 import { db } from "@/firebase";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import type { TItem } from "@/types/item";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import { parseSegments } from "@/utils/helper";
 import { useForm } from "react-hook-form";
-import type { TCategory, TCategoryDocumentData } from "@/types/category";
 import { useNavigate, useParams } from "react-router";
 import {
   Form,
@@ -26,8 +25,8 @@ import {
 import useItemCreationFormData from "@/stores/use-item-creation-form-data";
 import CategoriesSection from "./components/CategoriesSection";
 import { toast } from "sonner";
-import ModifierSelectionDialog from "./ModifierSelectionDialog";
 import ModifierSection from "./ModifierSection";
+import UploadImageArea from "./UploadImageArea";
 
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
@@ -43,10 +42,6 @@ export default function NewItemCreationPage() {
       type: "",
     },
   });
-
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
@@ -82,9 +77,8 @@ export default function NewItemCreationPage() {
         await set(itemsRef, formData);
       }
 
-              delete (itemInfo as any).categories;
-        delete (itemInfo as any).modifiers;
-
+      delete (itemInfo as any).categories;
+      delete (itemInfo as any).modifiers;
 
       const promise = formData.categories.map(async (cate) => {
         const segments = parseSegments(
@@ -236,6 +230,22 @@ export default function NewItemCreationPage() {
                           placeholder="Description"
                           {...field}
                           className="flex-1 h-14"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`image`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <UploadImageArea
+                          value={field.value ?? ""}
+                          onValueChange={(url) => field.onChange(url)}
                         />
                       </FormControl>
                       <FormMessage />

@@ -16,9 +16,7 @@ const CategorySection = ({ categoryName, items }: CategorySectionProps) => {
 
   return (
     <div className="mt-8  " ref={categoryRef}>
-      <h2 className="font-semibold text-xl mb-8">
-        {categoryName}
-      </h2>
+      <h2 className="font-semibold text-xl mb-8">{categoryName}</h2>
       <div className="grid grid-cols-2 gap-8">
         {items.map((item) => {
           return <ItemCard key={item.id} item={item} />;
@@ -57,7 +55,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
 
         <div className="img">
           <img
-            src="/tmp_restaurant_img.jpeg"
+            src={item.image ? item.image : "/tmp_restaurant_img.jpeg"}
             alt="dish-img"
             className="rounded-md object-cover h-full  aspect-square rounded-tl-none rounded-bl-none"
           />
