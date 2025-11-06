@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RiShoppingCartLine } from "react-icons/ri";
 import useCart from "@/stores/use-cart";
@@ -47,6 +47,7 @@ import GratuitySelector from "./GratuitySelector";
 import CostFreeSummary from "./CostFreeSummary";
 import ListCard from "./ListCard";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import { io, Socket } from "socket.io-client";
 
 const data = [
   { icon: MdOutlineTableRestaurant, label: "Dine In" },
@@ -58,6 +59,7 @@ const CheckoutSheet = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { shopId } = useParams(); // Destructure to get the 'slug' parameter
+  const socketRef = useRef<Socket | null>(null);
 
   const items = useCart((state) => state.items);
   const form = useForm<TCheckoutFormDataValues & { shippingMethod?: string }>({
@@ -151,6 +153,7 @@ const CheckoutSheet = () => {
         quantity: item.amount,
       }));
 
+      socketRef.current?.emit("order:user-create", {...orderInfo, id: newOrderRef.key});
       const res = await fetch(
         import.meta.env.VITE_BASE_URL + "/create-checkout-session",
         {
@@ -179,6 +182,15 @@ const CheckoutSheet = () => {
       });
     },
   });
+
+  useEffect(() => {
+    socketRef.current = io(import.meta.env.VITE_BASE_URL + "/orders");
+    socketRef.current.connect();
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
 
   const onSubmit = (
     data: TCheckoutFormDataValues & { shippingMethod?: string }

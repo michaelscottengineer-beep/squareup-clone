@@ -40,11 +40,12 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-   --color-promo-border: linear-gradient(#fff, #fff) padding-box, linear-gradient(90deg, #ff8a00, #ff3d00) border-box;
-   --color-accent-sold-out: rgb(47, 72, 88);
-   --color-accent-sold-out-foreground: #fff;
-   --color-accent-promo: rgb(252, 0, 101);
-   --color-accent-promo-foreground: #fff;
+  --color-promo-border: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ff8a00, #ff3d00) border-box;
+  --color-accent-sold-out: rgb(47, 72, 88);
+  --color-accent-sold-out-foreground: #fff;
+  --color-accent-promo: rgb(252, 0, 101);
+  --color-accent-promo-foreground: #fff;
 }
 
 :root {
@@ -122,5 +123,21 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@theme {
+  --animate-bellRing: bellRing .8s ease-in-out infinite;
+  @keyframes bellRing {
+    0% {
+      width: 0px;
+      height: 0px;
+        opacity: 1;
+    }
+    100% {
+      width: 100%;
+      height: 100%;
+          opacity: 0;
+    }
   }
 }

@@ -1,4 +1,5 @@
 "use client"
+import { BiBorderOuter } from "react-icons/bi";
 
 import * as React from "react"
 import {
@@ -58,6 +59,13 @@ const data = {
       isActive: true,
       icon: Home,
       url: '/dashboard',
+      items: []
+    },
+     {
+      title: "Orders",
+      isActive: false,
+      icon: BiBorderOuter,
+      url: '/dashboard/orders',
       items: []
     },
     {
