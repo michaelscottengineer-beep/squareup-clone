@@ -66,7 +66,7 @@ const OrderLayout = () => {
 
   console.log("orders", items);
   return (
-    <div className="px-2">
+    <div className="px-2 space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="flex gap-4 max-w-[300px]">
@@ -100,12 +100,7 @@ const OrderLayout = () => {
 
         <div className="flex items-center gap-2  mb-3">
           {/* <QuickCreationDialog /> */}
-          <Button
-            className="rounded-full px-5 py-3"
-            onClick={() => navigate("/dashboard/items/library/new")}
-          >
-            Create item
-          </Button>
+ 
         </div>
       </div>
 

@@ -27,11 +27,11 @@ export const orderColumns: ColumnDef<TOrder>[] = [
     header: "Order",
     cell: ({ row, renderValue }) => (
       <div className="flex items-center gap-1">
-        <Checkbox
+        {/* <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
-        />
+        /> */}
         <div className="">{row.original.id}</div>
       </div>
     ),
