@@ -79,10 +79,11 @@ import { io, Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import { type TOrder } from "@/types/checkout";
 import { useNavigate } from "react-router";
+import useBellSound from "@/stores/use-bell-sound";
 
 const MenuReceiveOrder = () => {
   const navigate = useNavigate();
-
+  const set = useBellSound(state => state.set);
   const socketRef = useRef<Socket>(null);
   const [receivedOrder, setReceivedOrder] = useState<TOrder | null>(null);
 
@@ -93,6 +94,7 @@ const MenuReceiveOrder = () => {
     socketRef.current?.on("connected", () => {});
     socketRef.current?.on("admin:receive-order", (order) => {
       console.log("received order", order);
+      set(true);
       setReceivedOrder(order);
     });
 

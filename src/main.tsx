@@ -26,6 +26,7 @@ import OrderLayout from "./pages/dashboard/orders/OrderLayout";
 import OrderDetail from "./pages/dashboard/orders/OrderDetail";
 import TestUploadImage from "./pages/experiments/TestUploadImage";
 import NotificationLayout from "./pages/notification/NotificationLayout";
+import NotificationBellRingMp3 from "./components/NotificationBellRingMp3";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <NotificationBellRingMp3 />
         <RouterProvider router={router} />
       </AuthProvider>
       <Toaster />
