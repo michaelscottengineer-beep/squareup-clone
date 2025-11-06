@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { BiBorderOuter } from "react-icons/bi";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -14,8 +14,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
-} from "lucide-react"
-
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -23,10 +22,10 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { NavMain } from "./NavMain"
-import { NavUser } from "./NavUser"
-import { TeamSwitcher } from "./TeamSwitcher"
+} from "@/components/ui/sidebar";
+import { NavMain } from "./NavMain";
+import { NavUser } from "./NavUser";
+import { TeamSwitcher } from "./TeamSwitcher";
 import { IoPricetagOutline } from "react-icons/io5";
 
 // This is sample data.
@@ -58,15 +57,20 @@ const data = {
       title: "Home",
       isActive: true,
       icon: Home,
-      url: '/dashboard',
-      items: []
+      url: "/dashboard",
+      items: [],
     },
-     {
-      title: "Orders",
-      isActive: false,
+
+    {
+      title: "Payments & Invoices",
+      url: "#",
       icon: BiBorderOuter,
-      url: '/dashboard/orders',
-      items: []
+      items: [
+        {
+          title: "Orders",
+          url: "/dashboard/orders",
+        },
+      ],
     },
     {
       title: "Item & Inventory",
@@ -75,7 +79,7 @@ const data = {
       items: [
         {
           title: "Item library",
-          url: '/dashboard/items/library'
+          url: "/dashboard/items/library",
         },
         {
           title: "Categories",
@@ -161,8 +165,7 @@ const data = {
       ],
     },
   ],
-
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -178,5 +181,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
