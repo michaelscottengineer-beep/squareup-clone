@@ -24,6 +24,7 @@ import ShopLayout from "./pages/shop/ShopLayout";
 import SuccessPay from "./pages/checkout/SuccessPage";
 import OrderLayout from "./pages/dashboard/orders/OrderLayout";
 import OrderDetail from "./pages/dashboard/orders/OrderDetail";
+import TestUploadImage from "./pages/experiments/TestUploadImage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
   },
   { path: "/shop/:shopId", element: <ShopLayout /> },
   { path: "/checkout/success", element: <SuccessPay /> },
+  { path: "/test/img", element: <TestUploadImage /> },
   {
     path: "/dashboard",
     element: <DashboardLayout />,
