@@ -22,6 +22,8 @@ import OptionsPage from "./pages/dashboard/item-invetory/options/OptionsPage";
 import OptionFormPage from "./pages/dashboard/item-invetory/options/OptionFormPage";
 import ShopLayout from "./pages/shop/ShopLayout";
 import SuccessPay from "./pages/checkout/SuccessPage";
+import OrderLayout from "./pages/dashboard/orders/OrderLayout";
+import OrderDetail from "./pages/dashboard/orders/OrderDetail";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
+      { path: "/dashboard/orders", element: <OrderLayout /> },
+      { path: "/dashboard/orders/:orderId", element: <OrderDetail /> },
       { path: "/dashboard/items/library", element: <ItemLibraryPage /> },
       {
         path: "/dashboard/items/library/new",

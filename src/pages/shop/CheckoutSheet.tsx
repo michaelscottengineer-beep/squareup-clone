@@ -25,7 +25,12 @@ import { PiHandWavingBold } from "react-icons/pi";
 import { IoCarSportOutline } from "react-icons/io5";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router";
 import { loadStripe } from "@stripe/stripe-js";
 import AddPaymentMethodButton from "./AddPaymentMethodButton";
 import DineInTabsContent from "./DineInTabsContent";
@@ -52,7 +57,7 @@ const data = [
 const CheckoutSheet = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-      const { shopId } = useParams(); // Destructure to get the 'slug' parameter
+  const { shopId } = useParams(); // Destructure to get the 'slug' parameter
 
   const items = useCart((state) => state.items);
   const form = useForm<TCheckoutFormDataValues & { shippingMethod?: string }>({
@@ -92,7 +97,7 @@ const CheckoutSheet = () => {
   const mutation = useMutation({
     mutationFn: async (orderInfo: Partial<TCheckoutFormDataValues>) => {
       console.log(items);
-      let prefixSegment = parseSegments("restaurants", shopId, "allOrders", user?.uid);
+      let prefixSegment = parseSegments("restaurants", shopId, "allOrders");
       const newOrderRef = push(ref(db, prefixSegment));
       prefixSegment = parseSegments(prefixSegment, newOrderRef.key);
 
@@ -120,7 +125,12 @@ const CheckoutSheet = () => {
       });
 
       const promise2 = [
-        await set(basicInfoRef, { ...orderInfo, status: "pending", createdAt: new Date().toISOString() }),
+        await set(basicInfoRef, {
+          ...orderInfo,
+          status: "pending",
+          createdBy: user?.uid,
+          createdAt: new Date().toISOString(),
+        }),
       ];
 
       const paymentInfoRef = ref(
@@ -148,7 +158,7 @@ const CheckoutSheet = () => {
           body: JSON.stringify({
             line_items,
             orderId: newOrderRef.key,
-            shopId
+            shopId,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -174,10 +184,10 @@ const CheckoutSheet = () => {
     data: TCheckoutFormDataValues & { shippingMethod?: string }
   ) => {
     if (!data?.paymentInfo?.methodId) {
-      toast.error('Please choose the payment method');
+      toast.error("Please choose the payment method");
       return;
-    };
-    
+    }
+
     console.log("data submit", data);
     const obj = { ...data };
     if (data.shippingMethod === "Dine In") {

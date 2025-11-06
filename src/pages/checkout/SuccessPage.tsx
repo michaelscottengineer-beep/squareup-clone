@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router";
 import useAuth from "@/hooks/use-auth";
-import { get, ref } from "firebase/database";
+import { get, ref, set } from "firebase/database";
 import { db } from "@/firebase";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import {
@@ -41,12 +41,22 @@ export default function SuccessPay() {
   const { data: order, isLoading } = useQuery({
     queryKey: ["orders", orderId],
     queryFn: async () => {
-      const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", user?.uid, orderId));
+      const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", orderId));
       const doc = await get(orderInfoRef);
       return { ...doc.val(), id: orderId } as TOrderDocumentData;
     },
     enabled: !!orderId && !!user?.uid && !!shopId,
   });
+
+  const {mutate: updateStatus} = useMutation({
+    mutationFn: async (order: TOrderDocumentData) => {
+     const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", orderId, 'basicInfo'));
+     return await set(orderInfoRef,  {
+      ...order.basicInfo,
+      status: "success"
+     })
+    }
+  })
 
   const orderDetails = {
     orderNumber: order?.id,
@@ -67,6 +77,7 @@ export default function SuccessPay() {
   useEffect(() => {
     if (order?.id) {
       useCart.getState().clear();
+      updateStatus(order)
     }
   }, [order]);
 

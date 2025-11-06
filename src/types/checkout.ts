@@ -17,7 +17,10 @@ export type TCheckoutFormDataValues = {
   feeSummary: TFeeSummary;
   paymentInfo: {
     methodId: string;
-  }
+  };
+  createdAt: string;
+  createdBy: string;
+  status?: "pending" | "success"
 };
 
 export type TFeeSummary = {
