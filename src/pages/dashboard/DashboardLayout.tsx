@@ -21,11 +21,11 @@ export default function DashboardPage() {
       </main>
     
 
-      <Button onClick={() => {
+      {/* <Button className="fixed top-0" onClick={() => {
         set(true);
       }}>
 sound
-      </Button >
+      </Button > */}
     </SidebarProvider>
   );
 }

@@ -48,11 +48,26 @@ const OrderDetail = () => {
   }
 
   return (
-    <div className="container max-w-1/2 space-y-8">
-      <div className="flex items-center gap-4">
+    <div className="container max-w-1/2 max-md:max-w-full space-y-8">
+      <div className="flex items-center flex-wrap gap-4">
         <h1 className="mb-1 font-semibold text-2xl">Order ID: {orderId}</h1>
         <div className="bg-yellow-50 text-yellow-500 font-semibold py-1  px-4 w-max text-sm border-yellow-500 rounded-md">
           Payment {order.basicInfo.status}
+        </div>
+        <div
+          className={cn(
+            "bg-yellow-50 text-yellow-500 font-semibold py-1  px-4 w-max text-sm border-yellow-500 rounded-md",
+            {
+              "bg-green-50 text-green-500 font-semibold py-1  px-4 w-max text-sm border-green-500 rounded-md":
+                order.basicInfo.orderStatus === "accepted",
+            },
+            {
+              "bg-red-50 text-red-500 font-semibold py-1  px-4 w-max text-sm border-red-500 rounded-md":
+                order.basicInfo.orderStatus === "rejected",
+            }
+          )}
+        >
+          Order is {order.basicInfo.orderStatus}
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -78,11 +93,22 @@ const OrderDetail = () => {
               : 0;
 
             return (
-              <div key={item.id} className={cn("flex items-start gap-4 border-b border-border pb-2", {
-                "border-b-0": i === Object.keys(order?.cartItems ?? {}).length -1
-              })}>
+              <div
+                key={item.id}
+                className={cn(
+                  "flex items-start gap-4 border-b border-border pb-2",
+                  {
+                    "border-b-0":
+                      i === Object.keys(order?.cartItems ?? {}).length - 1,
+                  }
+                )}
+              >
                 {item.image ? (
-                  <img src={item.image} alt="img-item" className="w-8 h-8 rounded-md" />
+                  <img
+                    src={item.image}
+                    alt="img-item"
+                    className="w-8 h-8 rounded-md"
+                  />
                 ) : (
                   <div className="img w-8 bg-red-50 rounded-lg h-full aspect-square"></div>
                 )}

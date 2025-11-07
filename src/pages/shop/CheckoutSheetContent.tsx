@@ -13,7 +13,7 @@ import AddPaymentMethodButton from "./AddPaymentMethodButton";
 import DineInTabsContent from "./DineInTabsContent";
 import DeliveryTabsContent from "./DeliveryTabsContent";
 import { useForm } from "react-hook-form";
-import { type TCheckoutFormDataValues } from "@/types/checkout";
+import { type TCheckoutFormDataValues, type TOrder } from "@/types/checkout";
 import { Form } from "@/components/ui/form";
 import PickUpTabsContent from "./PickUpTabsContent";
 import { parseSegments } from "@/utils/helper";
@@ -92,13 +92,21 @@ const CheckoutSheetContent = () => {
         });
       });
 
+      console.log("basic info", {
+        ...orderInfo,
+        status: "pending",
+        orderStatus: "pending",
+        createdBy: user?.uid,
+        createdAt: new Date().toISOString(),
+      });
       const promise2 = [
         await set(basicInfoRef, {
           ...orderInfo,
           status: "pending",
+          orderStatus: "pending",
           createdBy: user?.uid,
           createdAt: new Date().toISOString(),
-        }),
+        } as TOrder["basicInfo"]),
       ];
 
       const paymentInfoRef = ref(
@@ -169,7 +177,6 @@ const CheckoutSheetContent = () => {
   const onSubmit = (
     data: TCheckoutFormDataValues & { shippingMethod?: string }
   ) => {
-
     if (!isAvailableOpeningHours) {
       toast.error("Shop have not opened yet! Please place an order later");
       return;

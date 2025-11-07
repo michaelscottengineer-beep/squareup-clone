@@ -28,6 +28,7 @@ import TestUploadImage from "./pages/experiments/TestUploadImage";
 import NotificationLayout from "./pages/notification/NotificationLayout";
 import NotificationBellRingMp3 from "./components/NotificationBellRingMp3";
 import RestaurantSettingsPage from "./pages/restaurants/RestaurantSettingsPage";
+import OrderHistory from "./pages/dashboard/orders/OrderHistory";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
       { path: "/dashboard/restaurants/settings", element: <RestaurantSettingsPage /> },
       { path: "/dashboard/notifications", element: <NotificationLayout /> },
       { path: "/dashboard/orders", element: <OrderLayout /> },
+      { path: "/dashboard/orders/history", element: <OrderHistory /> },
       { path: "/dashboard/orders/:orderId", element: <OrderDetail /> },
       { path: "/dashboard/items/library", element: <ItemLibraryPage /> },
       {

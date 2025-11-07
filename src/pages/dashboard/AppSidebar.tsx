@@ -70,6 +70,10 @@ const data = {
           title: "Orders",
           url: "/dashboard/orders",
         },
+        {
+          title: "Orders History",
+          url: "/dashboard/orders/history",
+        },
       ],
     },
     {

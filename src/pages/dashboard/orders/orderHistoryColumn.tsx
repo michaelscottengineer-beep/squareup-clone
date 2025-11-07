@@ -9,23 +9,23 @@ import {
 import type { TItem } from "@/types/item";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { Copy, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, remove, set } from "firebase/database";
+import { ref, remove } from "firebase/database";
 import { toast } from "sonner";
-import type { TOrder } from "@/types/checkout";
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { TOrderHistory } from "@/types/order";
-import useAuth from "@/hooks/use-auth";
-export const orderColumns: ColumnDef<TOrder>[] = [
+import type { TOrder } from "@/types/checkout";
+
+export const orderHistoryColumns: ColumnDef<TOrderHistory>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "OrderId",
     header: "Order",
     cell: ({ row, renderValue }) => (
       <div className="flex items-center gap-1">
@@ -34,7 +34,23 @@ export const orderColumns: ColumnDef<TOrder>[] = [
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         /> */}
-        <div className="">{row.original.id}</div>
+        <div className="">{row.original.basicInfo.orderId}</div>
+        <Button
+          onClick={async () => {
+            await navigator.clipboard
+              .writeText(row.original.basicInfo.orderId)
+              .then(() => {
+                toast.success("Copied");
+              })
+              .catch(() => {
+                toast.error("Copy failed!");
+              });
+          }}
+          asChild
+          variant={"ghost"}
+        >
+          <Copy />
+        </Button>
       </div>
     ),
   },
@@ -59,8 +75,8 @@ export const orderColumns: ColumnDef<TOrder>[] = [
       return (
         <div
           className={cn(" font-semibold w-max rounded-md px-2 ", {
-            "bg-yellow-50 text-yellow-500": status === "pending",
-            "bg-green-50 text-green-500": status === "success",
+            "bg-red-50 text-red-500": status === "rejected",
+            "bg-green-50 text-green-500": status === "accepted",
           })}
         >
           {row.original.basicInfo.status}
@@ -68,73 +84,34 @@ export const orderColumns: ColumnDef<TOrder>[] = [
       );
     },
   },
-  {
-    accessorKey: "basicInfo.feeSummary.total",
-    header: "Total",
-    cell: ({ row }) => (
-      <div className="">
-        ${row.original.basicInfo.feeSummary.total.toFixed(2)}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "cartItems",
-    header: "Items",
-    cell: ({ row }) => (
-      <div className="">{row.original.cartItems.length} Items</div>
-    ),
+    {
+    accessorKey: "basicInfo.createdBy",
+    header: "Action By",
+    cell: ({ row }) => {
+      const createdByObj = row.original.basicInfo.createdByObj;
+
+      return (
+        <div
+        >
+          {createdByObj.email}
+        </div>
+      );
+    },
   },
   {
     id: "actions",
     cell: function Actions({ row }) {
       const navigate = useNavigate();
       const queryClient = useQueryClient();
-      const { user } = useAuth();
 
       const restaurantId = useCurrentRestaurantId((state) => state.id);
 
-      const { mutate: handleOrderAction } = useMutation({
-        mutationFn: async (type: "rejected" | "accepted") => {
-          const prefixRestaurant = parseSegments("restaurants", restaurantId);
-
-          const allHistoryRef = ref(db);
-          const newHistory = await push(
-            allHistoryRef,
-            parseSegments(prefixRestaurant, "allOrdersHistory")
-          );
-
-          const historyRef = ref(
-            db,
-            parseSegments(prefixRestaurant, "allOrdersHistory", newHistory.key)
-          );
-          await set(historyRef, {
-            basicInfo: {
-              orderId: row.original.id,
-              createdAt: new Date().toISOString(),
-              status: type,
-              createdBy: user?.uid,
-              createdByObj: {
-                email: user?.email,
-              },
-            },
-          } as TOrderHistory);
-
-          const orderRef = ref(
-            db,
-            parseSegments(prefixRestaurant, "allOrders", row.original.id)
-          );
-          return await set(orderRef, {
-            ...row.original,
-            basicInfo: {
-              ...row.original.basicInfo,
-              orderStatus: type,
-            },
-          } as TOrder);
-        },
+      const mutation = useMutation({
+        mutationFn: async () => {},
         onSuccess: () => {
           toast.success("deleted successfully");
           queryClient.invalidateQueries({
-            queryKey: ["allOrders"],
+            queryKey: ["allItems"],
           });
         },
         onError: (err) => {
@@ -154,16 +131,9 @@ export const orderColumns: ColumnDef<TOrder>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigate("/dashboard/orders/" + row.original.id)}
+              onClick={() => navigate("/dashboard/orders/" + row.original.basicInfo.orderId)}
             >
               View
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOrderAction("accepted")}>
-              Accept
-            </DropdownMenuItem>
-
-            <DropdownMenuItem onClick={() => handleOrderAction("rejected")}>
-              Rejected
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
