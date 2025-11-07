@@ -59,9 +59,9 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link to={subItem.url}>
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
@@ -78,7 +78,7 @@ export function NavMain({
 import { io, Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import { type TOrder } from "@/types/checkout";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useBellSound from "@/stores/use-bell-sound";
 
 const MenuReceiveOrder = () => {

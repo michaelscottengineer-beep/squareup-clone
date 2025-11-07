@@ -53,7 +53,7 @@ const IntroduceSection = () => {
         <img
           src="/tmp_restaurant_img.jpeg"
           alt="introduce-restaurant-img"
-          className="rounded-lg h-full w-auto object-cover"
+          className="rounded-lg w-auto aspect-square object-cover"
         />
       </div>
     </div>
