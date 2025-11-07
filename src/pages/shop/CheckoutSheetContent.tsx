@@ -25,6 +25,7 @@ import CostFreeSummary from "./CostFreeSummary";
 import ListCard from "./ListCard";
 import { io, Socket } from "socket.io-client";
 import checkoutService from "@/services/checkout.service";
+import useCheckAvailableOpeningHours from "@/hooks/use-check-available-opening-hours";
 
 const data = [
   { icon: MdOutlineTableRestaurant, label: "Dine In" },
@@ -36,6 +37,7 @@ const CheckoutSheetContent = () => {
   const { user } = useAuth();
   const { shopId } = useParams(); // Destructure to get the 'slug' parameter
   const socketRef = useRef<Socket | null>(null);
+  const isAvailableOpeningHours = useCheckAvailableOpeningHours(shopId);
 
   const items = useCart((state) => state.items);
   const form = useForm<TCheckoutFormDataValues & { shippingMethod?: string }>({
@@ -167,6 +169,11 @@ const CheckoutSheetContent = () => {
   const onSubmit = (
     data: TCheckoutFormDataValues & { shippingMethod?: string }
   ) => {
+
+    if (!isAvailableOpeningHours) {
+      toast.error("Shop have not opened yet! Please place an order later");
+      return;
+    }
     if (!data?.paymentInfo?.methodId) {
       toast.error("Please choose the payment method");
       return;

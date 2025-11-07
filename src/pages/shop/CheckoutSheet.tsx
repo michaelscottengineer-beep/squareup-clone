@@ -10,18 +10,33 @@ import {
 } from "@/components/ui/sheet";
 import { ArrowLeftIcon } from "lucide-react";
 
-
 import CheckoutSheetContent from "./CheckoutSheetContent";
 import { useCartTotal } from "@/stores/use-cart";
-
+import { useParams } from "react-router";
+import useCheckAvailableOpeningHours from "@/hooks/use-check-available-opening-hours";
+import { toast } from "sonner";
 
 const CheckoutSheet = () => {
   const total = useCartTotal();
-  
+  const { shopId } = useParams(); // Destructure to get the 'slug' parameter
+  const isAvailableOpeningHours = useCheckAvailableOpeningHours(shopId);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className="rounded-full">
+        <Button
+          className="rounded-full"
+          onClick={(e) => {
+            if (!isAvailableOpeningHours) {
+              e.preventDefault();
+              toast.error(
+                "Shop have not opened yet! Please place an order later!", {
+                  position: "top-center",
+                }
+              );
+            }
+          }}
+        >
           <div>
             <span>Checkout</span> <span>${total}</span>
           </div>

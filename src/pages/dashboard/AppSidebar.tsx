@@ -100,13 +100,13 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Restaurants",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Settings",
+          url: "/dashboard/restaurants/settings",
         },
         {
           title: "Explorer",

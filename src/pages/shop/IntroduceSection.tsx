@@ -9,7 +9,12 @@ import { cn } from "@/lib/utils";
 import useCart from "@/stores/use-cart";
 import PromotionSheet from "./PromotionSheet";
 import ShippingMeThodSelector from "./ShippingMethodSelector";
-
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { get, ref } from "firebase/database";
+import { db } from "@/firebase";
+import { parseSegments } from "@/utils/helper";
+import type { TOpeningHours } from "@/types/restaurant";
 
 const IntroduceSection = () => {
   return (
@@ -27,9 +32,7 @@ const IntroduceSection = () => {
             <StarIcon className="stroke-yellow-400 w-4 h-4 fill-yellow-400" />{" "}
             (1,000+ ratings)
           </div>
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" /> Open: -
-          </div>
+          <OpeningHoursSection />
         </div>
 
         <PromotionSheet
@@ -57,4 +60,52 @@ const IntroduceSection = () => {
   );
 };
 
+const OpeningHoursSection = () => {
+  const restaurantId = useCurrentRestaurantId((state) => state.id);
+
+  const { data: hours } = useQuery({
+    queryKey: ["restaurants", restaurantId, "basicInfo", "openingHours"],
+    queryFn: async () => {
+      const openHourRef = ref(
+        db,
+        parseSegments("restaurants", restaurantId, "basicInfo", "openingHours")
+      );
+      const doc = await get(openHourRef);
+      console.log(doc);
+      return doc.val() as TOpeningHours[];
+    },
+    enabled: !!restaurantId,
+  });
+
+  return (
+    <div className="flex items-start gap-2 text-sm mt-4">
+      <div className="flex items-center gap-1">
+        <Clock className="w-4 h-4" /> Open:
+      </div>
+      <div className="flex flex-col gap-2">
+        {hours?.map((h, i) => {
+          return (
+            <div key={i} className="flex items-center  gap-2">
+              <span>-</span>
+              <div className="flex items-center gap-2">
+                <span>{h.dow.from}</span>
+                {h.dow.from !== h.dow.to && (
+                  <>
+                    <span>to</span>
+                    <span>{h.dow.to}</span>
+                  </>
+                )}
+              </div>
+              <div className="flex items-center flex-1 gap-2">
+                <span className="ml-auto">{h.time.from}</span>
+                <span>to</span>
+                <span>{h.time.to}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 export default IntroduceSection;
