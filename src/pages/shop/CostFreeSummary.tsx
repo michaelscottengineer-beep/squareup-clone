@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { TCheckoutFormDataValues } from "@/types/checkout";
-import useCart from "@/stores/use-cart";
+import useCart, { useCartTotal } from "@/stores/use-cart";
 
 const CostFreeSummary = ({
   form,
@@ -16,27 +16,11 @@ const CostFreeSummary = ({
   form: UseFormReturn<TCheckoutFormDataValues, any, TCheckoutFormDataValues>;
 }) => {
   const selectedTip = form.watch("gratuity") ?? "10%";
-  const items = useCart((state) => state.items);
 
   // const [selectedTip, setSelectedTip] = useState("10%");
   const [customTip, setCustomTip] = useState("");
 
-  const subTotal = useMemo(() => {
-    const ret = items.reduce((acc, item) => {
-      const selectedModifier = item.modifiers?.[0]?.list?.[0];
-
-      const total = Number(item.price) * item.amount;
-      const totalWithModifiers =
-        total +
-        (selectedModifier ? Number(selectedModifier.price) * item.amount : 0);
-      const totalWithPromotion =
-        totalWithModifiers - (totalWithModifiers * 20) / 100;
-
-      return acc + totalWithPromotion;
-    }, 0);
-    form.setValue("feeSummary.subTotal", ret);
-    return ret;
-  }, [items]);
+  const subTotal = useCartTotal()
 
   const estimatedTax = form.getValues("feeSummary.tax");
   const serviceFee = form.getValues("feeSummary.serviceFee");
@@ -60,7 +44,8 @@ const CostFreeSummary = ({
   useEffect(() => {
     form.setValue("feeSummary.tip", tipAmount);
     form.setValue("feeSummary.total", total);
-  }, [total, tipAmount]);
+    form.setValue("feeSummary.subTotal", subTotal);
+  }, [total, tipAmount, subTotal]);
 
   return (
     <div className="space-y-3">

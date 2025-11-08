@@ -27,6 +27,19 @@ import CategoriesSection from "./components/CategoriesSection";
 import { toast } from "sonner";
 import ModifierSection from "./ModifierSection";
 import UploadImageArea from "./UploadImageArea";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
@@ -40,6 +53,11 @@ export default function NewItemCreationPage() {
       price: "",
       selected: false,
       type: "",
+
+      discount: {
+        value: 0,
+        unit: "%",
+      },
     },
   });
 
@@ -247,6 +265,49 @@ export default function NewItemCreationPage() {
                           value={field.value ?? ""}
                           onValueChange={(url) => field.onChange(url)}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`discount`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <InputGroup>
+                          <InputGroupAddon>
+                            <Select
+                              onValueChange={(val) => {
+                                field.onChange({
+                                  ...field.value,
+                                  unit: val,
+                                });
+                              }}
+                            >
+                              <SelectTrigger className="outline-none border-none">
+                                {field.value?.unit === "currency"
+                                  ? "$"
+                                  : field.value?.unit}
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="%">%</SelectItem>
+                                <SelectItem value="$">$</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            value={field.value?.value}
+                            onChange={(e) => {
+                              field.onChange({
+                                ...field.value,
+                                value: Number(e.target.value),
+                              });
+                            }}
+                          />
+                        </InputGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -19,24 +19,10 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import type { TCartItem } from "@/types/item";
 import CreationCartItemDialog from "./CreationCartItemDialog";
 import CheckoutSheet from "./CheckoutSheet";
+import { calcItemPrice } from "@/utils/helper";
 
 const CartSheet = () => {
   const items = useCart((state) => state.items);
-
-  const total = useMemo(() => {
-    return items.reduce((acc, item) => {
-      const selectedModifier = item.modifiers?.[0]?.list?.[0];
-
-      const total = Number(item.price) * item.amount;
-      const totalWithModifiers =
-        total +
-        (selectedModifier ? Number(selectedModifier.price) * item.amount : 0);
-      const totalWithPromotion =
-        totalWithModifiers - (totalWithModifiers * 20) / 100;
-
-      return acc + totalWithPromotion;
-    }, 0);
-  }, [items]);
 
   return (
     <Sheet>
@@ -91,6 +77,11 @@ interface CartItemCardProps {
 const CartItemCard = ({ item }: CartItemCardProps) => {
   const [isOpenEdit, setIsOpenEdit] = useState(false);
 
+  const discountText =
+    item.discount?.unit === "%"
+      ? `${item.discount.value}% discount applied`
+      : `$${item.discount?.value} discount applied`;
+
   return (
     <div className="space-y-2">
       <div className="w-max h-max p-1 flex items-center bg-secondary text-secondary-foreground rounded-full text-xs aspect-square shadow-lg">
@@ -98,14 +89,14 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="capitalize">{item.name}</span>
+        <span className="capitalize">{item.discount && item.name}</span>
         <span className="text-sm text-muted-foreground">
-          ${Number(item.price) * item.amount}
+          ${calcItemPrice(Number(item.price), item.amount, item.discount)}
         </span>
       </div>
       <div className="promotion">
-        <div className="text-green-600">10% discount applied</div>
-        <div className="text-green-600">10% discount promotion</div>
+        <div className="text-green-600">{discountText}</div>
+        <div className="text-green-600">10% promotion</div>
       </div>
       <div className="topping">
         <h4>Topping Specific</h4>

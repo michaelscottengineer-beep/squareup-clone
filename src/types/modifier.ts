@@ -1,3 +1,5 @@
+import type { TDiscount } from "./discount";
+
 export type TModifierListItem = {
   id: string;
   name: string;
@@ -5,6 +7,7 @@ export type TModifierListItem = {
   hideOnline?: boolean;
   preSelect?: boolean;
   inStock?: boolean;
+  discount?: TDiscount
 };
 
 export type TModifier = {

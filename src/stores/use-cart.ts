@@ -35,18 +35,25 @@ const useCartTotal = () => {
     return items.reduce((acc, item) => {
       const selectedModifier = item.modifiers?.[0]?.list?.[0];
 
-      const total = Number(item.price) * item.amount;
+      const total = Number(item.price) * item.amount; 
+      const totalPriceWithDiscount =
+        total -
+        Number(
+          item.discount?.unit === "%"
+            ? (total * item.discount?.value) / 100
+            : item.discount?.value
+        );
+
       const totalWithModifiers =
-        total +
+        totalPriceWithDiscount +
         (selectedModifier ? Number(selectedModifier.price) * item.amount : 0);
-      const totalWithPromotion =
-        totalWithModifiers - (totalWithModifiers * 20) / 100;
+      const totalWithPromotion = totalWithModifiers;
 
       return acc + totalWithPromotion;
     }, 0);
   }, [items]);
 
-  return total.toFixed(2);
+  return Number(total.toFixed(2))
 };
 export default useCart;
 export { useCartTotal };

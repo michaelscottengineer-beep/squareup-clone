@@ -1,4 +1,5 @@
 import type { TCategory } from "./category";
+import type { TDiscount } from "./discount";
 import type { TModifier } from "./modifier";
 
 export type TItem = {
@@ -9,8 +10,9 @@ export type TItem = {
   type: string;
   categories: TCategory[],
   description: string;
-  image: string,
-  modifiers: TModifier[]
+  image: string;
+  modifiers: TModifier[];
+  discount?: TDiscount
 }
 
 
