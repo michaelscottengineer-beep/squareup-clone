@@ -29,6 +29,7 @@ import NotificationLayout from "./pages/notification/NotificationLayout";
 import NotificationBellRingMp3 from "./components/NotificationBellRingMp3";
 import RestaurantSettingsPage from "./pages/restaurants/RestaurantSettingsPage";
 import OrderHistory from "./pages/dashboard/orders/OrderHistory";
+import RestaurantPromotion from "./pages/restaurants/RestaurantPromotion";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       },
 
       { path: "/dashboard/restaurants/settings", element: <RestaurantSettingsPage /> },
+      { path: "/dashboard/restaurants/promotions", element: <RestaurantPromotion /> },
       { path: "/dashboard/notifications", element: <NotificationLayout /> },
       { path: "/dashboard/orders", element: <OrderLayout /> },
       { path: "/dashboard/orders/history", element: <OrderHistory /> },

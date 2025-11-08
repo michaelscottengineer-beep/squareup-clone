@@ -113,13 +113,10 @@ const data = {
           url: "/dashboard/restaurants/settings",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Promotions",
+          url: "/dashboard/restaurants/promotions",
         },
-        {
-          title: "Quantum",
-          url: "#",
-        },
+  
       ],
     },
     {
