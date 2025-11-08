@@ -97,7 +97,8 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
       const promotionsRef = ref(db, prefix);
 
       const dataToActions = data.promotions.filter(
-        (item) => !item.isDeleted || (item.isDeleted && item.id)
+        (item) =>
+          !item.basicInfo.isDeleted || (item.basicInfo.isDeleted && item.id)
       );
       const promises = dataToActions.map(async (item) => {
         console.log("id ", item.id ? "123" : "456");
@@ -134,15 +135,18 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
         {fields
-          .filter((item) => !item.isDeleted)
+          .filter((item) => !item.basicInfo.isDeleted)
           .map((field, index) => {
             return (
               <div key={field.id} className="flex items-end gap-8 mb-2">
                 <FormField
                   control={form.control}
-                  name={`promotions.${index}.title`}
+                  name={`promotions.${index}.basicInfo.title`}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
@@ -154,15 +158,19 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
 
                 <FormField
                   control={form.control}
-                  name={`promotions.${index}.discount`}
-                  render={({ field }) => (
+                  name={`promotions.${index}.basicInfo.discount`}
+                  render={({ field: { value, onChange, ...field } }) => (
                     <FormItem>
                       <FormControl>
                         <InputGroup>
                           <InputGroupAddon>
                             <InputGroupText>%</InputGroupText>
                           </InputGroupAddon>
-                          <InputGroupInput {...field} />
+                          <InputGroupInput
+                            value={value}
+                            onChange={(e) => onChange(Number(e.target.value))}
+                            {...field}
+                          />
                         </InputGroup>
                       </FormControl>
                     </FormItem>
@@ -172,7 +180,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                 <div className="flex items-center gap-2">
                   <FormField
                     control={form.control}
-                    name={`promotions.${index}.schedule.date.from`}
+                    name={`promotions.${index}.basicInfo.schedule.date.from`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -190,7 +198,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
 
                   <FormField
                     control={form.control}
-                    name={`promotions.${index}.schedule.date.to`}
+                    name={`promotions.${index}.basicInfo.schedule.date.to`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -208,7 +216,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                 <div className="flex items-center gap-2">
                   <FormField
                     control={form.control}
-                    name={`promotions.${index}.schedule.time.from`}
+                    name={`promotions.${index}.basicInfo.schedule.time.from`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -239,7 +247,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
 
                   <FormField
                     control={form.control}
-                    name={`promotions.${index}.schedule.time.to`}
+                    name={`promotions.${index}.basicInfo.schedule.time.to`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -269,7 +277,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                 {isEdit && (
                   <FormField
                     control={form.control}
-                    name={`promotions.${index}.isDeleted`}
+                    name={`promotions.${index}.basicInfo.isDeleted`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -297,20 +305,22 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
               onClick={() => {
                 append({
                   id: "",
-                  discount: 0,
-                  schedule: {
-                    date: {
-                      from: new Date().toISOString(),
-                      to: new Date().toISOString(),
+                  basicInfo: {
+                    discount: 0,
+                    schedule: {
+                      date: {
+                        from: new Date().toISOString(),
+                        to: new Date().toISOString(),
+                      },
+                      repeat: "",
+                      time: {
+                        from: "",
+                        to: "",
+                      },
                     },
-                    repeat: "",
-                    time: {
-                      from: "",
-                      to: "",
-                    },
+                    title: "",
+                    isDeleted: false,
                   },
-                  title: "",
-                  isDeleted: false,
                 });
               }}
               variant={"secondary"}

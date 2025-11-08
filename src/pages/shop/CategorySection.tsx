@@ -4,6 +4,8 @@ import QuickAddToCartButton from "./QuickAddToCartButton";
 import type { TItem } from "@/types/item";
 import CreationCartItemDialog from "./CreationCartItemDialog";
 import useNavigateCategory from "@/hooks/use-navigate-category";
+import { calcItemPrice } from "@/utils/helper";
+import { cn } from "@/lib/utils";
 
 interface CategorySectionProps {
   categoryName: string;
@@ -33,6 +35,11 @@ const ItemCard = ({ item }: ItemCardProps) => {
   console.log("item ", item.name, item.modifiers);
   const [isOpenCreation, setIsOpenCreation] = useState(false);
 
+  const discountText =
+    item.discount?.unit === "%"
+      ? `${item.discount.value}% OFF`
+      : `$${item.discount?.value} OFF`;
+
   return (
     <div key={item.id} className="relative">
       <Button className="group p-0 bg-transparent min-h-[200px] hover:bg-transparent text-black text-start border-border hover:border-black border rounded-lg transition-colors duration-300 grid grid-cols-3 ">
@@ -43,13 +50,25 @@ const ItemCard = ({ item }: ItemCardProps) => {
           </p>
 
           <div className="price flex items-center gap-2 font-normal mt-auto text-sm">
-            <div className="price__original text-muted-foreground">
+            <div
+              className={cn("price__original ", {
+                "text-muted-foreground": !!item.discount,
+              })}
+            >
               ${item.price}
             </div>
-            <div className="price__promo">$0.45</div>
-            <div className="price__promo__info px-1.5 bg-accent-promo rounded-full text-accent-promo-foreground">
-              10% OFF
-            </div>
+
+            {item.discount && (
+              <>
+                <div className="price__promo">
+                  ${calcItemPrice(Number(item.price), 1, item.discount)}
+                </div>
+
+                <div className="price__promo__info px-1.5 bg-accent-promo rounded-full text-accent-promo-foreground">
+                  {discountText}
+                </div>
+              </>
+            )}
           </div>
         </div>
 

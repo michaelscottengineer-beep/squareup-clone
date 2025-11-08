@@ -40,6 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import PromotionSection from "./PromotionSection";
 
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
@@ -76,6 +77,7 @@ export default function NewItemCreationPage() {
     enabled: !!itemId,
   });
 
+
   const mutation = useMutation({
     mutationFn: async (formData: TItem) => {
       let currentItemId = itemId ?? null;
@@ -97,6 +99,7 @@ export default function NewItemCreationPage() {
 
       delete (itemInfo as any).categories;
       delete (itemInfo as any).modifiers;
+      delete (itemInfo as any).promotions;
 
       const promise = formData.categories.map(async (cate) => {
         const segments = parseSegments(
@@ -131,12 +134,28 @@ export default function NewItemCreationPage() {
           ...itemInfo,
         });
       });
-      return Promise.all([...promise, ...promise2]);
+
+      const promise3 = formData.promotions.map(async (promotion) => {
+        const segments = parseSegments(
+          prefix,
+          "allPromotions",
+          promotion.id,
+          "items",
+          currentItemId
+        );
+        const itemPromotionRef = ref(db, segments);
+
+        return await set(itemPromotionRef, {
+          ...itemInfo,
+        });
+      });
+      return Promise.all([...promise, ...promise2, ...promise3]);
     },
     onSuccess: () => {
       toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
     },
     onError: (err) => {
+      console.error("save error", err)
       toast.error(`${itemId ? "Saved" : "Created"} error`, {
         description: err.message,
       });
@@ -151,6 +170,7 @@ export default function NewItemCreationPage() {
     form.reset({ ...ret });
     useItemCreationFormData.getState().setCategories(ret.categories ?? []);
     useItemCreationFormData.getState().setModifiers(ret.modifiers ?? []);
+    useItemCreationFormData.getState().setPromotions(ret.promotions ?? []);
     console.log(ret, "reset");
   }, [item]);
 
@@ -158,10 +178,12 @@ export default function NewItemCreationPage() {
     console.log(data);
     console.log("cate g", useItemCreationFormData.getState().modifiers);
     console.log("cate g", useItemCreationFormData.getState().categories);
+    console.log("cate g", useItemCreationFormData.getState().promotions);
     mutation.mutate({
       ...data,
       categories: useItemCreationFormData.getState().categories,
       modifiers: useItemCreationFormData.getState().modifiers,
+      promotions: useItemCreationFormData.getState().promotions,
     });
   };
 
@@ -316,6 +338,10 @@ export default function NewItemCreationPage() {
 
                 <div>
                   <ModifierSection />
+                </div>
+
+                <div>
+                  <PromotionSection />
                 </div>
               </div>
 

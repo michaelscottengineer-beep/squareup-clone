@@ -1,6 +1,7 @@
 import type { TCategory } from "./category";
 import type { TDiscount } from "./discount";
 import type { TModifier } from "./modifier";
+import type { TPromotion } from "./promotion";
 
 export type TItem = {
   name: string;
@@ -12,6 +13,7 @@ export type TItem = {
   description: string;
   image: string;
   modifiers: TModifier[];
+  promotions: TPromotion[]
   discount?: TDiscount
 }
 
