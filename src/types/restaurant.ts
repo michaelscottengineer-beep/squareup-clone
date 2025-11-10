@@ -19,11 +19,11 @@ export type TRestaurant = {
       street: string;
       state: string;
     };
-    createdAt: string // date: ISO string 
+    createdAt: string; // date: ISO string
     openingHours: TOpeningHours;
+    ratingInfo: {
+      rate: number;
+      count: number;
+    };
   };
-  ratingInfo: { 
-    rate: number;
-    count: number;
-  }
 };

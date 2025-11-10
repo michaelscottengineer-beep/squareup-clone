@@ -109,6 +109,10 @@ const data = {
       icon: Bot,
       items: [
         {
+          title: "Management",
+          url: "/dashboard/restaurants/management",
+        },
+        {
           title: "Update Restaurant Info",
           url: "/dashboard/restaurants/edit",
         },

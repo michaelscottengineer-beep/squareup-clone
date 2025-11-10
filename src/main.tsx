@@ -33,6 +33,8 @@ import RestaurantPromotion from "./pages/restaurants/RestaurantPromotion";
 import RestaurantForm from "./pages/restaurants/RestaurantForm";
 import A from "./pages/experiments/test-use-state/A";
 import RestaurantEditForm from "./pages/restaurants/RestaurantEditForm";
+import RestaurantManagement from "./pages/restaurants/RestaurantManagement";
+import PrefetchRestaurantIds from "./PrefetchRestaurantIds";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +60,7 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
+      { path: "/dashboard/restaurants/management", element: <RestaurantManagement /> },
       { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
       {
         path: "/dashboard/restaurants/edit",
@@ -130,8 +133,10 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <NotificationBellRingMp3 />
         <RouterProvider router={router} />
+        <PrefetchRestaurantIds />
       </AuthProvider>
       <Toaster />
     </QueryClientProvider>
   </StrictMode>
 );
+
