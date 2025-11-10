@@ -63,10 +63,6 @@ const router = createBrowserRouter([
       { path: "/dashboard/restaurants/management", element: <RestaurantManagement /> },
       { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
       {
-        path: "/dashboard/restaurants/edit",
-        element: <RestaurantEditForm />,
-      },
-      {
         path: "/dashboard/restaurants/:restaurantId",
         element: <RestaurantForm />,
       },

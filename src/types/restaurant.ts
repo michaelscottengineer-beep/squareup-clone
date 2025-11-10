@@ -15,6 +15,8 @@ export type TRestaurant = {
   id: string;
   basicInfo: {
     name: string;
+    image: string;
+    logo: string;
     addressInfo: {
       street1: string;
       street2: string;

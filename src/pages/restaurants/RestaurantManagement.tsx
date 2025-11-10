@@ -34,53 +34,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { restaurantColumns } from "./restaurantColumns";
+import {
+  useUserRestaurantIdsQuery,
+  useUserRestaurantsQuery,
+} from "@/factory/restaurant";
 
 const RestaurantManagement = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const { data: restaurantIds } = useQuery({
-    queryKey: ["restaurants", "of-user", user?.uid, "list-of-id"],
-    queryFn: async () => {
-      const restaurantsRef = ref(
-        db,
-        parseSegments("users", user?.uid, "restaurants")
-      );
+  const { data: restaurantIds } = useUserRestaurantIdsQuery(user?.uid);
 
-      const doc = await get(restaurantsRef);
+  const { data: restaurants } = useUserRestaurantsQuery(restaurantIds ?? []);
 
-      return doc.exists() ? Object.keys(doc.val()) : [];
-    },
-    staleTime: 5 * 60 * 1000,
-    enabled: !!user?.uid,
-  });
-
-  const { data: restaurants } = useQuery({
-    queryKey: ["restaurants", "of-user", user?.uid, restaurantIds],
-    queryFn: async () => {
-      const ids = restaurantIds!;
-
-      const promise = ids.map(async (resId) => {
-        const resRef = ref(
-          db,
-          parseSegments("restaurants", resId, "basicInfo")
-        );
-        return get(resRef);
-      });
-
-      return Promise.all(promise).then((data) => {
-        return data.map(
-          (snapshot, i) =>
-            ({
-              basicInfo: { ...snapshot.val() },
-              id: ids[i],
-            } as TRestaurant)
-        );
-      });
-    },
-    enabled: !!user?.uid && !!restaurantIds?.length,
-  });
-console.log('users restaurants', restaurants)
   return (
     <div className="px-2">
       <div className="flex justify-between mb-3 items-center">

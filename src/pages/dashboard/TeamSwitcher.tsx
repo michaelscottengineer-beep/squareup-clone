@@ -26,6 +26,10 @@ import { db } from "@/firebase";
 import { parseSegments } from "@/utils/helper";
 import type { TRestaurant } from "@/types/restaurant";
 import { useNavigate } from "react-router";
+import {
+  useUserRestaurantIdsQuery,
+  useUserRestaurantsQuery,
+} from "@/factory/restaurant";
 
 export function TeamSwitcher() {
   const navigate = useNavigate();
@@ -57,7 +61,14 @@ export function TeamSwitcher() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"></div>
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <img
+                  alt="restaurant logo"
+                  src={
+                    restaurant.basicInfo.logo || "/restaurant_placeholder.png"
+                  }
+                />
+              </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
                   {restaurant.basicInfo.name}
@@ -87,7 +98,9 @@ export function TeamSwitcher() {
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">Add team</div>
+              <div className="text-muted-foreground font-medium">
+                Add Restaurant
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -101,34 +114,10 @@ const ListRestaurant = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const setRestaurantId = useCurrentRestaurantId((state) => state.set);
 
-  const { data: restaurants } = useQuery({
-    queryKey: ["restaurants", "of-user", user?.uid],
-    queryFn: async () => {
-      const restaurants = Object.values(user?.restaurants ?? {}).filter(
-        (res) => res.id !== restaurantId
-      );
-
-      const promise = restaurants
-        .filter((res) => res.id !== restaurantId)
-        .map(async (res) => {
-          const resRef = ref(
-            db,
-            parseSegments("restaurants", res.id, "basicInfo")
-          );
-          return get(resRef);
-        });
-      return Promise.all(promise).then((data) => {
-        return data.map(
-          (snapshot, i) =>
-            ({
-              basicInfo: { ...snapshot.val() },
-              id: restaurants[i].id,
-            } as TRestaurant)
-        );
-      });
-    },
-    enabled: !!user?.uid,
-  });
+  const { data: restaurantIds } = useUserRestaurantIdsQuery(user?.uid);
+  const { data: restaurants } = useUserRestaurantsQuery(
+    (restaurantIds ?? []).filter((resId) => resId !== restaurantId)
+  );
 
   const handleChange = (id: string) => {
     setRestaurantId(id);
@@ -142,7 +131,10 @@ const ListRestaurant = () => {
       className="gap-2 p-2"
     >
       <div className="flex size-6 items-center justify-center rounded-md border">
-        {/* <res.logo className="size-3.5 shrink-0" /> */}
+        <img
+          alt="restaurant logo"
+          src={res.basicInfo.logo || "/restaurant_placeholder.png"}
+        />
       </div>
       {res.basicInfo.name}
       {/* <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut> */}

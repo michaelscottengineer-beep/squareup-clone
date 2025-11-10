@@ -13,20 +13,37 @@ import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import { db } from "@/firebase";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
-import type { TOpeningHours } from "@/types/restaurant";
+import {
+  convertFirebaseArrayData,
+  getConcatAddress,
+  parseSegments,
+} from "@/utils/helper";
+import type { TOpeningHours, TRestaurant } from "@/types/restaurant";
 import type { TPromotion } from "@/types/promotion";
 import { useParams } from "react-router";
 
 const IntroduceSection = () => {
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const { shopId: shopSlug } = useParams();
+
+  const { data: restaurant } = useQuery({
+    queryKey: ["restaurants", "details", shopSlug],
+    queryFn: async () => {
+      const restaurantRef = ref(db, parseSegments("/restaurants/", shopSlug));
+
+      const restaurant = await get(restaurantRef);
+      const val = restaurant.val() as TRestaurant;
+
+      return val;
+    },
+    enabled: !!shopSlug,
+  });
 
   const { data: promotions, isLoading } = useQuery({
     queryKey: ["allPromotions"],
     queryFn: async () => {
       const categoriesRef = ref(
         db,
-        parseSegments("/restaurants/", restaurantId, "/allPromotions")
+        parseSegments("/restaurants/", shopSlug, "/allPromotions")
       );
 
       const categories = await get(categoriesRef);
@@ -34,23 +51,34 @@ const IntroduceSection = () => {
 
       return val ? convertFirebaseArrayData<TPromotion>(categories.val()) : [];
     },
-    enabled: !!restaurantId,
+    enabled: !!shopSlug,
   });
+
+  console.log(restaurant);
+  const address = restaurant?.basicInfo?.addressInfo;
 
   return (
     <div className="grid grid-cols-3 gap-8 py-8 shop-container">
       <div className="col-span-2 space-y-6 px-10">
         <div className="text-5xl font-semibold">
           <h1 className="">Ordering from</h1>
-          <h1 className="text-primary mt-3">Test Restaurant [Production]</h1>
+          <h1 className="text-primary mt-3">{restaurant?.basicInfo.name}</h1>
         </div>
 
         <div className="more-info text-lg text-gray-600">
-          <div>75 5th Street NW, Atlanta, GA 30308</div>
+          <div>
+            {address &&
+              getConcatAddress(
+                address?.street1 || address?.street2 || "",
+                address?.city,
+                address?.state,
+                address?.zip
+              )}
+          </div>
           <div className="flex items-center gap-1">
-            4.4{" "}
-            <StarIcon className="stroke-yellow-400 w-4 h-4 fill-yellow-400" />{" "}
-            (1,000+ ratings)
+            <span>{restaurant?.basicInfo.ratingInfo.rate}</span>
+            <StarIcon className="stroke-yellow-400 w-4 h-4 fill-yellow-400" /> (
+            {restaurant?.basicInfo.ratingInfo.count} ratings)
           </div>
           <OpeningHoursSection />
         </div>
@@ -72,7 +100,7 @@ const IntroduceSection = () => {
       </div>
       <div>
         <img
-          src="/tmp_restaurant_img.jpeg"
+          src={restaurant?.basicInfo.image || "/restaurant_placeholder.png"}
           alt="introduce-restaurant-img"
           className="rounded-lg w-auto aspect-square object-cover"
         />

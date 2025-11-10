@@ -10,15 +10,17 @@ import type { TItem } from "@/types/item";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Star } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { db } from "@/firebase";
 import { getConcatAddress, parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ref, remove } from "firebase/database";
+import { ref, remove, set, update } from "firebase/database";
 import { toast } from "sonner";
 import type { TRestaurant } from "@/types/restaurant";
 import useAuth from "@/hooks/use-auth";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import restaurantQueyKeys from "@/factory/restaurant/restaurant.queries";
 
 export const restaurantColumns: ColumnDef<TRestaurant>[] = [
   {
@@ -39,8 +41,8 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
   },
   {
     accessorKey: "name",
-    header: "Item",
-    cell: ({ row, renderValue }) => (
+    header: "Name",
+    cell: ({ row }) => (
       <div className="flex items-center gap-1">
         <div className="">{row.original.basicInfo.name}</div>
       </div>
@@ -71,13 +73,57 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
       );
     },
   },
+  {
+    accessorKey: "default",
+    header: "Default",
+    cell: function DefaultRestaurantChecked({ row }) {
+      const restaurantId = useCurrentRestaurantId((state) => state.id);
 
+      return (
+        <Checkbox
+          checked={row.original.id === restaurantId}
+          disabled
+          aria-label="Select row"
+        />
+      );
+    },
+  },
   {
     id: "actions",
     cell: function Actions({ row }) {
       const navigate = useNavigate();
       const queryClient = useQueryClient();
       const { user } = useAuth();
+
+      const { mutate: markAsDefault } = useMutation({
+        mutationFn: async (selected: boolean) => {
+          const restaurantId = row.original.id;
+          const userRestaurantRef = ref(
+            db,
+            parseSegments("users", user?.uid, "restaurants", restaurantId)
+          );
+
+          return await update(userRestaurantRef, {
+            default: selected,
+          });
+        },
+        onSuccess: (data, curToggle) => {
+          toast.success("Changed successfully");
+          if (curToggle === true)
+            useCurrentRestaurantId.getState().set(row.original.id);
+          else useCurrentRestaurantId.getState().clear();
+
+          queryClient.invalidateQueries({
+            queryKey: restaurantQueyKeys.userRestaurantKeys(),
+          });
+        },
+        onError: (err) => {
+          console.error("delete restaurant occur an error");
+          toast.error("deleted restaurant error", {
+            description: err.message,
+          });
+        },
+      });
 
       const mutation = useMutation({
         mutationFn: async () => {
@@ -121,6 +167,14 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => markAsDefault(true)}>
+              Mark as Default
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={"/shop/" + row.original.id} target="_blank">
+                View website
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
                 navigate("/dashboard/restaurants/" + row.original.id)

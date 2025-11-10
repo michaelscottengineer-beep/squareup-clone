@@ -113,10 +113,6 @@ const data = {
           url: "/dashboard/restaurants/management",
         },
         {
-          title: "Update Restaurant Info",
-          url: "/dashboard/restaurants/edit",
-        },
-        {
           title: "Settings",
           url: "/dashboard/restaurants/settings",
         },

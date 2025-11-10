@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import restaurantQueyKeys from "@/factory/restaurant/restaurant.queries";
 import { db } from "@/firebase";
 import useAuth from "@/hooks/use-auth";
 import type { TRestaurant } from "@/types/restaurant";
@@ -11,6 +12,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import { toast } from "sonner";
+import UploadImageArea from "../dashboard/item-invetory/items/UploadImageArea";
 
 const RestaurantForm = () => {
   const { user } = useAuth();
@@ -27,6 +29,7 @@ const RestaurantForm = () => {
           city: "",
           zip: "",
         },
+        image: "",
         ratingInfo: {
           rate: 0,
           count: 0,
@@ -81,9 +84,9 @@ const RestaurantForm = () => {
 
     onSuccess: () => {
       toast.success(`${restaurantId ? "Saved" : "Create"} successfully!`);
-      form.reset();
+      if(!restaurantId) form.reset();
       queryClient.invalidateQueries({
-        queryKey: ["restaurants", "of-user", user?.uid],
+        queryKey: restaurantQueyKeys.userRestaurantKeys(),
       });
     },
     onError: (err) => {
@@ -191,6 +194,38 @@ const RestaurantForm = () => {
               <FormItem>
                 <FormControl>
                   <Input {...field} placeholder="Enter the zip" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={`basicInfo.image`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Preview Image</FormLabel>
+                <FormControl>
+                  <UploadImageArea
+                    value={field.value ?? ""}
+                    onValueChange={(url) => field.onChange(url)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+            <FormField
+            control={form.control}
+            name={`basicInfo.logo`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Restaurant Logo</FormLabel>
+                <FormControl>
+                  <UploadImageArea
+                    value={field.value ?? ""}
+                    onValueChange={(url) => field.onChange(url)}
+                  />
                 </FormControl>
               </FormItem>
             )}

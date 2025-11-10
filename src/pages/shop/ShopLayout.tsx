@@ -5,13 +5,12 @@ import IntroduceSection from "./IntroduceSection";
 import ListCategory from "./ListCategory";
 import "./ShopLayout.css";
 
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import { db } from "@/firebase";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import type {
-  TCategory,
   TCategoryDocumentData,
   TCategoryV2,
 } from "@/types/category";
@@ -36,7 +35,7 @@ const ShopLayout = () => {
 const DishSection = () => {
   const { shopId: shopSlug } = useParams();
 
-  const { data: categories, isLoading } = useQuery({
+  const { data: categories,  } = useQuery({
     queryKey: ["allGroups", shopSlug],
     queryFn: async () => {
       const categoriesRef = ref(
@@ -55,7 +54,7 @@ const DishSection = () => {
   console.log(
     "??",
     categories,
-    categories && convertFirebaseArrayData<TItem>(categories[0].items ?? {})
+    categories && convertFirebaseArrayData<TItem>(categories[0]?.items ?? {})
   );
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const DishSection = () => {
           return (
             <CategorySection
               key={cate.id}
-              items={convertFirebaseArrayData<TItem>(cate.items ?? {})}
+              items={convertFirebaseArrayData<TItem>(cate?.items ?? {})}
               categoryName={cate.basicInfo.name}
             />
           );
