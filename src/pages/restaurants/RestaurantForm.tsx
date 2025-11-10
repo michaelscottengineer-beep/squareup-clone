@@ -5,7 +5,7 @@ import { db } from "@/firebase";
 import useAuth from "@/hooks/use-auth";
 import type { TRestaurant } from "@/types/restaurant";
 import { parseSegments } from "@/utils/helper";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, push, ref, set, update } from "firebase/database";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 const RestaurantForm = () => {
   const { user } = useAuth();
   const { restaurantId } = useParams();
+  const queryClient = useQueryClient();
 
   const form = useForm<TRestaurant>({
     defaultValues: {
@@ -73,6 +74,9 @@ const RestaurantForm = () => {
     onSuccess: () => {
       toast.success(`${restaurantId ? "Saved" : "Create"} successfully!`);
       form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ["restaurants", "of-user", user?.uid],
+      });
     },
     onError: (err) => {
       console.error(
