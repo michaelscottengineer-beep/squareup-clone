@@ -46,7 +46,7 @@ const ItemLibraryPage = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: items, isLoading } = useQuery({
-    queryKey: ["allItems"],
+    queryKey: ["allItems", restaurantId],
     queryFn: async () => {
       const path = parseSegments("restaurants", restaurantId, "allItems");
 
@@ -55,6 +55,7 @@ const ItemLibraryPage = () => {
 
       return convertFirebaseArrayData<TItem>(snap.val());
     },
+    enabled: !!restaurantId,
   });
 
   if (isLoading) return <div>Loading items...</div>;
@@ -86,10 +87,7 @@ const ItemLibraryPage = () => {
       {!items?.length ? (
         <div>No items</div>
       ) : (
-        <DataTable
-          columns={columns}
-          data={items}
-        />
+        <DataTable columns={columns} data={items} />
       )}
     </div>
   );

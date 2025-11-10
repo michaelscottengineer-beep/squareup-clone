@@ -17,6 +17,7 @@ import type {
 } from "@/types/category";
 import type { TItem } from "@/types/item";
 import useCart from "@/stores/use-cart";
+import { useParams } from "react-router";
 
 const ShopLayout = () => {
   return (
@@ -27,21 +28,20 @@ const ShopLayout = () => {
         <IntroduceSection />
 
         <DishSection />
-
       </main>
     </div>
   );
 };
 
 const DishSection = () => {
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const { shopId: shopSlug } = useParams();
 
   const { data: categories, isLoading } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["allGroups", shopSlug],
     queryFn: async () => {
       const categoriesRef = ref(
         db,
-        parseSegments("/restaurants/", restaurantId, "/allGroups")
+        parseSegments("/restaurants/", shopSlug, "/allGroups")
       );
 
       const categories = await get(categoriesRef);
@@ -49,10 +49,15 @@ const DishSection = () => {
 
       return val ? convertFirebaseArrayData<TCategoryV2>(categories.val()) : [];
     },
-    enabled: !!restaurantId,
+    enabled: !!shopSlug,
   });
 
-  console.log('??', categories, categories && convertFirebaseArrayData<TItem>(categories[0].items ?? {}))
+  console.log(
+    "??",
+    categories,
+    categories && convertFirebaseArrayData<TItem>(categories[0].items ?? {})
+  );
+
   useEffect(() => {
     console.log("check", useCart.getState().items);
   }, []);

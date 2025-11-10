@@ -29,14 +29,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Link, Outlet } from "react-router";
 
 const CategoriesHomePage = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: categories } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["allGroups", restaurantId],
     queryFn: async () => {
       const categoriesRef = ref(
         db,
@@ -46,6 +45,7 @@ const CategoriesHomePage = () => {
       const categories = await get(categoriesRef);
       return convertFirebaseArrayData<TCategory>(categories.val());
     },
+    enabled: !!restaurantId
   });
 
   return (
@@ -57,7 +57,7 @@ const CategoriesHomePage = () => {
       )}
       <div>
         <h1 className="text-2xl font-bold mb-4 ">Categories</h1>
-        {categories?.length === 0 && (
+        {!categories?.length  && (
           <Card className="px-4 rounded-xl w-full">
             <CardContent className="text-center flex flex-col items-center space-y-4">
               <Folder className="w-20 h-20 text-gray-400" />
