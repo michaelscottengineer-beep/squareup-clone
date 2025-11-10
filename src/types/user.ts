@@ -7,4 +7,5 @@ export type TUser = {
       default: string;
     };
   };
-} & User;
+  displayName: string;
+} & Omit<User, 'displayName'>;
