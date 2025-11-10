@@ -32,7 +32,7 @@ interface ItemCardProps {
   item: TItem;
 }
 const ItemCard = ({ item }: ItemCardProps) => {
-  console.log("item ", item.name, item.modifiers);
+  console.log("promotionspromotions ", item.name, item.promotions);
   const [isOpenCreation, setIsOpenCreation] = useState(false);
 
   const discountText =
@@ -52,13 +52,14 @@ const ItemCard = ({ item }: ItemCardProps) => {
           <div className="price flex items-center gap-2 font-normal mt-auto text-sm">
             <div
               className={cn("price__original ", {
-                "text-muted-foreground": !!item.discount,
+                "text-muted-foreground":
+                  !!item.discount && item.discount.value > 0,
               })}
             >
               ${item.price}
             </div>
 
-            {item.discount && (
+            {item.discount && item.discount.value > 0 && (
               <>
                 <div className="price__promo">
                   ${calcItemPrice(Number(item.price), 1, item.discount)}

@@ -97,9 +97,9 @@ export default function NewItemCreationPage() {
         await set(itemsRef, formData);
       }
 
-      delete (itemInfo as any).categories;
-      delete (itemInfo as any).modifiers;
-      delete (itemInfo as any).promotions;
+      // delete (itemInfo as any).categories;
+      // delete (itemInfo as any).modifiers;
+      // delete (itemInfo as any).promotions;
 
       const promise = formData.categories.map(async (cate) => {
         const segments = parseSegments(

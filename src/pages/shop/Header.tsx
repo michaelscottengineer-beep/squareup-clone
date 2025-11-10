@@ -3,8 +3,32 @@ import PromotionSheet from "./PromotionSheet";
 import CartSheet from "./CartSheet";
 import { Button } from "@/components/ui/button";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import { useQuery } from "@tanstack/react-query";
+import { get, ref } from "firebase/database";
+import { db } from "@/firebase";
+import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import type { TPromotion } from "@/types/promotion";
 
 const Header = () => {
+  const restaurantId = useCurrentRestaurantId((state) => state.id);
+
+  const { data: promotions, isLoading } = useQuery({
+    queryKey: ["allPromotions"],
+    queryFn: async () => {
+      const categoriesRef = ref(
+        db,
+        parseSegments("/restaurants/", restaurantId, "/allPromotions")
+      );
+
+      const categories = await get(categoriesRef);
+      const val = categories.val() as TPromotion;
+
+      return val ? convertFirebaseArrayData<TPromotion>(categories.val()) : [];
+    },
+    enabled: !!restaurantId,
+  });
+
   return (
     <div className="flex items-center bg-white z-10 shop-container justify-between py-3 px-5 sticky top-0 border-b border-border">
       <div>Heade1r</div>
@@ -12,10 +36,11 @@ const Header = () => {
 
       <div className="flex items-center gap-4">
         <PromotionSheet
+          promotions={promotions ?? []}
           triggerButton={
             <Button variant={"secondary"}>
               <RiDiscountPercentLine />
-              3
+              <span>{promotions?.length ?? 0}</span>
             </Button>
           }
         />

@@ -14,10 +14,12 @@ import { useEffect, useState } from "react";
 interface PromotionDatePicker {
   value?: Date;
   onValueChange?: (value?: Date) => void;
+  disabled?: boolean;
 }
 
 export default function PromotionDatePicker({
   value,
+  disabled,
   onValueChange,
 }: PromotionDatePicker) {
   const [open, setOpen] = useState(false);
@@ -35,6 +37,7 @@ export default function PromotionDatePicker({
             variant="outline"
             id="date"
             className="w-48 justify-between font-normal"
+            disabled={disabled}
           >
             {date ? date.toLocaleDateString() : "Select date"}
             <ChevronDownIcon />

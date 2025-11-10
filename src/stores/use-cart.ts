@@ -1,4 +1,5 @@
 import type { TCartItem } from "@/types/item";
+import { calcPromotion, getAvailablePromotions } from "@/utils/helper";
 import { useMemo } from "react";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
@@ -22,8 +23,8 @@ const useCart = create<TCartStore>()(
         set({ items: get().items.filter((cur) => cur.id !== item.id) }),
     }),
     {
-      name: "cart-storage", // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+      name: "cart-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
@@ -33,9 +34,14 @@ const useCartTotal = () => {
 
   const total = useMemo(() => {
     return items.reduce((acc, item) => {
+      const availablePromotions = getAvailablePromotions(item.promotions);
+      const totalPromotion = availablePromotions.reduce((acc, pro) => {
+        return acc + pro.basicInfo.discount;
+      }, 0);
+
       const selectedModifier = item.modifiers?.[0]?.list?.[0];
 
-      const total = Number(item.price) * item.amount; 
+      const total = Number(item.price) * item.amount;
       const totalPriceWithDiscount =
         total -
         Number(
@@ -44,16 +50,21 @@ const useCartTotal = () => {
             : item.discount?.value
         );
 
-      const totalWithModifiers =
-        totalPriceWithDiscount +
-        (selectedModifier ? Number(selectedModifier.price) * item.amount : 0);
-      const totalWithPromotion = totalWithModifiers;
+      const totalPriceWithPromotion =
+        totalPriceWithDiscount -
+        calcPromotion(Number(item.price), item.amount, totalPromotion);
 
-      return acc + totalWithPromotion;
+      const totalWithModifiers =
+        totalPriceWithPromotion +
+        (selectedModifier ? Number(selectedModifier.price) * item.amount : 0);
+
+      const finalTotal = totalWithModifiers;
+
+      return acc + finalTotal;
     }, 0);
   }, [items]);
 
-  return Number(total.toFixed(2))
+  return Number(total.toFixed(2));
 };
 export default useCart;
 export { useCartTotal };

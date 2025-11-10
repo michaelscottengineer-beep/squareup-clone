@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import * as React from "react";
+import { ChevronsUpDown, Plus } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -11,28 +11,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import useAuth from "@/hooks/use-auth";
+import { useQuery } from "@tanstack/react-query";
+import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import { get, ref } from "firebase/database";
+import { db } from "@/firebase";
+import { parseSegments } from "@/utils/helper";
+import type { TRestaurant } from "@/types/restaurant";
+import { useNavigate } from "react-router";
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+export function TeamSwitcher() {
+  const navigate = useNavigate();
 
-  if (!activeTeam) {
-    return null
+  const { isMobile } = useSidebar();
+  const restaurantId = useCurrentRestaurantId((state) => state.id);
+
+  const { data: restaurant } = useQuery({
+    queryKey: ["restaurants", "details", restaurantId],
+    queryFn: async () => {
+      const resRef = ref(db, parseSegments("restaurants", restaurantId));
+      const doc = await get(resRef);
+
+      return doc.val() as TRestaurant;
+    },
+    enabled: !!restaurantId,
+  });
+
+  if (!restaurant) {
+    return null;
   }
 
   return (
@@ -44,12 +57,12 @@ export function TeamSwitcher({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeTeam.logo className="size-4" />
-              </div>
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"></div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-medium">
+                  {restaurant.basicInfo.name}
+                </span>
+                <span className="truncate text-xs">{"s"}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -61,23 +74,16 @@ export function TeamSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              Restaurants
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
-              <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
-                className="gap-2 p-2"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <team.logo className="size-3.5 shrink-0" />
-                </div>
-                {team.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            ))}
+            <ListRestaurant />
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={() => {
+                navigate("/dashboard/restaurants/new");
+              }}
+            >
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
@@ -87,5 +93,59 @@ export function TeamSwitcher({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
+
+const ListRestaurant = () => {
+  const { user } = useAuth();
+  const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const setRestaurantId = useCurrentRestaurantId((state) => state.set);
+
+  const { data: restaurants } = useQuery({
+    queryKey: ["restaurants", "of-user", user?.uid],
+    queryFn: async () => {
+      const restaurants = Object.values(user?.restaurants ?? {}).filter(
+        (res) => res.id !== restaurantId
+      );
+
+      const promise = restaurants
+        .filter((res) => res.id !== restaurantId)
+        .map(async (res) => {
+          const resRef = ref(
+            db,
+            parseSegments("restaurants", res.id, "basicInfo")
+          );
+          return get(resRef);
+        });
+      return Promise.all(promise).then((data) => {
+        return data.map(
+          (snapshot, i) =>
+            ({
+              basicInfo: { ...snapshot.val() },
+              id: restaurants[i].id,
+            } as TRestaurant)
+        );
+      });
+    },
+    enabled: !!user?.uid,
+  });
+
+  const handleChange = (id: string) => {
+    setRestaurantId(id);
+  };
+
+  console.log("teams", restaurants);
+  return restaurants?.map((res, index) => (
+    <DropdownMenuItem
+      key={res.id}
+      onClick={() => handleChange(res.id)}
+      className="gap-2 p-2"
+    >
+      <div className="flex size-6 items-center justify-center rounded-md border">
+        {/* <res.logo className="size-3.5 shrink-0" /> */}
+      </div>
+      {res.basicInfo.name}
+      {/* <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut> */}
+    </DropdownMenuItem>
+  ));
+};

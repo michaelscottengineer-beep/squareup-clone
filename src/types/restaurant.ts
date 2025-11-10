@@ -10,3 +10,20 @@ export type TOpeningHours = {
     to: (typeof timeSlots30min)[number];
   };
 };
+
+export type TRestaurant = {
+  id: string;
+  basicInfo: {
+    name: string;
+    addressInfo: {
+      street: string;
+      state: string;
+    };
+    createdAt: string // date: ISO string 
+    openingHours: TOpeningHours;
+  };
+  ratingInfo: { 
+    rate: number;
+    count: number;
+  }
+};

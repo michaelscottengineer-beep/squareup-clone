@@ -1,3 +1,5 @@
+import type { TItem } from "./item";
+
 export type TPromotion = {
   id: string;
   basicInfo: {
@@ -8,7 +10,7 @@ export type TPromotion = {
         from: string;
         to: string;
       };
-      time?: {
+      time: {
         from: string;
         to: string;
       };
@@ -17,4 +19,7 @@ export type TPromotion = {
     appliedTo?: "All" | any[];
     isDeleted?: boolean;
   };
+  items: {
+    [id: string] : TItem;
+  }
 };

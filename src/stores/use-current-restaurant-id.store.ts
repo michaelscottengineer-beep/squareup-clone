@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 type TCurrentRestaurantIdStore = {
   id: string;
@@ -6,10 +7,13 @@ type TCurrentRestaurantIdStore = {
   set: (value: string) => void;
 };
 
-const useCurrentRestaurantId = create<TCurrentRestaurantIdStore>((set) => ({
+const useCurrentRestaurantId = create<TCurrentRestaurantIdStore>()(persist((set) => ({
   id: "",
   clear: () => set({ id: "" }),
-  set: (value) => set({ id: value }),
+  set: (value) => set({ id: value }), 
+}), {
+  name: 'current-restaurant-id',
+    storage: createJSONStorage(() => localStorage),
 }));
 
 export default useCurrentRestaurantId;

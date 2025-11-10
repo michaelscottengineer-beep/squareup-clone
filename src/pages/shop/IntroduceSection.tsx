@@ -13,10 +13,29 @@ import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import { db } from "@/firebase";
-import { parseSegments } from "@/utils/helper";
+import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import type { TOpeningHours } from "@/types/restaurant";
+import type { TPromotion } from "@/types/promotion";
 
 const IntroduceSection = () => {
+  const restaurantId = useCurrentRestaurantId((state) => state.id);
+
+  const { data: promotions, isLoading } = useQuery({
+    queryKey: ["allPromotions"],
+    queryFn: async () => {
+      const categoriesRef = ref(
+        db,
+        parseSegments("/restaurants/", restaurantId, "/allPromotions")
+      );
+
+      const categories = await get(categoriesRef);
+      const val = categories.val() as TPromotion;
+
+      return val ? convertFirebaseArrayData<TPromotion>(categories.val()) : [];
+    },
+    enabled: !!restaurantId,
+  });
+
   return (
     <div className="grid grid-cols-3 gap-8 py-8 shop-container">
       <div className="col-span-2 space-y-6 px-10">
@@ -36,6 +55,7 @@ const IntroduceSection = () => {
         </div>
 
         <PromotionSheet
+          promotions={promotions ?? []}
           triggerButton={
             <Button className="promo-box px-2 py-7 text-black flex items-center w-full">
               <div className="flex-1 text-center">

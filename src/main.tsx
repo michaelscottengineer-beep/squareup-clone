@@ -30,6 +30,8 @@ import NotificationBellRingMp3 from "./components/NotificationBellRingMp3";
 import RestaurantSettingsPage from "./pages/restaurants/RestaurantSettingsPage";
 import OrderHistory from "./pages/dashboard/orders/OrderHistory";
 import RestaurantPromotion from "./pages/restaurants/RestaurantPromotion";
+import RestaurantForm from "./pages/restaurants/RestaurantForm";
+import A from "./pages/experiments/test-use-state/A";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,7 @@ const router = createBrowserRouter([
   { path: "/shop/:shopId", element: <ShopLayout /> },
   { path: "/checkout/success", element: <SuccessPay /> },
   { path: "/test/img", element: <TestUploadImage /> },
+  { path: "/test/state", element: <A /> },
   {
     path: "/dashboard",
     element: <DashboardLayout />,
@@ -54,6 +57,8 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
+      { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
+      { path: "/dashboard/restaurants/:restaurantId", element: <RestaurantForm /> },
       { path: "/dashboard/restaurants/settings", element: <RestaurantSettingsPage /> },
       { path: "/dashboard/restaurants/promotions", element: <RestaurantPromotion /> },
       { path: "/dashboard/notifications", element: <NotificationLayout /> },

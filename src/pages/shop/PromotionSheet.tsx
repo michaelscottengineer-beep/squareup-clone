@@ -20,53 +20,55 @@ import type { TCartItem } from "@/types/item";
 import PromotionCard from "./PromotionCard";
 import type { Promotion } from "@/types/romotion";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import type { TPromotion } from "@/types/promotion";
 
-const promotions: Promotion[] = [
-  {
-    title: "Custom Promotion",
-    discount: 10,
-    status: "Active",
-    schedule: {
-      repeat: "Every day",
-      time: "All Day",
-      dates: [],
-    },
-    appliedTo: {
-      type: "All",
-    },
-  },
-  {
-    title: "Christmas Day",
-    discount: 2,
-    status: "Upcoming",
-    schedule: {
-      dates: ["12-25-2025", "12-26-2025"],
-      time: "09:00 - 00:00",
-    },
-    appliedTo: {
-      type: "Items",
-      items: ["Chicken Sandwich", "Pull Pork Sandwich", "Steak Sandwich"],
-    },
-  },
-  {
-    title: "Custom Promotion 1",
-    discount: 5,
-    status: "Upcoming",
-    schedule: {
-      dates: ["11-18-2025", "11-19-2025", "11-25-2025", "11-26-2025"],
-      time: "15:30 - 19:00",
-    },
-    appliedTo: {
-      type: "Items",
-      items: ["Chicken Sandwich", "Coca-Cola"],
-    },
-  },
-];
+// const promotions: Promotion[] = [
+//   {
+//     title: "Custom Promotion",
+//     discount: 10,
+//     status: "Active",
+//     schedule: {
+//       repeat: "Every day",
+//       time: "All Day",
+//       dates: [],
+//     },
+//     appliedTo: {
+//       type: "All",
+//     },
+//   },
+//   {
+//     title: "Christmas Day",
+//     discount: 2,
+//     status: "Upcoming",
+//     schedule: {
+//       dates: ["12-25-2025", "12-26-2025"],
+//       time: "09:00 - 00:00",
+//     },
+//     appliedTo: {
+//       type: "Items",
+//       items: ["Chicken Sandwich", "Pull Pork Sandwich", "Steak Sandwich"],
+//     },
+//   },
+//   {
+//     title: "Custom Promotion 1",
+//     discount: 5,
+//     status: "Upcoming",
+//     schedule: {
+//       dates: ["11-18-2025", "11-19-2025", "11-25-2025", "11-26-2025"],
+//       time: "15:30 - 19:00",
+//     },
+//     appliedTo: {
+//       type: "Items",
+//       items: ["Chicken Sandwich", "Coca-Cola"],
+//     },
+//   },
+// ];
 
 interface PromotionSheetProps {
   triggerButton?: ReactNode;
+  promotions: TPromotion[]
 }
-const PromotionSheet = ({ triggerButton }: PromotionSheetProps) => {
+const PromotionSheet = ({ promotions, triggerButton }: PromotionSheetProps) => {
   return (
     <Sheet>
       {triggerButton && <SheetTrigger asChild>{triggerButton}</SheetTrigger>}

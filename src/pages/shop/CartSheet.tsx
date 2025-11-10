@@ -19,7 +19,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import type { TCartItem } from "@/types/item";
 import CreationCartItemDialog from "./CreationCartItemDialog";
 import CheckoutSheet from "./CheckoutSheet";
-import { calcItemPrice } from "@/utils/helper";
+import { calcItemPrice, calcPromotion } from "@/utils/helper";
+import useAvailablePromotions from "@/hooks/use-available-promotions";
 
 const CartSheet = () => {
   const items = useCart((state) => state.items);
@@ -82,6 +83,13 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
       ? `${item.discount.value}% discount applied`
       : `$${item.discount?.value} discount applied`;
 
+  const availablePromotions = useAvailablePromotions(item.promotions, [item]);
+  console.log("promotions", item.promotions);
+  const totalPromotion = availablePromotions.reduce((acc, pro) => {
+    return acc + pro.basicInfo.discount;
+  }, 0);
+
+  console.log("dis", item.discount, availablePromotions);
   return (
     <div className="space-y-2">
       <div className="w-max h-max p-1 flex items-center bg-secondary text-secondary-foreground rounded-full text-xs aspect-square shadow-lg">
@@ -91,12 +99,24 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
       <div className="flex items-center justify-between">
         <span className="capitalize">{item.discount && item.name}</span>
         <span className="text-sm text-muted-foreground">
-          ${calcItemPrice(Number(item.price), item.amount, item.discount)}
+          $
+          {Number(
+            calcItemPrice(Number(item.price), item.amount, item.discount) -
+              calcPromotion(Number(item.price), item.amount, totalPromotion)
+          ).toFixed(2)}
         </span>
       </div>
       <div className="promotion">
         <div className="text-green-600">{discountText}</div>
-        <div className="text-green-600">10% promotion</div>
+        <div className="text-green-600">
+          {availablePromotions.map((pro, i) => {
+            return (
+              <div key={i + 1}>
+                {pro.basicInfo.discount}% promotion is applied
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="topping">
         <h4>Topping Specific</h4>

@@ -77,7 +77,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
       );
       const qr = query(
         promotionsRef,
-        orderByChild("isDeleted"),
+        orderByChild("basicInfo/isDeleted"),
         equalTo(false)
       );
       const doc = await get(qr);
@@ -150,7 +150,11 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input placeholder="Title" {...field} />
+                        <Input
+                          placeholder="Title"
+                          {...field}
+                          disabled={!isEdit}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
@@ -169,6 +173,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                           <InputGroupInput
                             value={value}
                             onChange={(e) => onChange(Number(e.target.value))}
+                            disabled={!isEdit}
                             {...field}
                           />
                         </InputGroup>
@@ -189,6 +194,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                             onValueChange={(date) =>
                               field.onChange(date?.toISOString())
                             }
+                            disabled={!isEdit}
                           />
                         </FormControl>
                       </FormItem>
@@ -207,6 +213,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                             onValueChange={(date) =>
                               field.onChange(date?.toISOString())
                             }
+                               disabled={!isEdit}
                           />
                         </FormControl>
                       </FormItem>
@@ -321,6 +328,7 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
                     title: "",
                     isDeleted: false,
                   },
+                  items: {},
                 });
               }}
               variant={"secondary"}
