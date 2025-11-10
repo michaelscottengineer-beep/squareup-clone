@@ -41,9 +41,7 @@ export const calcPromotion = (
 import type { TPromotion } from "@/types/promotion";
 import { useMemo } from "react";
 
-export function getAvailablePromotions(
-  promotions: TPromotion[],
-) {
+export function getAvailablePromotions(promotions: TPromotion[]) {
   const ret =
     promotions?.filter((item) => {
       const date = item.basicInfo.schedule.date;
@@ -70,4 +68,13 @@ export function getAvailablePromotions(
       return !item.basicInfo.isDeleted && isCurrentlyActive;
     }) ?? [];
   return ret;
+}
+
+export function getConcatAddress(
+  street: string,
+  city: string,
+  state: string,
+  zip: string
+) {
+  return [street, city, state + " " + zip].join(", ");
 }

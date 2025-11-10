@@ -16,8 +16,11 @@ export type TRestaurant = {
   basicInfo: {
     name: string;
     addressInfo: {
-      street: string;
+      street1: string;
+      street2: string;
       state: string;
+      city: string;
+      zip: string;
     };
     createdAt: string; // date: ISO string
     openingHours: TOpeningHours;

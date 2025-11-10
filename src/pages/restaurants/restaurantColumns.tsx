@@ -13,7 +13,7 @@ import { MoreHorizontal, Star } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { db } from "@/firebase";
-import { parseSegments } from "@/utils/helper";
+import { getConcatAddress, parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ref, remove } from "firebase/database";
 import { toast } from "sonner";
@@ -50,8 +50,9 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
     accessorKey: "rate",
     header: "Rating",
     cell: ({ row }) => (
-      <div className="">
-        {row.original.basicInfo?.ratingInfo?.count}{" "}
+      <div className="flex items-center gap-1">
+        <span>{row.original.basicInfo?.ratingInfo?.rate}</span>
+        <span>{`(+${row.original.basicInfo?.ratingInfo?.count} ratings)`}</span>
         <Star className="fill-yellow-300 size-4 text-yellow-300" />
       </div>
     ),
@@ -59,9 +60,16 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
   {
     accessorKey: "address",
     header: "Address",
-    cell: ({ row }) => (
-      <div className="">{row.original.basicInfo?.addressInfo?.street}</div>
-    ),
+    cell: ({ row }) => {
+      const { street1, street2, state, city, zip } =
+        row.original.basicInfo.addressInfo;
+
+      return (
+        <div className="">
+          {getConcatAddress(street1 || street2, city, state, zip)}
+        </div>
+      );
+    },
   },
 
   {

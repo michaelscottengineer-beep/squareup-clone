@@ -22,7 +22,14 @@ const RestaurantForm = () => {
       basicInfo: {
         addressInfo: {
           state: "",
-          street: "",
+          street1: "",
+          street2: "",
+          city: "",
+          zip: "",
+        },
+        ratingInfo: {
+          rate: 0,
+          count: 0,
         },
         name: "",
       },
@@ -48,6 +55,7 @@ const RestaurantForm = () => {
         user?.uid,
         "restaurants"
       );
+
       let restaurantPrefixSegment = parseSegments("restaurants");
       if (restaurantId) {
         newRestaurantId = restaurantId;
@@ -91,21 +99,30 @@ const RestaurantForm = () => {
 
   useEffect(() => {
     if (restaurant) {
-      form.reset(restaurant);
+      const currentValues = form.getValues();
+      form.reset({
+        ...currentValues,
+        basicInfo: { ...currentValues.basicInfo, ...restaurant.basicInfo },
+      });
     }
   }, [restaurant]);
 
   const onSubmit = (data: TRestaurant) => {
-    console.log(data);
+    console.log("data form", data);
     mutation.mutate(data);
   };
 
   return (
     <div className="space-y-4">
-      <h1 className="font-semibold text-2xl">Create new Restaurants</h1>
+      <h1 className="font-semibold text-2xl">
+        {restaurantId ? "Edit" : "Create new"} Restaurants
+      </h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 max-w-[400px]"
+        >
           <FormField
             control={form.control}
             name={`basicInfo.name`}
@@ -120,7 +137,7 @@ const RestaurantForm = () => {
 
           <FormField
             control={form.control}
-            name={`basicInfo.addressInfo.street`}
+            name={`basicInfo.addressInfo.street1`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -129,19 +146,55 @@ const RestaurantForm = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
-            name={`basicInfo.addressInfo.state`}
+            name={`basicInfo.addressInfo.street2`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} placeholder="Enter the state" />
+                  <Input
+                    {...field}
+                    placeholder="Enter the Apt, Suit, Unit, .etc."
+                  />
                 </FormControl>
               </FormItem>
             )}
           />
-
+          <div className="grid grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name={`basicInfo.addressInfo.city`}
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormControl>
+                    <Input {...field} placeholder="Enter the city" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`basicInfo.addressInfo.state`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input {...field} placeholder="Enter the state" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name={`basicInfo.addressInfo.zip`}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} placeholder="Enter the zip" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           <Button>{restaurantId ? "Save" : "Create"}</Button>
         </form>
       </Form>
