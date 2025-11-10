@@ -32,6 +32,7 @@ import OrderHistory from "./pages/dashboard/orders/OrderHistory";
 import RestaurantPromotion from "./pages/restaurants/RestaurantPromotion";
 import RestaurantForm from "./pages/restaurants/RestaurantForm";
 import A from "./pages/experiments/test-use-state/A";
+import RestaurantEditForm from "./pages/restaurants/RestaurantEditForm";
 
 const router = createBrowserRouter([
   {
@@ -58,9 +59,22 @@ const router = createBrowserRouter([
       },
 
       { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
-      { path: "/dashboard/restaurants/:restaurantId", element: <RestaurantForm /> },
-      { path: "/dashboard/restaurants/settings", element: <RestaurantSettingsPage /> },
-      { path: "/dashboard/restaurants/promotions", element: <RestaurantPromotion /> },
+      {
+        path: "/dashboard/restaurants/edit",
+        element: <RestaurantEditForm />,
+      },
+      {
+        path: "/dashboard/restaurants/:restaurantId",
+        element: <RestaurantForm />,
+      },
+      {
+        path: "/dashboard/restaurants/settings",
+        element: <RestaurantSettingsPage />,
+      },
+      {
+        path: "/dashboard/restaurants/promotions",
+        element: <RestaurantPromotion />,
+      },
       { path: "/dashboard/notifications", element: <NotificationLayout /> },
       { path: "/dashboard/orders", element: <OrderLayout /> },
       { path: "/dashboard/orders/history", element: <OrderHistory /> },

@@ -16,6 +16,7 @@ import { db } from "@/firebase";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import type { TOpeningHours } from "@/types/restaurant";
 import type { TPromotion } from "@/types/promotion";
+import { useParams } from "react-router";
 
 const IntroduceSection = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
@@ -81,20 +82,20 @@ const IntroduceSection = () => {
 };
 
 const OpeningHoursSection = () => {
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const { shopId: shopSlug } = useParams();
 
   const { data: hours } = useQuery({
-    queryKey: ["restaurants", restaurantId, "basicInfo", "openingHours"],
+    queryKey: ["restaurants", shopSlug, "basicInfo", "openingHours"],
     queryFn: async () => {
       const openHourRef = ref(
         db,
-        parseSegments("restaurants", restaurantId, "basicInfo", "openingHours")
+        parseSegments("restaurants", shopSlug, "basicInfo", "openingHours")
       );
       const doc = await get(openHourRef);
       console.log(doc);
       return doc.val() as TOpeningHours[];
     },
-    enabled: !!restaurantId,
+    enabled: !!shopSlug,
   });
 
   return (

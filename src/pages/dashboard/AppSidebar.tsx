@@ -109,8 +109,8 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "New Restaurant",
-          url: "/dashboard/restaurants/new",
+          title: "Update Restaurant Info",
+          url: "/dashboard/restaurants/edit",
         },
         {
           title: "Settings",
