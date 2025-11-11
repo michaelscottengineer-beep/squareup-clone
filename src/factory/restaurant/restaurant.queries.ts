@@ -4,7 +4,16 @@ import restaurantService from "./restaurant.service";
 const restaurantQueyKeys = {
   allKey: () => ["allRestaurants"],
   listKey: () => [...restaurantQueyKeys.allKey(), "list"],
-  list: () => {},
+  list: () =>
+    queryOptions({
+      queryKey: restaurantQueyKeys.listKey(),
+      queryFn: () => restaurantService.getRestaurants(),
+    }),
+  adminListKey: () => [...restaurantQueyKeys.allKey(), "admin", "list"],
+  adminList: () => queryOptions({
+    queryKey: restaurantQueyKeys.adminListKey(),
+          queryFn: () => restaurantService.getAdminRestaurants(),
+  }),
 
   userRestaurantKeys: () => [...restaurantQueyKeys.allKey(), "of-user"],
   userRestaurantIdsKey: (userId: string) => [

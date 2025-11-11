@@ -7,5 +7,6 @@ export type TUser = {
       default: string;
     };
   };
+  avatar: string;
   displayName: string;
 } & Omit<User, 'displayName'>;

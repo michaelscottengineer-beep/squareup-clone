@@ -35,6 +35,8 @@ import A from "./pages/experiments/test-use-state/A";
 import RestaurantEditForm from "./pages/restaurants/RestaurantEditForm";
 import RestaurantManagement from "./pages/restaurants/RestaurantManagement";
 import PrefetchRestaurantIds from "./PrefetchRestaurantIds";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,16 @@ const router = createBrowserRouter([
   { path: "/test/img", element: <TestUploadImage /> },
   { path: "/test/state", element: <A /> },
   {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        path: "/admin/restaurants/management",
+        element: <AdminRestaurant />
+      },
+    ],
+  },
+  {
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
@@ -60,7 +72,10 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
-      { path: "/dashboard/restaurants/management", element: <RestaurantManagement /> },
+      {
+        path: "/dashboard/restaurants/management",
+        element: <RestaurantManagement />,
+      },
       { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
       {
         path: "/dashboard/restaurants/:restaurantId",
@@ -135,4 +150,3 @@ createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </StrictMode>
 );
-

@@ -1,4 +1,5 @@
 import type { daysOfWeek, timeSlots30min } from "@/data/date";
+import type { TUser } from "./user";
 
 export type TOpeningHours = {
   dow: {
@@ -24,11 +25,18 @@ export type TRestaurant = {
       city: string;
       zip: string;
     };
+    createdByObj: TUser;
+    createdBy: string;
     createdAt: string; // date: ISO string
     openingHours: TOpeningHours;
     ratingInfo: {
       rate: number;
       count: number;
     };
+  };
+  statistics: {
+    totalRevenue: number;
+    totalStaff: number;
+    averageRating: number;
   };
 };

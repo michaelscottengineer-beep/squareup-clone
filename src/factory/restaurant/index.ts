@@ -12,3 +12,12 @@ export const useUserRestaurantsQuery = (ids: string[]) =>
     ...restaurantQueyKeys.userRestaurants(ids),
     enabled: !!ids && ids.length > 0,
   });
+
+export const useRestaurantsQuery = () =>
+  useQuery({
+    ...restaurantQueyKeys.list(),
+  });
+export const useAdminRestaurantsQuery = () =>
+  useQuery({
+    ...restaurantQueyKeys.adminList(),
+  });

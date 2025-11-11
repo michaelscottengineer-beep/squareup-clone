@@ -1,9 +1,65 @@
 import { db } from "@/firebase";
 import type { TRestaurant } from "@/types/restaurant";
-import { parseSegments } from "@/utils/helper";
-import { get, ref } from "firebase/database";
+import type { TUser } from "@/types/user";
+import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import { get, orderByChild, query, ref } from "firebase/database";
 
 const restaurantService = {
+  getRestaurants: async () => {
+    const restaurantsRef = ref(db, parseSegments("restaurants"));
+
+    const doc = await get(restaurantsRef);
+
+    const data = doc.exists()
+      ? convertFirebaseArrayData<TRestaurant>(doc.val())
+      : [];
+
+    const promise = data.map(async (res) => {
+      const userRef = ref(db, parseSegments("users", res.basicInfo.createdBy));
+      const doc = await get(userRef);
+      return {
+        ...res,
+        basicInfo: {
+          ...res.basicInfo,
+          createdByObj: doc.val() as TUser,
+        },
+      };
+    });
+
+    return Promise.all(promise);
+  },
+  getAdminRestaurants: async () => {
+    try {
+      const restaurantsRef = ref(db, parseSegments("restaurants"));
+      const qr = query(restaurantsRef, orderByChild("basicInfo/createdBy"));
+      const doc = await get(qr);
+
+      const data = doc.exists()
+        ? convertFirebaseArrayData<TRestaurant>(doc.val())
+        : [];
+
+      const promise = data.map(async (res) => {
+        const userRef = ref(
+          db,
+          parseSegments("users", res.basicInfo.createdBy)
+        );
+        const doc = await get(userRef);
+        return {
+          ...res,
+          basicInfo: {
+            ...res.basicInfo,
+            createdByObj: doc.val() as TUser,
+          },
+        };
+      });
+
+      return Promise.all(promise);
+    } catch (err) {
+      console.log("err", err);
+      return [];
+    }
+  },
+
   getUserRestaurantIds: async (userId: string) => {
     const restaurantsRef = ref(
       db,
@@ -11,7 +67,6 @@ const restaurantService = {
     );
 
     const doc = await get(restaurantsRef);
-
 
     return doc.exists() ? Object.keys(doc.val()) : [];
   },
