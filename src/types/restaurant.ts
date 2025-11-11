@@ -38,5 +38,7 @@ export type TRestaurant = {
     totalRevenue: number;
     totalStaff: number;
     averageRating: number;
+
+    totalOrder: number;
   };
 };

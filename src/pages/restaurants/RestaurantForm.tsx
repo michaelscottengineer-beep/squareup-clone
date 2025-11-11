@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import restaurantQueyKeys from "@/factory/restaurant/restaurant.queries";
 import { db } from "@/firebase";
@@ -30,11 +36,18 @@ const RestaurantForm = () => {
           zip: "",
         },
         image: "",
+        logo: "",
         ratingInfo: {
           rate: 0,
           count: 0,
         },
         name: "",
+      },
+      statistics: {
+        totalRevenue: 0,
+        averageRating: 0,
+        totalStaff: 0,
+        totalOrder: 0,
       },
     },
   });
@@ -77,14 +90,18 @@ const RestaurantForm = () => {
         id: newRestaurantId,
         default: false,
       };
-      updates[parseSegments(restaurantPrefixSegment, "basicInfo")] =
-        data.basicInfo;
+      updates[parseSegments(restaurantPrefixSegment, "basicInfo")] = {
+        ...data.basicInfo,
+        createdBy: user?.uid,
+      };
+      updates[parseSegments(restaurantPrefixSegment, "statistics")] =
+        data.statistics;
       return await update(ref(db), updates);
     },
 
     onSuccess: () => {
       toast.success(`${restaurantId ? "Saved" : "Create"} successfully!`);
-      if(!restaurantId) form.reset();
+      if (!restaurantId) form.reset();
       queryClient.invalidateQueries({
         queryKey: restaurantQueyKeys.userRestaurantKeys(),
       });
@@ -215,7 +232,7 @@ const RestaurantForm = () => {
             )}
           />
 
-            <FormField
+          <FormField
             control={form.control}
             name={`basicInfo.logo`}
             render={({ field }) => (

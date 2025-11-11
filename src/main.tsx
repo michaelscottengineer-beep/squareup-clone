@@ -37,6 +37,7 @@ import RestaurantManagement from "./pages/restaurants/RestaurantManagement";
 import PrefetchRestaurantIds from "./PrefetchRestaurantIds";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
+import DropdownMenuTest from "./pages/experiments/DropdownMenuTest";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
   { path: "/checkout/success", element: <SuccessPay /> },
   { path: "/test/img", element: <TestUploadImage /> },
   { path: "/test/state", element: <A /> },
+  { path: "/test/dropdown-menu", element: <DropdownMenuTest /> },
   {
     path: "/admin",
     element: <AdminLayout />,

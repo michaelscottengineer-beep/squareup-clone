@@ -40,7 +40,7 @@ const RestaurantStatistic = ({
               <div>
                 <p className="text-blue-100 text-sm">Total Order</p>
                 <p className="text-3xl font-bold mt-1">
-                  {statistics?.totalRevenue}
+                  {statistics?.totalOrder}
                 </p>
               </div>
               <UtensilsCrossed  size={40} className="opacity-50" />
