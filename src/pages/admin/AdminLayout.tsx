@@ -18,6 +18,7 @@ export default function AdminLayout() {
         <div className=" px-10 py-10">
           <Outlet />
         </div>
+
       </main>
     
     </SidebarProvider>

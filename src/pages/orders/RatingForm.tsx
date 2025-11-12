@@ -36,6 +36,7 @@ type FormValues = {
   rate: number;
   itemId: string;
   images: { id: string; value: string }[];
+  orderId: string;
 };
 
 const RatingForm = ({
@@ -49,6 +50,8 @@ const RatingForm = ({
     defaultValues: {
       content: "",
       rate: 5,
+      orderId: order.id,
+      itemId: "",
       images: [{ id: "", value: "" }],
     },
   });
@@ -117,7 +120,7 @@ const RatingForm = ({
             <FormItem>
               <FormControl>
                 <Select onValueChange={field.onChange}>
-                  <SelectTrigger className="h-12! py-2 focus-visible:ring-1">
+                  <SelectTrigger className="h-12! py-2 focus-visible:ring-1 mt-4">
                     <SelectValue
                       placeholder={"Select the review item"}
                       className="h-max p-0"

@@ -54,6 +54,7 @@ import type { TRating } from "@/types/rating";
 import { toast } from "sonner";
 import imgbbService from "@/services/imggbb.service";
 import RatingForm from "./RatingForm";
+import Header from "../shop/Header";
 const UserOrderHistory = () => {
   const { user } = useAuth();
 
@@ -117,25 +118,43 @@ const OrderHistoryCard = ({ order }: { order: TOrderDocumentData }) => {
   const [isShownRateForm, setIsShownRateForm] = useState(false);
 
   return (
-    <div key={order.id} className="max-w-[500px]">
-      <div className="flex items-center justify-between ">
-        <div>
-          <div className="font-semibold">{order.id}</div>
-          <div className="flex items-center gap-1 text-sm">
-            <div>{Object.keys(order.cartItems).length} Items</div>
-            <Separator className="w-2! h-0.5" />
+    <div>
+      <Header />
+      <div className="shop-container mt-10">
+        <h1 className="text-2xl font-medium mb-4">Order History</h1>
+
+        <div key={order.id} className="max-w-[500px]">
+          <div className="flex items-center justify-between ">
             <div>
-              {formatDate(new Date(order.basicInfo.createdAt), "dd/MM/yyyy")}
+              <div className="font-semibold">{order.id}</div>
+              <div className="flex items-center gap-1 text-sm">
+                <div>{Object.keys(order.cartItems).length} Items</div>
+                <Separator className="w-2! h-0.5" />
+                <div>
+                  {formatDate(
+                    new Date(order.basicInfo.createdAt),
+                    "dd/MM/yyyy"
+                  )}
+                </div>
+              </div>
             </div>
+
+            <Button
+              onClick={() => setIsShownRateForm(!isShownRateForm)}
+              className="bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-lg"
+            >
+              Rate Now <Star className="stroke-yellow-400 fill-yellow-400" />
+            </Button>
           </div>
+
+          {isShownRateForm && (
+            <RatingForm
+              order={order}
+              onSubmitCallback={() => setIsShownRateForm(false)}
+            />
+          )}
         </div>
-
-        <Button onClick={() => setIsShownRateForm(!isShownRateForm)} className="bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-md">
-          Rate Now <Star className="stroke-yellow-400 fill-yellow-400" />
-        </Button>
       </div>
-
-      {isShownRateForm && <RatingForm order={order} onSubmitCallback={() => setIsShownRateForm(false)} />}
     </div>
   );
 };

@@ -39,6 +39,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
 import DropdownMenuTest from "./pages/experiments/DropdownMenuTest";
 import UserOrderHistory from "./pages/orders/UserOrderHistory";
+import RestaurantRating from "./pages/restaurants/RestaurantRating";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
         element: <DashboardHomePage />,
       },
 
+      {
+        path: "/dashboard/restaurants/rating",
+        element: <RestaurantRating />,
+      },
       {
         path: "/dashboard/restaurants/management",
         element: <RestaurantManagement />,

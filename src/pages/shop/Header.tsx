@@ -73,7 +73,7 @@ const AuthDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
-        <DropdownMenuItem onClick={() => navigate("/orders/history")}>
+        <DropdownMenuItem onClick={() => navigate("/shop/orders/history")}>
           Order history
         </DropdownMenuItem>
       </DropdownMenuContent>
