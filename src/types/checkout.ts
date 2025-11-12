@@ -21,7 +21,7 @@ export type TCheckoutFormDataValues = {
   createdAt: string;
   createdBy: string;
   status?: "pending" | "success";
-  orderStatus?: "accepted" | "rejected" | "pending"
+  orderStatus?: "accepted" | "rejected" | "pending";
 };
 
 export type TFeeSummary = {
@@ -41,13 +41,13 @@ export type TOrderCartItem = {
   price: string;
   modifier?: {
     name: string;
-    price: string
-  }
+    price: string;
+  };
 };
 
 export type TOrder = {
   id: string;
-  basicInfo: TCheckoutFormDataValues;
+  basicInfo: TCheckoutFormDataValues & { restaurantId: string };
   cartItems: TOrderCartItem[];
 };
 
@@ -73,5 +73,3 @@ export type TDeliveryOrderInfo = {
     dropOffOption: "hand-it-to-me" | "leave-at-door";
   };
 };
-
-

@@ -38,7 +38,14 @@ export type TRestaurant = {
     totalRevenue: number;
     totalStaff: number;
     averageRating: number;
-
+    ratingInfo: {
+      [`1star`]: number;
+      [`2star`]: number;
+      [`3star`]: number;
+      [`4star`]: number;
+      [`5star`]: number;
+      totalRating: number;
+    }
     totalOrder: number;
   };
 };

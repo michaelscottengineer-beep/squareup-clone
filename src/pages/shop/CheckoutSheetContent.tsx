@@ -18,7 +18,7 @@ import { Form } from "@/components/ui/form";
 import PickUpTabsContent from "./PickUpTabsContent";
 import { parseSegments } from "@/utils/helper";
 import useAuth from "@/hooks/use-auth";
-import { push, ref, set } from "firebase/database";
+import { push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import GratuitySelector from "./GratuitySelector";
 import CostFreeSummary from "./CostFreeSummary";
@@ -69,6 +69,21 @@ const CheckoutSheetContent = () => {
       if (!newOrderRef.key || !shopId)
         return Promise.reject("missing value shopId or orderId");
 
+      const updates: { [key: string]: any } = {};
+
+      const userTrackingOrderPath = parseSegments(
+        "users",
+        user?.uid,
+        "orders",
+        newOrderRef.key
+      );
+      const userTrackingOrderData = {
+        id: newOrderRef.key,
+        restaurantId: shopId,
+      };
+      updates[userTrackingOrderPath] = userTrackingOrderData;
+
+      await update(ref(db), updates);
       const basicInfoRef = ref(db, parseSegments(prefixSegment, "basicInfo"));
 
       const promise1 = items.map(async (item) => {
@@ -105,6 +120,7 @@ const CheckoutSheetContent = () => {
           status: "pending",
           orderStatus: "pending",
           createdBy: user?.uid,
+          restaurantId: shopId,
           createdAt: new Date().toISOString(),
         } as TOrder["basicInfo"]),
       ];

@@ -38,6 +38,7 @@ import PrefetchRestaurantIds from "./PrefetchRestaurantIds";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
 import DropdownMenuTest from "./pages/experiments/DropdownMenuTest";
+import UserOrderHistory from "./pages/orders/UserOrderHistory";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "/orders/history", element: <UserOrderHistory /> },
+  { path: "/shop/:shopId", element: <ShopLayout /> },
   { path: "/shop/:shopId", element: <ShopLayout /> },
   { path: "/checkout/success", element: <SuccessPay /> },
   { path: "/test/img", element: <TestUploadImage /> },
