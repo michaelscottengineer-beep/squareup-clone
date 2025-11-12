@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import imgbbService from "@/services/imggbb.service";
 import RatingSelector from "./RatingSelector";
 import ImageUploadFrame from "./ImageUploadFrame";
+import useAuth from "@/hooks/use-auth";
 
 type FormValues = {
   content: string;
@@ -37,6 +38,7 @@ type FormValues = {
   itemId: string;
   images: { id: string; value: string }[];
   orderId: string;
+  createdBy: string;
 };
 
 const RatingForm = ({
@@ -46,6 +48,7 @@ const RatingForm = ({
   order: TOrderDocumentData;
   onSubmitCallback?: (data: FormValues) => void;
 }) => {
+  const { user } = useAuth();
   const form = useForm<FormValues>({
     defaultValues: {
       content: "",
@@ -53,6 +56,7 @@ const RatingForm = ({
       orderId: order.id,
       itemId: "",
       images: [{ id: "", value: "" }],
+      createdBy: user?.uid,
     },
   });
 
@@ -93,6 +97,7 @@ const RatingForm = ({
       updates[parseSegments(path, newKey, "basicInfo")] = {
         ...data,
         images,
+        createdBy: user?.uid,
       };
 
       return await update(ref(db), updates);

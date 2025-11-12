@@ -16,7 +16,7 @@ import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, remove, set } from "firebase/database";
+import { push, ref, remove, set, update } from "firebase/database";
 import { toast } from "sonner";
 import type { TOrder } from "@/types/checkout";
 import { formatDate } from "date-fns";
@@ -103,11 +103,10 @@ export const orderColumns: ColumnDef<TOrder>[] = [
             parseSegments(prefixRestaurant, "allOrdersHistory")
           );
 
-          const historyRef = ref(
-            db,
+          const updates: { [key: string]: any } = {};
+          updates[
             parseSegments(prefixRestaurant, "allOrdersHistory", newHistory.key)
-          );
-          await set(historyRef, {
+          ] = {
             basicInfo: {
               orderId: row.original.id,
               createdAt: new Date().toISOString(),
@@ -117,19 +116,20 @@ export const orderColumns: ColumnDef<TOrder>[] = [
                 email: user?.email,
               },
             },
-          } as TOrderHistory);
+          };
+          updates[
+            parseSegments(
+              prefixRestaurant,
+              "allOrders",
+              row.original.id,
+              "basicInfo"
+            )
+          ] = {
+            ...row.original.basicInfo,
+            orderStatus: type,
+          };
 
-          const orderRef = ref(
-            db,
-            parseSegments(prefixRestaurant, "allOrders", row.original.id)
-          );
-          return await set(orderRef, {
-            ...row.original,
-            basicInfo: {
-              ...row.original.basicInfo,
-              orderStatus: type,
-            },
-          } as TOrder);
+          return await update(ref(db), updates);
         },
         onSuccess: () => {
           toast.success("deleted successfully");

@@ -19,7 +19,7 @@ export default function DashboardPage() {
       </div>
       <div className="relative h-[calc(100vh-80px)] top-20">
         <SidebarProvider className="h-[calc(100vh-80px)]! min-h-[calc(100vh-80px)]! max-h-[calc(100vh-80px)]! ">
-          <AppSidebar className="fixed top-20 left-0 h-[calc(100vh-80px)]" />
+          <AppSidebar className="fixed top-20 h-[calc(100vh-80px)]" />
           <SidebarInset>
             <main className="flex-1">
       

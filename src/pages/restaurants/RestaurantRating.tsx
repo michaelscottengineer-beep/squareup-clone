@@ -18,8 +18,6 @@ import React, { useState } from "react";
 import RatingCard from "./RatingCard";
 import RatingStatistic from "./RatingStatistic";
 
-
-
 const RestaurantRating = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const [selectedValue, setSelectedValue] = useState("All");
@@ -38,6 +36,7 @@ const RestaurantRating = () => {
           orderByChild("basicInfo/rate"),
           equalTo(Number(selectedValue))
         );
+        console.log(123123)
       }
       const doc = await get(qr ?? resRef);
       console.log(doc.val());
@@ -78,7 +77,7 @@ const RestaurantRating = () => {
     },
     enabled: !!restaurantId,
   });
-
+console.log(ratings, restaurantId)
   return (
     <div>
       <h1 className="text-2xl font-semibold">RestaurantRating</h1>
@@ -120,6 +119,5 @@ const RestaurantRating = () => {
     </div>
   );
 };
-
 
 export default RestaurantRating;

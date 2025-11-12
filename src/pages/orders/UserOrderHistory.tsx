@@ -141,7 +141,9 @@ const OrderHistoryCard = ({ order }: { order: TOrderDocumentData }) => {
 
             <Button
               onClick={() => setIsShownRateForm(!isShownRateForm)}
-              className="bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-lg"
+              className={cn("bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-lg", {
+                hidden: order.basicInfo.orderStatus !== "accepted"
+              })}
             >
               Rate Now <Star className="stroke-yellow-400 fill-yellow-400" />
             </Button>
