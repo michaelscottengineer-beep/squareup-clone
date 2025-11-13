@@ -110,7 +110,7 @@ console.log(ratings, restaurantId)
           </SelectContent>
         </Select>
       </div>
-      <div>
+      <div className="space-y-4">
         {!ratings?.length && <div>No items</div>}
         {ratings?.map((rating) => {
           return <RatingCard rating={rating} key={rating.id} />;

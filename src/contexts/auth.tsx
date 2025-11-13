@@ -12,7 +12,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | null>(null);
 const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const [user, setUser] = useState<TUser | null>(null);
-
+  
   async function getUserInfo(uid: string) {
     const userRef = ref(db, parseSegments("users", uid));
     const doc = await get(userRef);
@@ -27,7 +27,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         const userInfo = await getUserInfo(userCredential.uid);
         console.log("User is signed in:", userCredential.uid, userInfo);
 
-        const restaurants = Object.values(userInfo.restaurants);
+        const restaurants = Object.values(userInfo?.restaurants ?? {});
         const currentRestaurantId = useCurrentRestaurantId.getState().id;
         const defaultRestaurantId = restaurants.find((res) => res.default);
         if (!currentRestaurantId)
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       } else {
         useCurrentRestaurantId.getState().clear();
         setUser(null);
-        window.location.href = window.location.origin + "/signin";
+        if (!window.location.href.includes("/signin") && !window.location.href.includes("/signup"))window.location.href = window.location.origin + "/signin";
       }
     });
 

@@ -7,6 +7,7 @@ export type TUser = {
       default: string;
     };
   };
+  role?: "admin" | "user";
   avatar: string;
   displayName: string;
 } & Omit<User, 'displayName'>;

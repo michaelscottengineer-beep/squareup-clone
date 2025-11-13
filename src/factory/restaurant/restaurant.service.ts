@@ -59,7 +59,6 @@ const restaurantService = {
       return [];
     }
   },
-
   getUserRestaurantIds: async (userId: string) => {
     const restaurantsRef = ref(
       db,

@@ -30,10 +30,11 @@ import {
   useUserRestaurantIdsQuery,
   useUserRestaurantsQuery,
 } from "@/factory/restaurant";
+import { cn } from "@/lib/utils";
 
 export function TeamSwitcher() {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const { isMobile } = useSidebar();
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
@@ -65,7 +66,7 @@ export function TeamSwitcher() {
                 <img
                   alt="restaurant logo"
                   src={
-                    restaurant.basicInfo.logo || "/restaurant_placeholder.png"
+                    restaurant.basicInfo?.logo || "/restaurant_placeholder.png"
                   }
                 />
               </div>
@@ -78,31 +79,36 @@ export function TeamSwitcher() {
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            align="start"
-            side={isMobile ? "bottom" : "right"}
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Restaurants
-            </DropdownMenuLabel>
-            <ListRestaurant />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="gap-2 p-2"
-              onClick={() => {
-                navigate("/dashboard/restaurants/new");
-              }}
+          {user?.role !== "admin" && (
+            <DropdownMenuContent
+              className={cn(
+                "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg",
+              
+              )}
+              align="start"
+              side={isMobile ? "bottom" : "right"}
+              sideOffset={4}
             >
-              <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                <Plus className="size-4" />
-              </div>
-              <div className="text-muted-foreground font-medium">
-                Add Restaurant
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+              <DropdownMenuLabel className="text-muted-foreground text-xs">
+                Restaurants
+              </DropdownMenuLabel>
+              <ListRestaurant />
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="gap-2 p-2"
+                onClick={() => {
+                  navigate("/dashboard/restaurants/new");
+                }}
+              >
+                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                  <Plus className="size-4" />
+                </div>
+                <div className="text-muted-foreground font-medium">
+                  Add Restaurant
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

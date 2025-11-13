@@ -100,7 +100,6 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
       const { user } = useAuth();
       const [isOpenStatistic, setIsOpenStatistic] = useState(false);
 
-
       const mutation = useMutation({
         mutationFn: async () => {
           const restaurantId = row.original.id;
@@ -142,11 +141,8 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-            >
+            <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-     
 
               <DropdownMenuItem onClick={() => setIsOpenStatistic(true)}>
                 View Statistics
@@ -156,6 +152,19 @@ export const restaurantColumns: ColumnDef<TRestaurant>[] = [
                   View website
                 </Link>
               </DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
+                <Link
+                  to={"/dashboard/orders"}
+                  target="_blank"
+                  onClick={() => {
+                    useCurrentRestaurantId.getState().set(row.original.id);
+                  }}
+                >
+                  Use As Owner
+                </Link>
+              </DropdownMenuItem>
+
               <DropdownMenuItem
                 onClick={() =>
                   navigate("/dashboard/restaurants/" + row.original.id)
