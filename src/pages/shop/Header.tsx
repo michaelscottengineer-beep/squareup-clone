@@ -39,23 +39,25 @@ const Header = () => {
   });
 
   return (
-    <div className="flex items-center bg-white z-10 shop-container justify-between py-3 px-5 sticky top-0 border-b border-border">
-      <div>Heade1r</div>
-      <div>Header</div>
+    <div className="border-b border-border h-20 flex ">
+      <div className="flex items-center flex-1 bg-white z-10 shop-container justify-between py-3 px-5 sticky top-0 ">
+        <div>Heade1r</div>
+        <div>Header</div>
 
-      <div className="flex items-center gap-4">
-        <PromotionSheet
-          promotions={promotions ?? []}
-          triggerButton={
-            <Button variant={"secondary"}>
-              <RiDiscountPercentLine />
-              <span>{promotions?.length ?? 0}</span>
-            </Button>
-          }
-        />
-        <CartSheet />
+        <div className="flex items-center gap-4">
+          <PromotionSheet
+            promotions={promotions ?? []}
+            triggerButton={
+              <Button variant={"secondary"}>
+                <RiDiscountPercentLine />
+                <span>{promotions?.length ?? 0}</span>
+              </Button>
+            }
+          />
+          <CartSheet />
 
-        <AuthDropdown/>
+          <AuthDropdown />
+        </div>
       </div>
     </div>
   );
@@ -75,6 +77,9 @@ const AuthDropdown = () => {
       <DropdownMenuContent className="w-56" align="start">
         <DropdownMenuItem onClick={() => navigate("/orders/history")}>
           Order history
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate("/billings")}>
+          Billing
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

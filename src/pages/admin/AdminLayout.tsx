@@ -4,11 +4,13 @@ import NotificationBellRingMp3 from "@/components/NotificationBellRingMp3";
 import { Button } from "@/components/ui/button";
 import useBellSound from "@/stores/use-bell-sound";
 import { AppSidebar } from "./AppSidebar";
+import useAuth from "@/hooks/use-auth";
 
 
 
 export default function AdminLayout() {
-
+  const {user} = useAuth();
+  if (user?.role !== "admin") return <div className="h-max w-max m-auto font-medium">You dont have permission!</div>
   return (   
     <SidebarProvider>
       <AppSidebar />

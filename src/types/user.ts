@@ -8,6 +8,7 @@ export type TUser = {
     };
   };
   role?: "admin" | "user";
+  customerId: string;
   avatar: string;
   displayName: string;
 } & Omit<User, 'displayName'>;

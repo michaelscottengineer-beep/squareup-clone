@@ -1,10 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router";
+import Header from "./shop/Header";
 
 const RootPage = () => {
   return (
     <div>
-      RootPage
+      <Header />
       <div>
         <Outlet />
       </div>

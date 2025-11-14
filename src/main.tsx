@@ -40,6 +40,9 @@ import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
 import DropdownMenuTest from "./pages/experiments/DropdownMenuTest";
 import UserOrderHistory from "./pages/orders/UserOrderHistory";
 import RestaurantRating from "./pages/restaurants/RestaurantRating";
+import BillingLayout from "./pages/billings/BillingLayout";
+import BillingTransaction from "./pages/billings/trasaction/BillingTransaction";
+import BillingListCards from "./pages/billings/cards/BillingListCards";
 
 const router = createBrowserRouter([
   {
@@ -50,22 +53,31 @@ const router = createBrowserRouter([
         element: <HomePage />,
         index: true,
       },
+      {
+        path: "/billings",
+        element: <BillingLayout />,
+        children: [
+          { path: "/billings/transactions", element: <BillingTransaction /> },
+          { path: "/billings/cards", element: <BillingListCards /> },
+        ],
+      },
+      { path: "/orders/history", element: <UserOrderHistory /> },
+      { path: "/shop/:shopId", element: <ShopLayout /> },
+      { path: "/shop/:shopId", element: <ShopLayout /> },
+      { path: "/checkout/success", element: <SuccessPay /> },
+      { path: "/test/img", element: <TestUploadImage /> },
+      { path: "/test/state", element: <A /> },
+      { path: "/test/dropdown-menu", element: <DropdownMenuTest /> },
     ],
   },
-  { path: "/orders/history", element: <UserOrderHistory /> },
-  { path: "/shop/:shopId", element: <ShopLayout /> },
-  { path: "/shop/:shopId", element: <ShopLayout /> },
-  { path: "/checkout/success", element: <SuccessPay /> },
-  { path: "/test/img", element: <TestUploadImage /> },
-  { path: "/test/state", element: <A /> },
-  { path: "/test/dropdown-menu", element: <DropdownMenuTest /> },
+
   {
     path: "/admin",
     element: <AdminLayout />,
     children: [
       {
         path: "/admin/restaurants/management",
-        element: <AdminRestaurant />
+        element: <AdminRestaurant />,
       },
     ],
   },

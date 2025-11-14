@@ -21,8 +21,6 @@ import { useParams } from "react-router";
 const ShopLayout = () => {
   return (
     <div className="relative">
-      <Header />
-
       <main className="">
         <IntroduceSection />
 

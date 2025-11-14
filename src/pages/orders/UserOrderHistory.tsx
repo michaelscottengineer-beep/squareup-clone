@@ -21,7 +21,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Info, Plus, Search, Star, X } from "lucide-react";
+import { ChevronRight, Info, Plus, Search, Star, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -106,57 +106,62 @@ const UserOrderHistory = () => {
   });
   console.log(orders, orderIds, user?.uid);
   return (
-    <div className="p-6">
-      {orders?.map((order, i) => {
-        return <OrderHistoryCard order={order} key={order.id} />;
-      })}
+    <div>
+      <Header />
+
+      <div className="shop-container mt-10">
+        <h1 className="text-2xl font-medium mb-4">Order History</h1>
+
+        <div className="p-6 space-y-6">
+          {orders?.map((order, i) => {
+            return <OrderHistoryCard order={order} key={order.id} />;
+          })}
+        </div>
+      </div>
     </div>
   );
 };
 
 const OrderHistoryCard = ({ order }: { order: TOrderDocumentData }) => {
   const [isShownRateForm, setIsShownRateForm] = useState(false);
+  const [isShownTransaction, setIsShownTransaction] = useState(false);
 
   return (
-    <div>
-      <Header />
-      <div className="shop-container mt-10">
-        <h1 className="text-2xl font-medium mb-4">Order History</h1>
-
-        <div key={order.id} className="max-w-[500px]">
-          <div className="flex items-center justify-between ">
-            <div>
-              <div className="font-semibold">{order.id}</div>
-              <div className="flex items-center gap-1 text-sm">
-                <div>{Object.keys(order.cartItems).length} Items</div>
-                <Separator className="w-2! h-0.5" />
-                <div>
-                  {formatDate(
-                    new Date(order.basicInfo.createdAt),
-                    "dd/MM/yyyy"
-                  )}
-                </div>
+    <div key={order.id} className="max-w-[500px]">
+      <div className="flex items-center justify-between ">
+        <div className="flex items-center gap-2">
+          <ChevronRight size={16} onClick={() => setIsShownTransaction(!isShownTransaction)} />
+          <div>
+            <div className="font-semibold">{order.id}</div>
+            <div className="flex items-center gap-1 text-sm">
+              <div>{Object.keys(order.cartItems).length} Items</div>
+              <Separator className="w-2! h-0.5" />
+              <div>
+                {formatDate(new Date(order.basicInfo.createdAt), "dd/MM/yyyy")}
               </div>
             </div>
-
-            <Button
-              onClick={() => setIsShownRateForm(!isShownRateForm)}
-              className={cn("bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-lg", {
-                hidden: order.basicInfo.orderStatus !== "accepted"
-              })}
-            >
-              Rate Now <Star className="stroke-yellow-400 fill-yellow-400" />
-            </Button>
           </div>
-
-          {isShownRateForm && (
-            <RatingForm
-              order={order}
-              onSubmitCallback={() => setIsShownRateForm(false)}
-            />
-          )}
         </div>
+
+        <Button
+          onClick={() => setIsShownRateForm(!isShownRateForm)}
+          className={cn(
+            "bg-yellow-50 text-yellow-600 hover:bg-yellow-50 hover:shadow-yellow-100 hover:shadow-lg",
+            {
+              hidden: order.basicInfo.orderStatus !== "accepted",
+            }
+          )}
+        >
+          Rate Now <Star className="stroke-yellow-400 fill-yellow-400" />
+        </Button>
       </div>
+
+      {isShownRateForm && (
+        <RatingForm
+          order={order}
+          onSubmitCallback={() => setIsShownRateForm(false)}
+        />
+      )}
     </div>
   );
 };

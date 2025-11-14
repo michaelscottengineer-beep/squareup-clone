@@ -1,17 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import useAuth from "@/hooks/use-auth";
 import type { TPaymentMethod } from "@/types/payment";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { FaCcVisa } from "react-icons/fa6";
-import { FaCcMastercard } from "react-icons/fa6";
+import { Plus } from "lucide-react";
+import React from "react";
+import { FaCcMastercard, FaCcVisa } from "react-icons/fa";
 
-interface ListCardProps {
-  onChange?: (methodId: string) => void;
-}
+const BillingListCards = () => {
+  const { user } = useAuth();
 
-const ListCard = ({ onChange }: ListCardProps) => {
   const { data: methods } = useQuery({
     queryKey: ["payment_methods"],
     queryFn: async () => {
@@ -20,7 +18,7 @@ const ListCard = ({ onChange }: ListCardProps) => {
           import.meta.env.VITE_BASE_URL + "/payment_methods",
           {
             body: JSON.stringify({
-              customerId: "cus_TQ00ka7jjNyZ8e",
+              customerId: user?.customerId,
             }),
             headers: {
               "Content-Type": "application/json", // IMPORTANT
@@ -36,21 +34,19 @@ const ListCard = ({ onChange }: ListCardProps) => {
         return [];
       }
     },
+    enabled: !!user?.uid,
   });
 
-  useEffect(() => {
-    if (methods?.length) {
-      onChange?.(methods[0].id);
-    }
-  }, [methods]);
-
-  console.log(methods);
   return (
     <div>
-      <RadioGroup
-        onValueChange={(val) => onChange?.(val)}
-        defaultValue={methods?.[0]?.id ?? ""}
-      >
+      <div className="flex mb-8 items-center justify-between">
+        <h1 className="text-2xl font-semibold">BillingListCards</h1>
+        <Button className="uppercase bg-green-500 hover:bg-green-600 ">
+          <Plus className="w-4 h-4 mr-2" /> add new card
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-3">
         {methods?.map((method) => {
           return (
             <Button
@@ -59,8 +55,7 @@ const ListCard = ({ onChange }: ListCardProps) => {
               asChild
               variant={"ghost"}
             >
-              <Label className="method flex font-semibold items-center gap-2">
-                <RadioGroupItem value={method.id} />
+              <div className="method flex font-semibold items-center gap-2">
                 <div>
                   {method.card.brand === "mastercard" ? (
                     <FaCcMastercard />
@@ -73,13 +68,13 @@ const ListCard = ({ onChange }: ListCardProps) => {
                 <div className="ml-auto text-xs">
                   {method.card.exp_month} / {method.card.exp_year}
                 </div>
-              </Label>
+              </div>
             </Button>
           );
         })}
-      </RadioGroup>
+      </div>
     </div>
   );
 };
 
-export default ListCard;
+export default BillingListCards;
