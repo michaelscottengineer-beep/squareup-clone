@@ -43,6 +43,8 @@ import RestaurantRating from "./pages/restaurants/RestaurantRating";
 import BillingLayout from "./pages/billings/BillingLayout";
 import BillingTransaction from "./pages/billings/trasaction/BillingTransaction";
 import BillingListCards from "./pages/billings/cards/BillingListCards";
+import StaffMemberList from "./pages/dashboard/staffs/members/StaffMemberList ";
+import MemberForm from "./pages/dashboard/staffs/members/MemberForm";
 
 const router = createBrowserRouter([
   {
@@ -89,14 +91,25 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardHomePage />,
       },
-
+ {
+        path: "/dashboard/restaurants/management",
+        element: <RestaurantManagement />,
+      },
       {
         path: "/dashboard/restaurants/rating",
         element: <RestaurantRating />,
       },
       {
-        path: "/dashboard/restaurants/management",
-        element: <RestaurantManagement />,
+        path: "/dashboard/restaurants/rating",
+        element: <RestaurantRating />,
+      },
+      {
+        path: "/dashboard/staffs/members",
+        element: <StaffMemberList />,
+      },
+      {
+        path: "/dashboard/staffs/members/new",
+        element: <MemberForm />,
       },
       { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
       {

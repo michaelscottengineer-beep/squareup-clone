@@ -82,8 +82,7 @@ export function TeamSwitcher() {
           {user?.role !== "admin" && (
             <DropdownMenuContent
               className={cn(
-                "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg",
-              
+                "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
               )}
               align="start"
               side={isMobile ? "bottom" : "right"}
@@ -116,7 +115,7 @@ export function TeamSwitcher() {
 }
 
 const ListRestaurant = () => {
-  const { user } = useAuth();
+  const { user, updateRestaurant, memberInfo } = useAuth();
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const setRestaurantId = useCurrentRestaurantId((state) => state.set);
 
@@ -124,9 +123,12 @@ const ListRestaurant = () => {
   const { data: restaurants } = useUserRestaurantsQuery(
     (restaurantIds ?? []).filter((resId) => resId !== restaurantId)
   );
-
+  console.log("member info", memberInfo);
   const handleChange = (id: string) => {
     setRestaurantId(id);
+    const restaurant = user?.restaurants?.[id];
+    console.log(restaurant, 'zz restaurant')
+    updateRestaurant(restaurant);
   };
 
   console.log("teams", restaurants);

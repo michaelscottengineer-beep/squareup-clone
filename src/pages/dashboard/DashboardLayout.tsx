@@ -14,20 +14,14 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="w-screen h-20 fixed top-0 z-50 left-0 bg-accent-promo/5">
-        Header
-      </div>
-      <div className="relative h-[calc(100vh-80px)] top-20">
-        <SidebarProvider className="h-[calc(100vh-80px)]! min-h-[calc(100vh-80px)]! max-h-[calc(100vh-80px)]! ">
-          <AppSidebar className="fixed top-20 h-[calc(100vh-80px)]" />
+      <div className="relative  ">
+        <SidebarProvider className="! min-! max-! ">
+          <AppSidebar className="fixed  " />
           <SidebarInset>
             <main className="flex-1">
-      
-
               <div className=" px-10 py-10">
                 <Outlet />
               </div>
-
             </main>
           </SidebarInset>
         </SidebarProvider>
