@@ -25,6 +25,7 @@ import useAuth from "@/hooks/use-auth";
 import type { PropsWithChildren } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CustomerLayout from "@/pages/dashboard/customers/CustomerLayout";
+import RestaurantJobLayout from "@/pages/dashboard/jobs/RestaurantJobLayout";
 
 const dashboardRoute: RouteObject = {
   path: "/dashboard",
@@ -33,6 +34,14 @@ const dashboardRoute: RouteObject = {
     {
       index: true,
       element: <DashboardHomePage />,
+    },
+    {
+      path: "/dashboard/jobs/management",
+      element: (
+        <ProtectedRoute>
+          <RestaurantJobLayout />,
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/dashboard/customers/management",

@@ -64,3 +64,11 @@ export type TRestaurantCustomer = {
     totalOrder: number;
   };
 };
+
+export type TRestaurantJob = {
+  id: string;
+  basicInfo: {
+    name: string;
+    description: string;
+  };
+};

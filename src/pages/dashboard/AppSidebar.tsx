@@ -6,6 +6,7 @@ import {
   AudioWaveform,
   BookOpen,
   Bot,
+  Briefcase,
   Command,
   Frame,
   GalleryVerticalEnd,
@@ -153,6 +154,18 @@ const data = {
         {
           title: "Management",
           url: "/dashboard/customers/management",
+        },
+      ],
+      canView: ["admin"],
+    },
+    {
+      title: "Jobs",
+      url: "#",
+      icon: Briefcase,
+      items: [
+        {
+          title: "Management",
+          url: "/dashboard/jobs/management",
         },
       ],
       canView: ["admin"],
