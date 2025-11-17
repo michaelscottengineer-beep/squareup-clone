@@ -45,7 +45,22 @@ export type TRestaurant = {
       [`4star`]: number;
       [`5star`]: number;
       totalRating: number;
-    }
+    };
+    totalOrder: number;
+  };
+};
+
+export type TRestaurantCustomer = {
+  id: string;
+  basicInfo: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+  orders: {
+    [id: string]: { id: string };
+  };
+  statistics: {
     totalOrder: number;
   };
 };

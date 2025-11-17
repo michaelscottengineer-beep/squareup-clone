@@ -18,7 +18,7 @@ import { Form } from "@/components/ui/form";
 import PickUpTabsContent from "./PickUpTabsContent";
 import { parseSegments } from "@/utils/helper";
 import useAuth from "@/hooks/use-auth";
-import { push, ref, set, update } from "firebase/database";
+import { increment, push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import GratuitySelector from "./GratuitySelector";
 import CostFreeSummary from "./CostFreeSummary";
@@ -82,6 +82,30 @@ const CheckoutSheetContent = () => {
         restaurantId: shopId,
       };
       updates[userTrackingOrderPath] = userTrackingOrderData;
+
+      const restaurantCustomerPath = {
+        index: () =>
+          parseSegments("restaurants", shopId, "allCustomers", user?.uid),
+        order: () =>
+          parseSegments(
+            restaurantCustomerPath.index(),
+            "orders",
+            newOrderRef.key
+          ),
+        statistics: {
+          index: () =>
+            parseSegments(restaurantCustomerPath.index(), "statistics"),
+          totalOrder: () =>
+            parseSegments(
+              restaurantCustomerPath.statistics.index(),
+              "totalOrder"
+            ),
+        },
+      };
+
+      updates[restaurantCustomerPath.order()] = { id: newOrderRef.key, createdAt: new Date().toISOString() };
+      updates[restaurantCustomerPath.statistics.totalOrder()] = increment(1);
+      console.log(updates)
 
       await update(ref(db), updates);
       const basicInfoRef = ref(db, parseSegments(prefixSegment, "basicInfo"));

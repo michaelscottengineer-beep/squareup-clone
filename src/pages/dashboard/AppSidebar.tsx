@@ -145,6 +145,18 @@ const data = {
       ],
       canView: ["admin"],
     },
+    {
+      title: "Customers",
+      url: "#",
+      icon: Users,
+      items: [
+        {
+          title: "Management",
+          url: "/dashboard/customers/management",
+        },
+      ],
+      canView: ["admin"],
+    },
   ],
 };
 
