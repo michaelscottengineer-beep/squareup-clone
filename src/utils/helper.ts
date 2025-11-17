@@ -78,3 +78,8 @@ export function getConcatAddress(
 ) {
   return [street, city, state + " " + zip].join(", ");
 }
+
+
+export const renderGender = () => { 
+  return {}
+}

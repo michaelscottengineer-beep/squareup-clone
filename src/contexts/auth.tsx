@@ -34,20 +34,17 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         const restaurants = Object.values(userInfo?.restaurants ?? {});
         const currentRestaurantId = useCurrentRestaurantId.getState().id;
         const defaultRestaurantId = restaurants.find((res) => res.default);
-        console.log("default restaurant", defaultRestaurantId);
+        console.log("default restaurant", defaultRestaurantId, currentRestaurantId);
         if (!currentRestaurantId) {
-          useCurrentRestaurantId
-            .getState()
-            .set(
-              defaultRestaurantId?.id ?? restaurants?.[0]?.id ?? "NO RESTAURANT"
-            );
+          const resId = defaultRestaurantId?.id ?? restaurants?.[0]?.id;
+          if (resId) useCurrentRestaurantId.getState().set(resId);
 
-          if (defaultRestaurantId?.staffId) {
-            updateRestaurant(defaultRestaurantId);
+          if (defaultRestaurantId?.staffId ||  restaurants?.[0]?.staffId) {
+            updateRestaurant(defaultRestaurantId || restaurants?.[0]);
           }
         } else {
           const restaurant = userInfo?.restaurants?.[currentRestaurantId];
-          console.log('follow local ', restaurant, currentRestaurantId)
+          console.log("follow local ", restaurant, currentRestaurantId);
           updateRestaurant(restaurant);
         }
 
@@ -57,7 +54,8 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         setUser(null);
         if (
           !window.location.href.includes("/signin") &&
-          !window.location.href.includes("/signup")
+          !window.location.href.includes("/signup") && 
+          !window.location.href.includes("/setup")
         )
           window.location.href = window.location.origin + "/signin";
       }
@@ -69,14 +67,18 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   async function updateRestaurant(
     data: TUser["restaurants"]["number"] | undefined
   ) {
-    if (!data) return;
+    if (!data?.staffId) {
+      setMemberInfo(null);
+      return;
+    }
     const staffRef = ref(
       db,
       parseSegments("restaurants", data.id, "allStaffs", data.staffId)
     );
     const staff = await get(staffRef);
     console.log("staff info after reset", staff.val());
-    setMemberInfo({ ...staff.val() });
+    if (staff.exists()) setMemberInfo({ ...staff.val() });
+    else setMemberInfo(null);
   }
 
   return (

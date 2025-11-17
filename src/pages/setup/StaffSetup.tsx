@@ -22,11 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SheetClose } from "@/components/ui/sheet";
-import { db } from "@/firebase";
+import { auth, db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { memberJob, type TMember } from "@/types/staff";
+import { memberJob, type TInviting, type TMember } from "@/types/staff";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   equalTo,
   get,
@@ -34,6 +35,7 @@ import {
   push,
   query,
   ref,
+  set,
   update,
 } from "firebase/database";
 import { X } from "lucide-react";
@@ -42,12 +44,16 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 
-const MemberForm = () => {
+type FormValues = TMember & {
+  setup: {
+    password: string;
+  };
+};
+const StaffSetup = () => {
   const navigate = useNavigate();
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
-  const { staffId } = useParams();
+  const { invitingId } = useParams();
 
-  const form = useForm<TMember>({
+  const form = useForm<FormValues>({
     defaultValues: {
       basicInfo: {
         address: "",
@@ -60,114 +66,114 @@ const MemberForm = () => {
         role: "employee",
         startedAt: "",
       },
+      setup: {
+        password: "",
+      },
     },
   });
 
-  const { data: staff } = useQuery({
-    queryKey: ["restaurants", restaurantId, "allStaffs", staffId],
+  const { data: inviting } = useQuery({
+    queryKey: ["invites", invitingId],
     queryFn: async () => {
+      const inviteRef = ref(db, parseSegments(...["invites", invitingId]));
+      const doc = await get(inviteRef);
+
+      return { ...doc.val(), id: invitingId } as TInviting;
+    },
+    enabled: !!invitingId,
+  });
+
+  console.log(inviting)
+  const { data: staff } = useQuery({
+    queryKey: ["restaurants", inviting?.restaurantId, "allStaffs", inviting?.staffId],
+    queryFn: async () => {
+      const staffId = inviting?.staffId;
       const staffRef = ref(
         db,
-        parseSegments(...["restaurants", restaurantId, "allStaffs", staffId])
+        parseSegments(...["restaurants", inviting?.restaurantId, "allStaffs", staffId])
       );
       const doc = await get(staffRef);
-
-      return { ...doc.val(), id: staffId };
+      console.log(doc.exists(), ["restaurants", inviting?.restaurantId, "allStaffs", staffId])
+      return { ...doc.val(), id: staffId } as TMember;
     },
-    enabled: !!restaurantId && !!staffId && staffId !== "new",
+    enabled: !!inviting,
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: TMember) => {
+    mutationFn: async (data: FormValues) => {
       const basicInfo = data.basicInfo;
 
-      // const userRef = ref(db, parseSegments("users"));
-      // const userQuery = query(
-      //   userRef,
-      //   orderByChild("email"),
-      //   equalTo(basicInfo.email)
-      // );
-      // const user = await get(userQuery);
-      // if (!user.exists()) {
-      //   throw new Error(
-      //     "The user with email " + basicInfo.email + " doest not exists!"
-      //   );
-      // }
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        basicInfo.email,
+        data.setup.password
+      );
 
-      // const userKey = Object.keys(user.val() ?? {})?.[0];
+      const userKey = user.uid;
 
-      let newStaffKey = null;
-      if (staffId && staffId !== "new") newStaffKey = staffId;
-      else {
-        newStaffKey = push(
-          ref(db, parseSegments("restaurants", restaurantId, "allStaffs"))
-        ).key;
-      }
+      const newStaffKey = inviting?.staffId;
 
-      const staffPath = parseSegments(
+      const staffStatusPath = parseSegments(
         "restaurants",
-        restaurantId,
+        inviting?.restaurantId,
         "allStaffs",
         newStaffKey,
-        "basicInfo"
+        "basicInfo",
+        "status"
       );
+      const staffUserUIDPath = parseSegments(
+        "restaurants",
+        inviting?.restaurantId,
+        "allStaffs",
+        newStaffKey,
+        "basicInfo",
+        "userUID"
+      );
+
       const updates: { [key: string]: any } = {};
-      updates[staffPath] = {
-        ...basicInfo,
-        userUID: "",
-        status: "pending",
-      };
-      // updates[parseSegments("users", userKey, "restaurants", restaurantId)] = {
-      //   default: false,
-      //   id: restaurantId,
-      //   staffId: newStaffKey,
-      // };
+      updates[staffStatusPath] = "accepted";
+      updates[staffUserUIDPath] = userKey;
 
-      update(ref(db), updates);
+      await set(ref(db, parseSegments("users", userKey)), {
+        displayName: basicInfo.fullName,
+        email: basicInfo.email,
+        role: "user",
+        avatar: "",
+        customerId: "",
 
-      const inviting = await push(ref(db, parseSegments("invites")), {
-        restaurantId,
-        email: data.basicInfo.email,
+      });
+
+      updates[parseSegments("users", userKey, "restaurants", inviting?.restaurantId)] = {
+        default: false,
+        id: inviting?.restaurantId,
         staffId: newStaffKey,
-      });
+      };
 
-      return await fetch(import.meta.env.VITE_BASE_URL + "/staff-inviting", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          email: data.basicInfo.email,
-          restaurantName: restaurantId,
-          invitingId: inviting.key,
-        }),
-      });
+
+      return await update(ref(db), updates);
     },
     onSuccess: () => {
-      toast.success(
-        `${
-          staffId && staffId !== "new" ? "Edit" : "Send an inviting to"
-        } member successfully`
-      );
-      navigate(-1);
+      toast.success(`Setup member successfully`);
+      navigate("/signin");
     },
     onError: (err) => {
-      console.log(
-        `${staffId && staffId !== "new" ? "Edit" : "Send an inviting to"} member error`,
-        err
-      );
-      toast.error(
-        `${staffId && staffId !== "new" ? "Edit" : "Send an inviting to"} member error : ` +
-          err.message
-      );
+      console.log(`Setup member error`, err);
+      toast.error(`Setup member error : ` + err.message);
     },
   });
 
   useEffect(() => {
-    if (staff) form.reset(staff);
+    console.log("SS", staff);
+    if (staff)
+      form.reset({
+        ...form.getValues(),
+        basicInfo: {
+          ...staff.basicInfo,
+        },
+      });
   }, [staff]);
 
-  const onSubmit = (data: TMember) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data);
     mutation.mutate(data);
   };
@@ -178,17 +184,6 @@ const MemberForm = () => {
         className="w-screen! max-w-full! h-screen rounded-none flex flex-col "
         showCloseButton={false}
       >
-        <DialogHeader className="p-0 w-full h-max flex justify-between">
-          <Button
-            variant={"ghost"}
-            className="w-max h-max p-2 rounded-full"
-            size={"icon-lg"}
-            onClick={() => navigate(-1)}
-          >
-            <X />
-          </Button>
-          <div></div>
-        </DialogHeader>
         <div className="w-full h-full flex justify-center items-center">
           <Form {...form}>
             <form
@@ -203,6 +198,7 @@ const MemberForm = () => {
                     <FormItem>
                       <FormControl>
                         <Input
+                          disabled
                           placeholder="Full Name"
                           {...field}
                           className="flex-1"
@@ -220,6 +216,7 @@ const MemberForm = () => {
                     <FormItem>
                       <FormControl>
                         <Input
+                          disabled
                           placeholder="Address"
                           {...field}
                           className="flex-1"
@@ -239,6 +236,7 @@ const MemberForm = () => {
                     <FormItem>
                       <FormControl>
                         <Input
+                          disabled
                           placeholder="Phone"
                           {...field}
                           className="flex-1"
@@ -259,7 +257,7 @@ const MemberForm = () => {
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full" disabled>
                             <SelectValue placeholder="Select Gender" />
                           </SelectTrigger>
 
@@ -293,6 +291,7 @@ const MemberForm = () => {
                           placeholder="Day of  Birth"
                           {...field}
                           className="flex-1"
+                          disabled
                         />
                       </FormControl>
                       <FormMessage />
@@ -310,7 +309,7 @@ const MemberForm = () => {
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full" disabled>
                             <SelectValue placeholder="Select Job" />
                           </SelectTrigger>
 
@@ -345,6 +344,25 @@ const MemberForm = () => {
                         <Input
                           placeholder="Staff Email"
                           {...field}
+                          disabled
+                          className="flex-1"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`setup.password`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          required
+                          placeholder="Your password"
+                          {...field}
                           className="flex-1"
                         />
                       </FormControl>
@@ -353,9 +371,7 @@ const MemberForm = () => {
                   )}
                 />
               </div>
-              <Button>
-                {staffId && staffId !== "new" ? "Save" : "Create"}
-              </Button>
+              <Button>{"DONE"}</Button>
             </form>
           </Form>
         </div>
@@ -364,4 +380,4 @@ const MemberForm = () => {
   );
 };
 
-export default MemberForm;
+export default StaffSetup;

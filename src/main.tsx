@@ -45,6 +45,8 @@ import BillingTransaction from "./pages/billings/trasaction/BillingTransaction";
 import BillingListCards from "./pages/billings/cards/BillingListCards";
 import StaffMemberList from "./pages/dashboard/staffs/members/StaffMemberList ";
 import MemberForm from "./pages/dashboard/staffs/members/MemberForm";
+import dashboardRoute from "./routes/dashboard";
+import StaffSetup from "./pages/setup/StaffSetup";
 
 const router = createBrowserRouter([
   {
@@ -84,83 +86,10 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    children: [
-      {
-        index: true,
-        element: <DashboardHomePage />,
-      },
- {
-        path: "/dashboard/restaurants/management",
-        element: <RestaurantManagement />,
-      },
-      {
-        path: "/dashboard/restaurants/rating",
-        element: <RestaurantRating />,
-      },
-      {
-        path: "/dashboard/restaurants/rating",
-        element: <RestaurantRating />,
-      },
-      {
-        path: "/dashboard/staffs/members",
-        element: <StaffMemberList />,
-      },
-      {
-        path: "/dashboard/staffs/members/new",
-        element: <MemberForm />,
-      },
-      { path: "/dashboard/restaurants/new", element: <RestaurantForm /> },
-      {
-        path: "/dashboard/restaurants/:restaurantId",
-        element: <RestaurantForm />,
-      },
-      {
-        path: "/dashboard/restaurants/settings",
-        element: <RestaurantSettingsPage />,
-      },
-      {
-        path: "/dashboard/restaurants/promotions",
-        element: <RestaurantPromotion />,
-      },
-      { path: "/dashboard/notifications", element: <NotificationLayout /> },
-      { path: "/dashboard/orders", element: <OrderLayout /> },
-      { path: "/dashboard/orders/history", element: <OrderHistory /> },
-      { path: "/dashboard/orders/:orderId", element: <OrderDetail /> },
-      { path: "/dashboard/items/library", element: <ItemLibraryPage /> },
-      {
-        path: "/dashboard/items/library/new",
-        element: <NewItemCreationPage />,
-      },
-      {
-        path: "/dashboard/items/library/:itemId",
-        element: <NewItemCreationPage />,
-      },
-      { path: "/dashboard/items/modifiers", element: <ModifierHomePage /> },
-      { path: "/dashboard/items/modifiers/new", element: <ModifierFormPage /> },
-      {
-        path: "/dashboard/items/modifiers/:modifierId",
-        element: <ModifierFormPage />,
-      },
-      { path: "/dashboard/items/options", element: <OptionsPage /> },
-      { path: "/dashboard/items/options/new", element: <OptionFormPage /> },
-      {
-        path: "/dashboard/items/options/:optionId",
-        element: <OptionFormPage />,
-      },
-      {
-        path: "/dashboard/items/categories",
-        element: <CategoriesHomePage />,
-        children: [
-          {
-            path: "/dashboard/items/categories" + "/:cateId",
-            element: <CategoryFormPage />,
-          },
-        ],
-      },
-    ],
+    path: "/setup/:invitingId",
+    element: <StaffSetup />,
   },
+  { ...dashboardRoute },
   {
     path: "/signin",
     element: <LoginPage />,

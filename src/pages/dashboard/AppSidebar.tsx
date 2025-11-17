@@ -60,6 +60,7 @@ const data = {
       icon: Home,
       url: "/dashboard",
       items: [],
+      canView: ["employee", "admin"],
     },
 
     {
@@ -76,6 +77,8 @@ const data = {
           url: "/dashboard/orders/history",
         },
       ],
+
+      canView: ["employee", "admin"],
     },
     {
       title: "Item & Inventory",
@@ -103,6 +106,7 @@ const data = {
           url: "#",
         },
       ],
+      canView: ["admin"],
     },
     {
       title: "Restaurants",
@@ -126,9 +130,10 @@ const data = {
           url: "/dashboard/restaurants/promotions",
         },
       ],
+      canView: ["admin"],
     },
-  
- {
+
+    {
       title: "Staffs",
       url: "#",
       icon: Users,
@@ -138,6 +143,7 @@ const data = {
           url: "/dashboard/staffs/members",
         },
       ],
+      canView: ["admin"],
     },
   ],
 };

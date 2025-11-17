@@ -29,6 +29,7 @@ const LoginPage = () => {
     onSuccess: (data) => {
       console.log("signed in data", data);
       toast.success("Sign in successfully");
+        window.location.href = window.location.origin + "/dashboard";
     },
     onError: () => {
       toast.error("Signin failed");

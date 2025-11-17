@@ -23,10 +23,11 @@ import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { TOrderHistory } from "@/types/order";
 import useAuth from "@/hooks/use-auth";
-export const memberColumns: ColumnDef<TOrder>[] = [
+import type { TMember } from "@/types/staff";
+export const memberColumns: ColumnDef<TMember>[] = [
   {
-    accessorKey: "name",
-    header: "Order",
+    accessorKey: "id",
+    header: "StaffId",
     cell: ({ row, renderValue }) => (
       <div className="flex items-center gap-1">
         {/* <Checkbox
@@ -39,50 +40,52 @@ export const memberColumns: ColumnDef<TOrder>[] = [
     ),
   },
   {
-    accessorKey: "basicInfo.createdAat",
-    header: "Date",
+    accessorKey: "basicInfo.fullName",
+    header: "Full Name",
     cell: ({ row }) => (
-      <div className="">
-        {formatDate(
-          new Date(row.original.basicInfo.createdAt),
-          "dd/MM/yyyy HH:ss"
-        )}
-      </div>
+      <div className="">{row.original.basicInfo.fullName}</div>
     ),
   },
   {
+    accessorKey: "basicInfo.address",
+    header: "Address",
+    cell: ({ row }) => {
+      const address = row.original.basicInfo.address;
+
+      return <div>{address}</div>;
+    },
+  },
+  {
+    accessorKey: "basicInfo.job",
+    header: "Job",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.original.basicInfo.job}</div>
+    ),
+  },
+    {
+    accessorKey: "basicInfo.email",
+    header: "Email",
+    cell: ({ row }) => (
+      <div className="">{row.original.basicInfo.email}</div>
+    ),
+  },
+  {
+    accessorKey: "basicInfo.gender",
+    header: "Gender",
+    cell: ({ row }) => {
+      return <div className="capitalize">{row.original.basicInfo.gender}</div>;
+    },
+  },
+    {
     accessorKey: "basicInfo.status",
     header: "Status",
     cell: ({ row }) => {
       const status = row.original.basicInfo.status;
-
-      return (
-        <div
-          className={cn(" font-semibold w-max rounded-md px-2 ", {
-            "bg-yellow-50 text-yellow-500": status === "pending",
-            "bg-green-50 text-green-500": status === "success",
-          })}
-        >
-          {row.original.basicInfo.status}
-        </div>
-      );
+      return <div className={cn("capitalize font-medium w-max px-2 py-1 rounded-full text-xs", {
+        "bg-green-100 text-green-500": status === "accepted",
+        "bg-yellow-100 text-yellow-500": status === "pending",
+      })}>{status}</div>;
     },
-  },
-  {
-    accessorKey: "basicInfo.feeSummary.total",
-    header: "Total",
-    cell: ({ row }) => (
-      <div className="">
-        ${row.original.basicInfo.feeSummary.total.toFixed(2)}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "cartItems",
-    header: "Items",
-    cell: ({ row }) => (
-      <div className="">{row.original.cartItems.length} Items</div>
-    ),
   },
   {
     id: "actions",
@@ -90,51 +93,35 @@ export const memberColumns: ColumnDef<TOrder>[] = [
       const navigate = useNavigate();
       const queryClient = useQueryClient();
       const { user } = useAuth();
+      const { id: staffId, basicInfo } = row.original;
 
       const restaurantId = useCurrentRestaurantId((state) => state.id);
 
-      const { mutate: handleOrderAction } = useMutation({
-        mutationFn: async (type: "rejected" | "accepted") => {
-          const prefixRestaurant = parseSegments("restaurants", restaurantId);
-
-          const allHistoryRef = ref(db);
-          const newHistory = await push(
-            allHistoryRef,
-            parseSegments(prefixRestaurant, "allOrdersHistory")
+      const { mutate: handleDelete } = useMutation({
+        mutationFn: async () => {
+          const staffPath = parseSegments(
+            "restaurants",
+            restaurantId,
+            "allStaffs",
+            staffId
+          );
+          const staffRestaurantPath = parseSegments(
+            "users",
+            basicInfo.userUID,
+            "restaurants",
+            restaurantId
           );
 
-          const updates: { [key: string]: any } = {};
-          updates[
-            parseSegments(prefixRestaurant, "allOrdersHistory", newHistory.key)
-          ] = {
-            basicInfo: {
-              orderId: row.original.id,
-              createdAt: new Date().toISOString(),
-              status: type,
-              createdBy: user?.uid,
-              createdByObj: {
-                email: user?.email,
-              },
-            },
-          };
-          updates[
-            parseSegments(
-              prefixRestaurant,
-              "allOrders",
-              row.original.id,
-              "basicInfo"
-            )
-          ] = {
-            ...row.original.basicInfo,
-            orderStatus: type,
-          };
 
-          return await update(ref(db), updates);
+          return await Promise.all([
+            remove(ref(db, staffPath)),
+            remove(ref(db, staffRestaurantPath)),
+          ]);
         },
         onSuccess: () => {
           toast.success("deleted successfully");
           queryClient.invalidateQueries({
-            queryKey: ["allOrders"],
+            queryKey: ["restaurants", restaurantId, "allStaffs"],
           });
         },
         onError: (err) => {
@@ -153,17 +140,16 @@ export const memberColumns: ColumnDef<TOrder>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigate("/dashboard/orders/" + row.original.id)}
-            >
-              View
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleOrderAction("accepted")}>
-              Accept
+            <DropdownMenuItem onClick={() => handleDelete()}>
+              Delete
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => handleOrderAction("rejected")}>
-              Rejected
+            <DropdownMenuItem
+              onClick={() =>
+                navigate("/dashboard/staffs/members/" + row.original.id)
+              }
+            >
+              Edit
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

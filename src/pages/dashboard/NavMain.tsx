@@ -30,14 +30,22 @@ export function NavMain({
       title: string;
       url: string;
     }[];
+    canView: string[]
   }[];
 }) {
+  const {memberInfo, user} = useAuth();
+
+  const itemWithPermission = items.filter(item => {
+    console.log("asf", memberInfo)
+    return !memberInfo ||  item.canView.includes(memberInfo?.basicInfo?.role) ;
+  });
+  if (!user?.uid) return <div>Loading Items....</div>
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         <MenuReceiveOrder />
-        {items.map((item) => (
+        {itemWithPermission.map((item) => (
           <Collapsible
             key={item.title}
             asChild
@@ -80,6 +88,7 @@ import { useEffect, useRef, useState } from "react";
 import { type TOrder } from "@/types/checkout";
 import { Link, useNavigate } from "react-router";
 import useBellSound from "@/stores/use-bell-sound";
+import useAuth from "@/hooks/use-auth";
 
 const MenuReceiveOrder = () => {
   const navigate = useNavigate();
