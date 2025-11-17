@@ -26,6 +26,7 @@ import type { PropsWithChildren } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CustomerLayout from "@/pages/dashboard/customers/CustomerLayout";
 import RestaurantJobLayout from "@/pages/dashboard/jobs/RestaurantJobLayout";
+import PermissionLayout from "@/pages/dashboard/staffs/permissions/PermissionLayout";
 
 const dashboardRoute: RouteObject = {
   path: "/dashboard",
@@ -72,6 +73,14 @@ const dashboardRoute: RouteObject = {
       element: (
         <ProtectedRoute>
           <RestaurantRating />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/dashboard/staffs/permissions",
+      element: (
+        <ProtectedRoute>
+          <PermissionLayout />
         </ProtectedRoute>
       ),
     },

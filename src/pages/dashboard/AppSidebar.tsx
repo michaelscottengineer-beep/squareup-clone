@@ -143,6 +143,10 @@ const data = {
           title: "Members",
           url: "/dashboard/staffs/members",
         },
+        {
+          title: "Permissions",
+          url: "/dashboard/staffs/permissions",
+        },
       ],
       canView: ["admin"],
     },
