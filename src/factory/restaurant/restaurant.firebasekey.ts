@@ -5,12 +5,14 @@ import { ref } from "firebase/database";
 type TRestaurantFirebaseKey = {
   restaurantId?: string;
   jobKey?: string | null;
+  orderId?: string | null;
   permissionKey?: string | null;
 };
 
 const restaurantFirebaseKey = ({
   restaurantId,
   jobKey,
+  orderId,
   permissionKey,
 }: TRestaurantFirebaseKey) => {
   const keys = {
@@ -45,6 +47,20 @@ const restaurantFirebaseKey = ({
     },
     permissionBasicInfoRef: () => {
       return ref(db, keys.permissionBasicInfo());
+    },
+
+    orders: () => parseSegments(...[keys.details(), "allOrders"]),
+    ordersRef: () => ref(db, keys.orders()),
+    order: () => {
+      if (!orderId) throw new Error("missing orderId");
+      return parseSegments(...[keys.orders(), orderId]);
+    },
+    orderRef: () => ref(db, keys.order()),
+    orderBasicInfo: () => {
+      return parseSegments(...[keys.order(), "basicInfo"]);
+    },
+    orderBasicInfoRef: () => {
+      return ref(db, keys.orderBasicInfo());
     },
   };
   return { ...keys };

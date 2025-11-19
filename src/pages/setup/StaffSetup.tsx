@@ -1,3 +1,4 @@
+import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -60,7 +62,7 @@ const StaffSetup = () => {
         createdAt: "",
         fullName: "",
         dob: "",
-        job: "chef",
+        job: "",
         gender: "F",
         phone: "",
         role: "employee",
@@ -83,17 +85,29 @@ const StaffSetup = () => {
     enabled: !!invitingId,
   });
 
-  console.log(inviting)
+  console.log(inviting);
   const { data: staff } = useQuery({
-    queryKey: ["restaurants", inviting?.restaurantId, "allStaffs", inviting?.staffId],
+    queryKey: [
+      "restaurants",
+      inviting?.restaurantId,
+      "allStaffs",
+      inviting?.staffId,
+    ],
     queryFn: async () => {
       const staffId = inviting?.staffId;
       const staffRef = ref(
         db,
-        parseSegments(...["restaurants", inviting?.restaurantId, "allStaffs", staffId])
+        parseSegments(
+          ...["restaurants", inviting?.restaurantId, "allStaffs", staffId]
+        )
       );
       const doc = await get(staffRef);
-      console.log(doc.exists(), ["restaurants", inviting?.restaurantId, "allStaffs", staffId])
+      console.log(doc.exists(), [
+        "restaurants",
+        inviting?.restaurantId,
+        "allStaffs",
+        staffId,
+      ]);
       return { ...doc.val(), id: staffId } as TMember;
     },
     enabled: !!inviting,
@@ -140,15 +154,15 @@ const StaffSetup = () => {
         role: "user",
         avatar: "",
         customerId: "",
-
       });
 
-      updates[parseSegments("users", userKey, "restaurants", inviting?.restaurantId)] = {
+      updates[
+        parseSegments("users", userKey, "restaurants", inviting?.restaurantId)
+      ] = {
         default: false,
         id: inviting?.restaurantId,
         staffId: newStaffKey,
       };
-
 
       return await update(ref(db), updates);
     },
@@ -196,6 +210,7 @@ const StaffSetup = () => {
                   name={`basicInfo.fullName`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Full Name</FormLabel>
                       <FormControl>
                         <Input
                           disabled
@@ -214,6 +229,7 @@ const StaffSetup = () => {
                   name={`basicInfo.address`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input
                           disabled
@@ -234,6 +250,7 @@ const StaffSetup = () => {
                   name={`basicInfo.phone`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Phone</FormLabel>
                       <FormControl>
                         <Input
                           disabled
@@ -252,6 +269,7 @@ const StaffSetup = () => {
                   name={`basicInfo.gender`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Gender</FormLabel>
                       <FormControl>
                         <Select
                           value={field.value}
@@ -286,6 +304,7 @@ const StaffSetup = () => {
                   name={`basicInfo.dob`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Day of Birth</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Day of  Birth"
@@ -304,29 +323,13 @@ const StaffSetup = () => {
                   name={`basicInfo.job`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Job</FormLabel>
                       <FormControl>
-                        <Select
+                        <StaffJobSelector
+                        restaurantId={inviting?.restaurantId ??" "}
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
-                        >
-                          <SelectTrigger className="w-full" disabled>
-                            <SelectValue placeholder="Select Job" />
-                          </SelectTrigger>
-
-                          <SelectContent className="">
-                            {memberJob.map((job, i) => {
-                              return (
-                                <SelectItem
-                                  key={job}
-                                  value={job}
-                                  className="capitalize"
-                                >
-                                  {job}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -340,6 +343,7 @@ const StaffSetup = () => {
                   name={`basicInfo.email`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Staff Email"
@@ -358,6 +362,7 @@ const StaffSetup = () => {
                   name={`setup.password`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input
                           required

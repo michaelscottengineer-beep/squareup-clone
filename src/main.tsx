@@ -47,6 +47,8 @@ import StaffMemberList from "./pages/dashboard/staffs/members/StaffMemberList ";
 import MemberForm from "./pages/dashboard/staffs/members/MemberForm";
 import dashboardRoute from "./routes/dashboard";
 import StaffSetup from "./pages/setup/StaffSetup";
+import PosLayout from "./pages/pos/PosLayout";
+import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,14 @@ const router = createBrowserRouter([
   {
     path: "/setup/:invitingId",
     element: <StaffSetup />,
+  },
+  {
+    path: "/pos",
+    element: <PosLayout />,
+    children: [{
+      path: 'order-line',
+      element: <OrderLineLayout />
+    }]
   },
   { ...dashboardRoute },
   {

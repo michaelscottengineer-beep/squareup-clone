@@ -1,3 +1,4 @@
+import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -54,7 +56,7 @@ const MemberForm = () => {
         createdAt: "",
         fullName: "",
         dob: "",
-        job: "chef",
+        job: "",
         gender: "F",
         phone: "",
         role: "employee",
@@ -153,12 +155,15 @@ const MemberForm = () => {
     },
     onError: (err) => {
       console.log(
-        `${staffId && staffId !== "new" ? "Edit" : "Send an inviting to"} member error`,
+        `${
+          staffId && staffId !== "new" ? "Edit" : "Send an inviting to"
+        } member error`,
         err
       );
       toast.error(
-        `${staffId && staffId !== "new" ? "Edit" : "Send an inviting to"} member error : ` +
-          err.message
+        `${
+          staffId && staffId !== "new" ? "Edit" : "Send an inviting to"
+        } member error : ` + err.message
       );
     },
   });
@@ -201,6 +206,7 @@ const MemberForm = () => {
                   name={`basicInfo.fullName`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Full Name</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Full Name"
@@ -218,6 +224,7 @@ const MemberForm = () => {
                   name={`basicInfo.address`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Address"
@@ -237,6 +244,7 @@ const MemberForm = () => {
                   name={`basicInfo.phone`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Phone</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Phone"
@@ -254,6 +262,8 @@ const MemberForm = () => {
                   name={`basicInfo.gender`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Gender</FormLabel>
+
                       <FormControl>
                         <Select
                           value={field.value}
@@ -288,6 +298,7 @@ const MemberForm = () => {
                   name={`basicInfo.dob`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Day of Birth</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Day of  Birth"
@@ -305,29 +316,13 @@ const MemberForm = () => {
                   name={`basicInfo.job`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Select Staff Job</FormLabel>
                       <FormControl>
-                        <Select
+                        <StaffJobSelector
+                          restaurantId={restaurantId}
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Job" />
-                          </SelectTrigger>
-
-                          <SelectContent className="">
-                            {memberJob.map((job, i) => {
-                              return (
-                                <SelectItem
-                                  key={job}
-                                  value={job}
-                                  className="capitalize"
-                                >
-                                  {job}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -341,6 +336,7 @@ const MemberForm = () => {
                   name={`basicInfo.email`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Staff Email"

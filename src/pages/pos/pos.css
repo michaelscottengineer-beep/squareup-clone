@@ -1,0 +1,7 @@
+:root {
+  --primary: #1ba09c;
+}
+
+.hidden-scrollbar {
+  scrollbar-width: none;
+}

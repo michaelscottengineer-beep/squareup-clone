@@ -7,7 +7,7 @@ export type TMember = {
     gender: "F" | "M" | "O";
     phone: string;
     role: string;
-    job: (typeof memberJob)[number];
+    job: string;
     dob: string;
     address: string;
     startedAt: string;
