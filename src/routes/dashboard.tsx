@@ -27,6 +27,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import CustomerLayout from "@/pages/dashboard/customers/CustomerLayout";
 import RestaurantJobLayout from "@/pages/dashboard/jobs/RestaurantJobLayout";
 import PermissionLayout from "@/pages/dashboard/staffs/permissions/PermissionLayout";
+import TableManagement from "@/pages/dashboard/pos/table/TableManagement";
 
 const dashboardRoute: RouteObject = {
   path: "/dashboard",
@@ -35,6 +36,14 @@ const dashboardRoute: RouteObject = {
     {
       index: true,
       element: <DashboardHomePage />,
+    },
+    {
+      path: "/dashboard/pos/tables",
+      element: (
+        <ProtectedRoute>
+          <TableManagement />,
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/dashboard/jobs/management",

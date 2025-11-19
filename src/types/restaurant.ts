@@ -72,3 +72,15 @@ export type TRestaurantJob = {
     description: string;
   };
 };
+
+export type TRestaurantTable = {
+  id: string;
+  basicInfo: {
+    tableStatus: "on dine" | "reserved" | "available";
+    name: string;
+    maxPeople: number;
+    createdAt: string;
+    updatedAt: string;
+    paymentStatus: "paid" | "unpaid";
+  };
+};

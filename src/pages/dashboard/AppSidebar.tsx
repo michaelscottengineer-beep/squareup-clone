@@ -29,6 +29,7 @@ import { NavMain } from "./NavMain";
 import { NavUser } from "./NavUser";
 import { TeamSwitcher } from "./TeamSwitcher";
 import { IoPricetagOutline } from "react-icons/io5";
+import { MdOutlinePointOfSale } from "react-icons/md";
 
 // This is sample data.
 const data = {
@@ -170,6 +171,22 @@ const data = {
         {
           title: "Management",
           url: "/dashboard/jobs/management",
+        },
+      ],
+      canView: ["admin"],
+    },
+    {
+      title: "On Your POS",
+      url: "#",
+      icon: MdOutlinePointOfSale,
+      items: [
+        {
+          title: "Tables",
+          url: "/dashboard/pos/tables",
+        },
+        {
+          title: "Your POS",
+          url: "/pos/order-line",
         },
       ],
       canView: ["admin"],
