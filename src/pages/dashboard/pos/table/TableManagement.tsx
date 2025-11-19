@@ -26,7 +26,7 @@ import { useNavigate } from "react-router";
 import { restaurantTableColumns } from "./restaurantTableColumns";
 import type { TRestaurantJob, TRestaurantTable } from "@/types/restaurant";
 
-import JobActionDialog from "./TableActionDialog";
+import TableActionDialog from "./TableActionDialog";
 import tableFirebaseKey from "@/factory/table/table.firebaseKey";
 
 const TableManagement = () => {
@@ -90,7 +90,7 @@ const TableManagement = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <JobActionDialog trigger={<Button>Create new Table</Button>} />
+          <TableActionDialog trigger={<Button>Create new Table</Button>} />
         </div>
       </div>
 

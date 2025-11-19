@@ -1,4 +1,3 @@
-import "../pos.css";
 import React, { useRef } from "react";
 import OrderInvoice from "./OrderInvoice";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";

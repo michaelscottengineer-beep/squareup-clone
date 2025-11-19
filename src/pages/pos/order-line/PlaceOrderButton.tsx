@@ -8,9 +8,10 @@ import usePosOrderLineState, {
   usePosOrderLineSubtotal,
 } from "@/stores/use-pos-order-line-state";
 import type { TCheckoutFormDataValues } from "@/types/checkout";
+import type { TRestaurantTable } from "@/types/restaurant";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, update } from "firebase/database";
+import { get, push, ref, update } from "firebase/database";
 import { useEffect, useRef } from "react";
 import { CiDesktopMouse2 } from "react-icons/ci";
 import { io, type Socket } from "socket.io-client";
@@ -75,10 +76,22 @@ const PlaceOrderButton = () => {
         "allNotifications"
       );
       const noticeId = push(ref(db, noticePath)).key;
+      const tableStatusPath = parseSegments(
+        "restaurants",
+        restaurantId,
+        "allTables",
+        tableNumber,
+        "status"
+      );
 
       const paymentInfoPath = parseSegments(keys.details(), "paymentInfo");
       // const cartItemsPath = parseSegments(keys.details(), "cartItems");
-
+      updates[tableStatusPath] = {
+        bookedAt: new Date().toISOString(),
+        numberOfPeople: 2,
+        paymentStatus: "paid",
+        tableStatus: "on dine",
+      } as TRestaurantTable["status"];
       updates[keys.basicInfo()] = {
         ...data,
       };

@@ -84,7 +84,7 @@ const TableForm = ({ defaultData }: { defaultData?: TRestaurantTable }) => {
   const mutation = useMutation({
     mutationFn: async (data: TRestaurantTable) => {
       const keys = tableFirebaseKey({ restaurantId });
-      const newTableId = defaultData?.id || push(ref(db, keys.root())).key;
+      const newTableId = defaultData?.id || data.basicInfo.name;
 
       keys.addParams({ tableId: newTableId });
       const tableRef = keys.basicInfoRef();

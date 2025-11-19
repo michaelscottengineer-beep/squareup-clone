@@ -49,6 +49,7 @@ import dashboardRoute from "./routes/dashboard";
 import StaffSetup from "./pages/setup/StaffSetup";
 import PosLayout from "./pages/pos/PosLayout";
 import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout";
+import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayout";
 
 const router = createBrowserRouter([
   {
@@ -94,10 +95,16 @@ const router = createBrowserRouter([
   {
     path: "/pos",
     element: <PosLayout />,
-    children: [{
-      path: 'order-line',
-      element: <OrderLineLayout />
-    }]
+    children: [
+      {
+        path: "order-line",
+        element: <OrderLineLayout />,
+      },
+      {
+        path: "manage-table",
+        element: <TableManagementLayout />,
+      },
+    ],
   },
   { ...dashboardRoute },
   {

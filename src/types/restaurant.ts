@@ -76,11 +76,16 @@ export type TRestaurantJob = {
 export type TRestaurantTable = {
   id: string;
   basicInfo: {
-    tableStatus: "on dine" | "reserved" | "available";
     name: string;
     maxPeople: number;
     createdAt: string;
     updatedAt: string;
+  };
+  status?: {
+    numberOfPeople: number;
+    customerInfo?: { name: string; phone: string };
+    bookedAt: string;
+    tableStatus: "on dine" | "reserved" | "available";
     paymentStatus: "paid" | "unpaid";
   };
 };

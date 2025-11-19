@@ -1,6 +1,11 @@
+@reference "tailwindcss";
+
 :root {
-  --primary: #1ba09c;
+ 
+   --primary: #1ba09c;
 }
+
+
 
 .hidden-scrollbar {
   scrollbar-width: none;
