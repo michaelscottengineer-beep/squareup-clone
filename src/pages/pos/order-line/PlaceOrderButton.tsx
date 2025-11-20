@@ -28,6 +28,9 @@ const PlaceOrderButton = () => {
 
   const { mutate: handlePlaceOrder } = useMutation({
     mutationFn: async () => {
+      if (!tableNumber) {
+        throw new Error("Table number is required");
+      }
       const data: Pick<
         TCheckoutFormDataValues,
         | "dineIn"
@@ -147,9 +150,7 @@ const PlaceOrderButton = () => {
     },
     onError: (err) => {
       console.error("Err when plac order", err);
-      toast.error("Err when plac order", {
-        description: err.message,
-      });
+      toast.error("Err when plac order: " + err.message, {});
     },
   });
 

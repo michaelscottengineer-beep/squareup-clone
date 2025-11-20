@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,14 +9,16 @@ import {
 import tableFirebaseKey from "@/factory/table/table.firebaseKey";
 import { cn } from "@/lib/utils";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import usePosOrderLineState from "@/stores/use-pos-order-line-state";
 import type { TRestaurantTable } from "@/types/restaurant";
 import { convertFirebaseArrayData } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "date-fns";
 import { get } from "firebase/database";
-import { CheckCircle, Phone, Users } from "lucide-react";
+import { CheckCircle, Phone, Plus, Users } from "lucide-react";
 import React, { useMemo } from "react";
 import { MdTableRestaurant } from "react-icons/md";
+import { useNavigate } from "react-router";
 
 const statusBgColors: Record<string, string> = {
   reserved: "bg-[#E9F4F5] text-[#0B605D]",
@@ -25,6 +28,8 @@ const statusBgColors: Record<string, string> = {
 
 const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const setTableName = usePosOrderLineState(state => state.setTableNo);
+  const navigate = useNavigate();
 
   const { data: tables } = useQuery({
     queryKey: ["restaurants", restaurantId, "pos", "allTables"],
@@ -35,6 +40,7 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
     },
     enabled: !!restaurantId,
   });
+  console.log("tables", tables);
 
   const resolveHeaderText = (status?: TRestaurantTable["status"]) => {
     switch (status?.tableStatus) {
@@ -85,9 +91,11 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
         return status?.tableStatus === "on dine";
       }
 
-      return status?.tableStatus === "available" || status?.tableStatus === undefined;
+      return (
+        status?.tableStatus === "available" || status?.tableStatus === undefined
+      );
     });
-  }, [selectedTab]);
+  }, [selectedTab, tables]);
 
   return (
     <div className="gap-4 flex flex-col mt-4 overflow-y-auto max-h-[600px] flex-1">
@@ -148,15 +156,26 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
               )}
             </CardContent>
 
-            <CardFooter className="flex items-center gap-1">
-              <CheckCircle
-                className={cn("size-3!", {
-                  "text-green-500": status?.paymentStatus === "paid",
-                })}
-              />
-              <span className="text-xs capitalize font-medium">
-                {status?.paymentStatus ?? "UnPaid"}
-              </span>
+            <CardFooter className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <CheckCircle
+                  className={cn("size-3!", {
+                    "text-green-500": status?.paymentStatus === "paid",
+                  })}
+                />
+                <span className="text-xs capitalize font-medium">
+                  {status?.paymentStatus ?? "UnPaid"}
+                </span>
+              </div>
+              {status?.customerInfo?.name && (
+                <Button className="flex items-center text-xs" size={"sm"} onClick={() => {
+                  setTableName(table.basicInfo.name);
+                  navigate("/pos/order-line");
+                }}>
+                  <Plus className="size-3!" />
+                  Order
+                </Button>
+              )}
             </CardFooter>
           </Card>
         );

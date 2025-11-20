@@ -42,6 +42,7 @@ const statusBadgeColorMap = {
 const OrderLine = () => {
   const scrollXRef = useRef<HTMLDivElement>(null);
   const setOrderId = usePosOrderLineState((state) => state.setOrderId);
+  const clear = usePosOrderLineState((state) => state.clear);
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: orders } = useQuery({
@@ -55,7 +56,12 @@ const OrderLine = () => {
         equalTo("Dine In")
       );
       const orders = await get(orderQuery);
-      return convertFirebaseArrayData<TOrderDocumentData>(orders.val());
+      const allOrders = convertFirebaseArrayData<TOrderDocumentData>(
+        orders.val()
+      );
+      return allOrders.filter(
+        (order) => order.basicInfo?.orderStatus !== "completed"
+      );
     },
 
     enabled: !!restaurantId,
@@ -72,7 +78,15 @@ const OrderLine = () => {
 
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-semibold mb-3">Order Line</h1>
+      <div className="flex items-start gap-1">
+        <h1 className="text-2xl font-semibold mb-3">Order Line</h1>
+        <Button
+          className="rounded-full w-max h-max p-1!"
+          onClick={() => clear()}
+        >
+          <Plus />
+        </Button>
+      </div>
       <div className=" overflow-x-auto hidden-scrollbar" ref={scrollXRef}>
         <div className="flex items-center gap-4">
           {orders?.map((o) => {

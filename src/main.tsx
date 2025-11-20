@@ -50,6 +50,7 @@ import StaffSetup from "./pages/setup/StaffSetup";
 import PosLayout from "./pages/pos/PosLayout";
 import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout";
 import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayout";
+import ScreenInvoicePreviewPage from "./pages/screen-invoice-preview/ScreenInvoicePreviewPage";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
         element: <AdminRestaurant />,
       },
     ],
+  },
+  {
+    path: "/invoice-preview",
+    element: <ScreenInvoicePreviewPage />
   },
   {
     path: "/setup/:invitingId",

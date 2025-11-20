@@ -9,11 +9,13 @@ type TCartStore = {
   selectedItems: TSelectedItem;
   tableNo: string;
   orderId?: string;
+  paymentMethod: string;
   clear: () => void;
   add: (item: TCartItem) => void;
   remove: (item: TCartItem) => void;
 
   setTableNo: (no: string) => void;
+  setPaymentMethod: (no: string) => void;
   setOrderId: (orderId: string) => void;
   setCurrentCategoryId: (id: string) => void;
   setSelectedItems: (items: TSelectedItem) => void;
@@ -24,6 +26,7 @@ const usePosOrderLineState = create<TCartStore>((set, get) => ({
   orderId: undefined,
   tableNo: "",
   selectedItems: {},
+  paymentMethod: "cash",
   clear: () =>
     set({
       selectedItems: {},
@@ -57,13 +60,14 @@ const usePosOrderLineState = create<TCartStore>((set, get) => ({
   },
   setSelectedItems: (items) => set({ selectedItems: items }),
   setOrderId: (id) => set({ orderId: id }),
+  setPaymentMethod: (method) => set({ paymentMethod: method }),
   setTableNo: (no) => set({ tableNo: no }),
   setCurrentCategoryId: (id) => set({ currentCategoryId: id }),
 }));
 
 const usePosOrderLineSubtotal = () => {
   const items = usePosOrderLineState((state) => state.selectedItems);
-
+  console.log(items);
   const total = useMemo(() => {
     return Object.values(items).reduce((acc, item) => {
       const availablePromotions = getAvailablePromotions(item.promotions);
@@ -76,11 +80,13 @@ const usePosOrderLineSubtotal = () => {
       const total = Number(item.price) * item.amount;
       const totalPriceWithDiscount =
         total -
-        Number(
-          item.discount?.unit === "%"
-            ? (total * item.discount?.value) / 100
-            : item.discount?.value
-        );
+        (!item.discount
+          ? 0
+          : Number(
+              item.discount?.unit === "%"
+                ? (total * item.discount?.value) / 100
+                : item.discount?.value
+            ));
 
       const totalPriceWithPromotion =
         totalPriceWithDiscount -
@@ -96,6 +102,7 @@ const usePosOrderLineSubtotal = () => {
     }, 0);
   }, [items]);
 
+  console.log("Subtotal calc:", total);
   return Number(total.toFixed(2));
 };
 export default usePosOrderLineState;

@@ -1,7 +1,12 @@
 import DashedHr from "@/components/ui/dashed-hr";
 import { cn } from "@/lib/utils";
 import { Check, Edit2, Trash } from "lucide-react";
-import React, { Fragment, useState, type PropsWithChildren } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
 
 import { BsCashCoin } from "react-icons/bs";
 import { GoCreditCard } from "react-icons/go";
@@ -17,7 +22,7 @@ import { IoMdPrint } from "react-icons/io";
 import { CiDesktopMouse2 } from "react-icons/ci";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PlaceOrderButton from "./PlaceOrderButton";
-import { BiScan } from "react-icons/bi";
+import { BiMoney, BiScan } from "react-icons/bi";
 
 const Panel = ({ children }: PropsWithChildren) => {
   return <div className="bg-white rounded-xl p-4">{children}</div>;
@@ -70,12 +75,13 @@ const SectionItemRow = ({
 };
 
 const methods = [
-  { icon: BsCashCoin, label: "Cash" },
-  { icon: GoCreditCard, label: "Card" },
-  { icon: BiScan, label: "Scan" },
+  { icon: BsCashCoin, label: "cash" },
+  { icon: GoCreditCard, label: "card" },
+  { icon: BiScan, label: "scan" },
 ];
 
 const TableNo = () => {
+  const orderId = usePosOrderLineState((state) => state.orderId);
   const setTableNo = usePosOrderLineState((state) => state.setTableNo);
   const tableNo = usePosOrderLineState((state) => state.tableNo);
   const [text, setText] = useState(tableNo);
@@ -92,7 +98,7 @@ const TableNo = () => {
               onChange={(e) => setText(e.target.value)}
             />
           ) : (
-            `Table No #${tableNo.padStart(2, "0")}`
+            `Table No ${tableNo.padStart(2, "0")}`
           )}
         </SectionTitle>
         <div className="flex items-center gap-1">
@@ -115,8 +121,10 @@ const TableNo = () => {
       </SectionHeader>
 
       <SectionItemRow>
-        <SectionItemText className="font-medium">Order #F0030</SectionItemText>
-        <span className="font-medium">2 People</span>
+        <SectionItemText className="font-medium">
+          Order: {orderId}
+        </SectionItemText>
+        {/* <span className="font-medium">2 People</span> */}
       </SectionItemRow>
     </div>
   );
@@ -129,6 +137,7 @@ import orderFirebaseKey from "@/factory/order/order.firebaseKey";
 import { get } from "firebase/database";
 import type { TOrderDocumentData } from "@/types/checkout";
 import type { TCartItem } from "@/types/item";
+import PaidButton from "./PaidButton";
 
 const OrderInvoice = () => {
   const selectedItems = usePosOrderLineState((state) => state.selectedItems);
@@ -149,55 +158,56 @@ const OrderInvoice = () => {
 
       return { ...doc.val(), id: orderId } as TOrderDocumentData;
     },
-    select: (data) => {
-      if (data) {
-        console.log(data);
-        const items = Object.entries(data.cartItems).map(
-          ([key, item]) =>
-            ({
-              amount: item.quantity,
-              name: item.name,
-              image: item.image,
-              categories: [],
-              description: "",
-              id: key,
-              modifiers: [],
-              note: "",
-              price: item.price,
-              promotions: [],
-              type: "",
-            } as TCartItem)
-        );
-
-        const newItems = items.reduce((acc, item) => {
-          acc[item.id] = { 
-            amount: item.amount,
-            name: item.name,
-            image: item.image,
-            categories: [],
-            description: "",
-            id: "123",
-            modifiers: [],
-            note: "",
-            price: item.price,
-            promotions: [],
-            type: "",
-          };
-
-          return acc;
-        }, {} as TSelectedItem);
-
-        // setSelectedItem(newItems);
-
-        setTableNo(data.basicInfo.dineIn.tableNumber);
-      }
-    },
     enabled: !!restaurantId && !!orderId,
   });
 
   const calcPriceOfItem = (price: number, amount: number) => {
     return (price * amount).toFixed(2);
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      const items = Object.entries(data.cartItems).map(
+        ([key, item]) =>
+          ({
+            amount: item.quantity,
+            name: item.name,
+            image: item.image,
+            categories: [],
+            description: "",
+            id: key,
+            modifiers: [],
+            note: "",
+            price: item.price,
+            promotions: [],
+            type: "",
+          } as TCartItem)
+      );
+
+      const newItems = items.reduce((acc, item) => {
+        acc[item.id] = {
+          amount: item.amount,
+          name: item.name,
+          image: item.image,
+          categories: [],
+          description: "",
+          id: "123",
+          modifiers: [],
+          note: "",
+          price: item.price,
+          promotions: [],
+          type: "",
+        };
+
+        return acc;
+      }, {} as TSelectedItem);
+
+      setSelectedItem(newItems);
+
+      setTableNo(data.basicInfo.dineIn.tableNumber);
+    }
+  }, [data]);
 
   const subTotal = usePosOrderLineSubtotal();
 
@@ -268,37 +278,47 @@ const OrderInvoice = () => {
           <span>Print</span>
         </Button>
 
-        <PlaceDraftOrderButton />
-        <PlaceOrderButton />
+        {data?.basicInfo.orderStatus === "accepted" ? (
+          <PaidButton />
+        ) : (
+          <>
+            <PlaceDraftOrderButton />
+            <PlaceOrderButton />
+          </>
+        )}
       </div>
     </div>
   );
 };
 
 const MethodList = () => {
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const setPaymentMethod = usePosOrderLineState(
+    (state) => state.setPaymentMethod
+  );
+  const paymentMethod = usePosOrderLineState((state) => state.paymentMethod);
 
   return (
     <div className="flex items-center justify-center gap-4">
       {methods.map((item, i) => {
+        const isSelected = paymentMethod === item.label;
         return (
           <Button
             className={cn(
               "border rounded-md flex-1 text-gray-400 max-w-32 items-center flex gap-2 bg-transparent hover:bg-transparent",
               {
-                "border-primary text-primary": currentIdx === i,
+                "border-primary text-primary": isSelected,
               }
             )}
-            onClick={() => setCurrentIdx(i)}
+            onClick={() => setPaymentMethod(item.label)}
           >
             <item.icon
               className={cn("", {
-                "text-primary": currentIdx === i,
+                "text-primary": isSelected,
               })}
             />
             <span
               className={cn("", {
-                "text-black": currentIdx === i,
+                "text-black": isSelected,
               })}
             >
               {item.label}

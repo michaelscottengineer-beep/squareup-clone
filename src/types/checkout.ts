@@ -21,7 +21,7 @@ export type TCheckoutFormDataValues = {
   createdAt: string;
   createdBy: string;
   status?: "pending" | "success";
-  orderStatus?: "accepted" | "rejected" | "pending";
+  orderStatus?: "accepted" | "rejected" | "pending" | "completed";
 };
 
 export type TFeeSummary = {
