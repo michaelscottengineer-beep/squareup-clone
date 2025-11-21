@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -14,38 +15,85 @@ type TJsonElement = {
   [key: string]: any;
 };
 
-type TEditorStateStore = {
-  activeId: string;
-  html: TJsonElement[];
-  clear: () => void;
-  add: (value: TJsonElement) => void;
-  set: (value: TJsonElement[]) => void;
-  setActiveId: (activeId: string) => void;
-  update: (id: string, data: TJsonElement) => void;
+export type TElementProperties = {
+  style?: CSSProperties;
+  text?: string | number;
+  type: "text" | "button" | "list" | "checkbox" | "general";
+  displayName: string;
+  data?: Record<string, any>;
 };
 
-const useEditorState = create<TEditorStateStore>()(
+export type TPartEditorData = {
+  header: Record<string, TElementProperties>;
+  footer: Record<string, TElementProperties>;
+  sections: Record<string, Record<string, TElementProperties>>;
+};
+
+type TEditorTemplateStateStore = {
+  partEditorData: TPartEditorData;
+  set: (partEditorData: Partial<TPartEditorData>) => void;
+};
+
+const useEditorTemplateState = create<TEditorTemplateStateStore>()(
   persist(
     (set, get) => ({
-      html: [],
-      activeId: "",
-      add: (value) => set({ html: [...get().html, value] }),
-      clear: () => set({ html: [] }),
-      set: (value) => set({ html: value }),
-      setActiveId: (value) => set({ activeId: value }),
-      update: (id, data) =>
-        set({
-          html: get().html.map((json) => {
-            if (json.id === id) return { ...json, ...data };
-            return json;
-          }),
-        }),
+      partEditorData: {
+        header: {
+          hidden: {
+            displayName: "",
+            type: "checkbox",
+            style: {},
+            data: {
+              isChecked: false,
+              label: "Hidden This Section?",
+            },
+          },
+          general: {
+            displayName: "",
+            type: "general",
+            style: {
+              backgroundColor: "#ffffff",
+              color: "#000000",
+            },
+          },
+          navigation: {
+            displayName: "Header navigation",
+            type: "list",
+            data: {
+              items: [
+                {
+                  label: "Section 1",
+                  url: "#section1",
+                  isActive: false,
+                },
+              ],
+            },
+            style: {
+              display: "flex",
+            },
+          },
+          pageName: {
+            displayName: "Page Name",
+            type: "text",
+            text: "La Cuisine",
+            style: {
+              color: "#1d293d",
+              fontWeight: "bold",
+              fontSize: "24px",
+            },
+          },
+        },
+        footer: {},
+        sections: {},
+      },
+      set: (partEditorData) =>
+        set({ partEditorData: { ...get().partEditorData, ...partEditorData } }),
     }),
     {
-      name: "web-editor-state",
+      name: "useEditorTemplateState",
       storage: createJSONStorage(() => localStorage),
     }
   )
 );
 
-export default useEditorState;
+export default useEditorTemplateState;
