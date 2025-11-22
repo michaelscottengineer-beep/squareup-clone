@@ -33,7 +33,7 @@ interface EditOverlayProps {
 }
 const EditOverlay = ({ partEditorKey }: EditOverlayProps) => {
   return (
-    <div className="bg-black/30 w-full h-full absolute top-0 left-0 backdrop-blur-[1px]">
+    <div className="bg-black/30 w-full h-full absolute top-0 left-0 backdrop-blur-[1px] edit-overlay">
       <SettingSheet partEditorKey={partEditorKey} />
     </div>
   );

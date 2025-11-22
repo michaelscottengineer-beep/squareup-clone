@@ -28,6 +28,8 @@ import CustomerLayout from "@/pages/dashboard/customers/CustomerLayout";
 import RestaurantJobLayout from "@/pages/dashboard/jobs/RestaurantJobLayout";
 import PermissionLayout from "@/pages/dashboard/staffs/permissions/PermissionLayout";
 import TableManagement from "@/pages/dashboard/pos/table/TableManagement";
+import TemplatesLayout from "@/pages/dashboard/my-website/template/TemplatesLayout";
+import MyWebsiteLayout from "@/pages/dashboard/my-website/MyWebsiteLayout";
 
 const dashboardRoute: RouteObject = {
   path: "/dashboard",
@@ -36,6 +38,22 @@ const dashboardRoute: RouteObject = {
     {
       index: true,
       element: <DashboardHomePage />,
+    },
+       {
+      path: "/dashboard/my-websites/templates",
+      element: (
+        <ProtectedRoute>
+          <TemplatesLayout />,
+        </ProtectedRoute>
+      ),
+    },
+       {
+      path: "/dashboard/my-websites",
+      element: (
+        <ProtectedRoute>
+          <MyWebsiteLayout />,
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/dashboard/pos/tables",

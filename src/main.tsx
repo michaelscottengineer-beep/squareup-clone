@@ -32,6 +32,8 @@ import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayou
 import ScreenInvoicePreviewPage from "./pages/screen-invoice-preview/ScreenInvoicePreviewPage";
 import WebBuilderEditorLayout from "./pages/web-builder/web-build-editor/WebBuilderEditorLayout";
 import RestaurantLanding from "./pages/web-builder/templates/RestaurantLanding";
+import TemplateEditor from "./pages/web-builder/user-editor/TemplateEditor";
+import WebSitePage from "./pages/website/WebSitePage";
 
 const router = createBrowserRouter([
   {
@@ -71,12 +73,20 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/websites/:websiteId",
+    element: <WebSitePage />,
+  },
+  {
     path: "/web-builder/editor",
     element: <WebBuilderEditorLayout />,
   },
   {
     path: '/web-builder/templates',
     element: <RestaurantLanding />
+  },
+  {
+    path: '/web-builder/templates/:templateId/editor',
+    element: <TemplateEditor />
   },
   {
     path: "/invoice-preview",

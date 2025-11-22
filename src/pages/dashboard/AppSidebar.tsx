@@ -10,6 +10,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  Globe,
   Home,
   Map,
   PieChart,
@@ -187,6 +188,22 @@ const data = {
         {
           title: "Your POS",
           url: "/pos/order-line",
+        },
+      ],
+      canView: ["admin"],
+    },
+    {
+      title: "Your Websites",
+      url: "#",
+      icon: Globe,
+      items: [
+        {
+          title: "View Templates",
+          url: "/dashboard/my-websites/templates",
+        },
+        {
+          title: "Websites",
+          url: "/dashboard/my-websites",
         },
       ],
       canView: ["admin"],

@@ -16,13 +16,17 @@ import {
   Star,
   ChefHat,
   UtensilsCrossed,
+  X,
+  Edit,
 } from "lucide-react";
 import { Slot } from "@radix-ui/react-slot";
 import EditOverlay from "./EditOverlay";
 import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import AdminPublishForUserButton from "../components/AdminPublishForUserButton";
+import SaveTemplateButton from "../components/SaveTemplateButton";
+import { IoOpen } from "react-icons/io5";
 
 // Mock Data
 const restaurantInfo = {
@@ -107,11 +111,18 @@ const stats = [
   { label: "Happy Guests", value: "50K+" },
 ];
 
-export default function RestaurantLanding() {
+interface RestaurantLandingProps {
+  userId?: string;
+  isEdit?: boolean;
+}
+export default function RestaurantLanding({
+  userId,
+  isEdit,
+}: RestaurantLandingProps) {
   const navigation = useNavigate();
   const outerRef = useRef<HTMLDivElement>(null);
-
-  const [isEditing, setIsEditing] = useState(false);
+  const { templateId } = useParams();
+  const [isEditing, setIsEditing] = useState(isEdit);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const partEditorData = useEditorTemplateState(
     (state) => state.partEditorData
@@ -131,12 +142,44 @@ export default function RestaurantLanding() {
       ? featuredDishes
       : featuredDishes.filter((dish) => dish.category === selectedCategory);
 
-      // useEffect(() => {
-      //   console.log(outerRef.current?.outerHTML)
-      // }, [])
+  useEffect(() => {
+    setIsEditing(!!isEdit);
+  }, [isEdit]);
+
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100" ref={outerRef}>
+      {userId && (
+        <div className="w-full border-b border-border py-4 px-4 flex items-center gap-4">
+          <Link
+            to={"/websites/" + templateId}
+            className="flex items-center underline"
+            target="_blank"
+          >
+            <IoOpen className="" /> View Published Website
+          </Link>
+          {isEditing ? (
+            <Button
+              className="flex items-center gap-2 bg-yellow-100 text-yellow-500 hover:bg-yellow-100 hover:text-yellow-500"
+              onClick={() => setIsEditing(false)}
+            >
+              <X />
+              Close Editing
+            </Button>
+          ) : (
+            <Button
+              className="flex items-center gap-2 bg-yellow-100 text-yellow-500 hover:bg-yellow-100 hover:text-yellow-500"
+              onClick={() => setIsEditing(true)}
+            >
+              <Edit />
+              Editing
+            </Button>
+          )}
+        </div>
+      )}
+      <div
+        className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100"
+        ref={outerRef}
+      >
         {/* Header/Nav */}
         <nav
           className={cn("shadow-sm sticky top-0 z-50", {
@@ -411,7 +454,8 @@ export default function RestaurantLanding() {
           </div>
         </footer>
       </div>
-      <AdminPublishForUserButton  templateName="Test1" outerHTML={outerRef} />
+      <AdminPublishForUserButton templateName="Test1" outerHTML={outerRef} />
+      {isEdit && <SaveTemplateButton outerHTMLRef={outerRef} />}
     </>
   );
 }

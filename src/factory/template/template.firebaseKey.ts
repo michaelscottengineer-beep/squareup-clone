@@ -31,6 +31,17 @@ const templateFirebaseKey = (initKeys: TTemplateFirebaseKey) => {
       return ref(db, keys.adminDetails());
     },
 
+
+    
+    restaurantDetails: function () {
+      console.log(this, keys);
+      if (!keys.initKeys.templateId) throw new Error("missing templateId");
+      return parseSegments(...[keys.restaurantRoot(), keys.initKeys.templateId]);
+    },
+    restaurantDetailsRef: function () {
+      return ref(db, keys.restaurantDetails());
+    },
+
     adminBasicInfo: function () {
       return parseSegments(...[keys.adminDetails(), "basicInfo"]);
     },

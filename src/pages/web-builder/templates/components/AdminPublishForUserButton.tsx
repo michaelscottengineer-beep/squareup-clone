@@ -31,7 +31,7 @@ const AdminPublishForUserButton = ({
 
       return await set(keys.adminDetailsRef(), {
         basicInfo: {
-          name: templateName,
+          name: iTemplateName,
           createdBy: user?.uid,
         },
         outerHTML: outerHTML.current?.outerHTML,
