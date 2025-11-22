@@ -44,7 +44,7 @@ const TemplateEditor = () => {
 
   return (
     <div>
-      {item?.id === "-Oe_7aEB88AELcoeUnMa" && (
+      {item?.basicInfo.name.toLowerCase().includes('restaurant landing') && (
         <RestaurantLanding isEdit userId={user?.uid} />
       )}
 

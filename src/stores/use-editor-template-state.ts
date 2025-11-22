@@ -16,7 +16,10 @@ type TJsonElement = {
 };
 
 export type TElementProperties = {
-  style?: CSSProperties & { iconColor?: string | CSSProperties["color"] };
+  style?: CSSProperties & {
+    iconColor?: string | CSSProperties["color"];
+    statisticCountColor?: string | CSSProperties["color"];
+  };
   text?: string | number;
   type: "text" | "button" | "list" | "checkbox" | "general";
   displayName: string;
@@ -89,6 +92,32 @@ const useEditorTemplateState = create<TEditorTemplateStateStore>()(
         },
         footer: {},
         sections: {
+          statisticSection: {
+            general: {
+              displayName: "",
+              type: "general",
+              style: {
+                backgroundColor: "#ffffff",
+                color: "#45556c",
+              },
+            },
+            stat: {
+              type: "list",
+              displayName: "Statistic",
+              style: {
+                statisticCountColor: "#e17100",
+                color: "#45556c",
+              },
+              data: {
+                items: [
+                  { count: 15, label: "Years of Excellence" },
+                  { count: 8, label: "Master Chefs" },
+                  { count: 50, label: "Signature Dishes" },
+                  { count: 100.0, label: "Happy Guests" },
+                ],
+              },
+            },
+          },
           contactSection: {
             title: {
               displayName: "Title",
@@ -123,7 +152,7 @@ const useEditorTemplateState = create<TEditorTemplateStateStore>()(
                 backgroundColor: "#314158",
                 borderColor: "#45556c",
                 color: "#ffffff",
-                iconColor: '#ffba00'
+                iconColor: "#ffba00",
               },
               data: {
                 items: [

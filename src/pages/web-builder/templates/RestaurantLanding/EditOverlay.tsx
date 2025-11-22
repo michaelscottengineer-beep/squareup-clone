@@ -29,6 +29,7 @@ import {
 import NavigationList from "./components/NavigationList";
 import SheetHeaderSettingContent from "./components/HeaderSetting";
 import SheetContactSectionSettingContent from "./components/ContactSectionSheeting";
+import StatisticSectionSetting from "./components/StatisticSectionSetting";
 
 interface EditOverlayProps {
   partEditorKey: string;
@@ -58,6 +59,7 @@ const SettingSheet = ({ partEditorKey }: SettingSheetProps) => {
       <SheetContent showCloseButton={false} className="overflow-y-auto">
         {partEditorKey === "header" && <SheetHeaderSettingContent />}
         {partEditorKey === "contactSection" && <SheetContactSectionSettingContent />}
+        {partEditorKey === "statisticSection" && <StatisticSectionSetting />}
       </SheetContent>
     </Sheet>
   );
