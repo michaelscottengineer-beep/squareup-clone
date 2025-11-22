@@ -54,7 +54,7 @@ import type { TRating } from "@/types/rating";
 import { toast } from "sonner";
 import imgbbService from "@/services/imggbb.service";
 import RatingForm from "./RatingForm";
-import Header from "../shop/Header";
+import Header from "../shop/components/Header";
 const UserOrderHistory = () => {
   const { user } = useAuth();
 

@@ -25,7 +25,7 @@ import BillingLayout from "./pages/billings/BillingLayout";
 import BillingTransaction from "./pages/billings/trasaction/BillingTransaction";
 import BillingListCards from "./pages/billings/cards/BillingListCards";
 import dashboardRoute from "./routes/dashboard";
-import StaffSetup from "./pages/setup/StaffSetup";
+import StaffSetup from "./pages/staff-setup/StaffSetup";
 import PosLayout from "./pages/pos/PosLayout";
 import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout";
 import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayout";

@@ -1,6 +1,6 @@
 import React from "react";
-import PromotionSheet from "./PromotionSheet";
-import CartSheet from "./CartSheet";
+import PromotionSheet from "./promotion/PromotionSheet";
+import CartSheet from "./cart/CartSheet";
 import { Button } from "@/components/ui/button";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";

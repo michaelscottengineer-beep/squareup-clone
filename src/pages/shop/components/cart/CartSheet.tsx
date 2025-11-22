@@ -17,8 +17,8 @@ import {
 import { ArrowLeftFromLine, ArrowLeftIcon, Plus, X } from "lucide-react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import type { TCartItem } from "@/types/item";
-import CreationCartItemDialog from "./CreationCartItemDialog";
-import CheckoutSheet from "./CheckoutSheet";
+import CreationCartItemDialog from "../categories/CreationCartItemDialog";
+import CheckoutSheet from "../checkout/CheckoutSheet";
 import { calcItemPrice, calcPromotion } from "@/utils/helper";
 import useAvailablePromotions from "@/hooks/use-available-promotions";
 

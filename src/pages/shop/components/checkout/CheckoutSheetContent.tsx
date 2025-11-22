@@ -22,7 +22,7 @@ import { increment, push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import GratuitySelector from "./GratuitySelector";
 import CostFreeSummary from "./CostFreeSummary";
-import ListCard from "./ListCard";
+import ListCard from "../cart/ListCard";
 import { io, Socket } from "socket.io-client";
 import checkoutService from "@/services/checkout.service";
 import useCheckAvailableOpeningHours from "@/hooks/use-check-available-opening-hours";

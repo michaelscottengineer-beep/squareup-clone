@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import Header from "./shop/Header";
+import Header from "./shop/components/Header";
 
 const RootPage = () => {
   return (
