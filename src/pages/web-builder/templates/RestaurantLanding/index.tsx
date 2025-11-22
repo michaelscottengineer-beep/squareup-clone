@@ -27,6 +27,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import AdminPublishForUserButton from "../components/AdminPublishForUserButton";
 import SaveTemplateButton from "../components/SaveTemplateButton";
 import { IoOpen } from "react-icons/io5";
+import ContactSection from "./ContactSection";
 
 // Mock Data
 const restaurantInfo = {
@@ -122,7 +123,7 @@ export default function RestaurantLanding({
   const navigation = useNavigate();
   const outerRef = useRef<HTMLDivElement>(null);
   const { templateId } = useParams();
-  const [isEditing, setIsEditing] = useState(isEdit);
+  const [isEditing, setIsEditing] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const partEditorData = useEditorTemplateState(
     (state) => state.partEditorData
@@ -142,9 +143,9 @@ export default function RestaurantLanding({
       ? featuredDishes
       : featuredDishes.filter((dish) => dish.category === selectedCategory);
 
-  useEffect(() => {
-    setIsEditing(!!isEdit);
-  }, [isEdit]);
+  // useEffect(() => {
+  //   setIsEditing(!!isEdit);
+  // }, [isEdit]);
 
   return (
     <>
@@ -402,49 +403,7 @@ export default function RestaurantLanding({
         </section>
 
         {/* Contact Section */}
-        <section className="py-16 bg-slate-800 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Visit Us Today</h2>
-              <p className="text-slate-300">
-                We're here to serve you an unforgettable experience
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="bg-slate-700 border-slate-600 text-white">
-                <CardHeader>
-                  <Clock className="w-8 h-8 mb-2 text-amber-400" />
-                  <CardTitle>Opening Hours</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-300">{restaurantInfo.hours}</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-slate-700 border-slate-600 text-white">
-                <CardHeader>
-                  <MapPin className="w-8 h-8 mb-2 text-amber-400" />
-                  <CardTitle>Location</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-300">{restaurantInfo.address}</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-slate-700 border-slate-600 text-white">
-                <CardHeader>
-                  <Phone className="w-8 h-8 mb-2 text-amber-400" />
-                  <CardTitle>Contact Us</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-300 mb-2">{restaurantInfo.phone}</p>
-                  <p className="text-slate-300">{restaurantInfo.email}</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+        <ContactSection isEditing={isEditing} />
 
         {/* Footer */}
         <footer className="bg-slate-900 text-slate-400 py-8">
@@ -455,7 +414,7 @@ export default function RestaurantLanding({
         </footer>
       </div>
       <AdminPublishForUserButton templateName="Test1" outerHTML={outerRef} />
-      {isEdit && <SaveTemplateButton outerHTMLRef={outerRef} />}
+      {isEditing && userId && <SaveTemplateButton outerHTMLRef={outerRef} />}
     </>
   );
 }

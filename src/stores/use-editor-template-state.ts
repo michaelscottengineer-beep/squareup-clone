@@ -16,7 +16,7 @@ type TJsonElement = {
 };
 
 export type TElementProperties = {
-  style?: CSSProperties;
+  style?: CSSProperties & { iconColor?: string | CSSProperties["color"] };
   text?: string | number;
   type: "text" | "button" | "list" | "checkbox" | "general";
   displayName: string;
@@ -32,6 +32,10 @@ export type TPartEditorData = {
 type TEditorTemplateStateStore = {
   partEditorData: TPartEditorData;
   set: (partEditorData: Partial<TPartEditorData>) => void;
+  setSection: (
+    sectionKey: string,
+    sectionPartData: Record<string, TElementProperties>
+  ) => void;
 };
 
 const useEditorTemplateState = create<TEditorTemplateStateStore>()(
@@ -84,10 +88,82 @@ const useEditorTemplateState = create<TEditorTemplateStateStore>()(
           },
         },
         footer: {},
-        sections: {},
+        sections: {
+          contactSection: {
+            title: {
+              displayName: "Title",
+              style: {
+                fontSize: "36px",
+                color: "#ffffff",
+                fontWeight: "bold",
+              },
+              type: "text",
+              text: "Visit Us Today",
+            },
+            description: {
+              displayName: "Description",
+              style: {
+                color: "#cad5e2",
+              },
+              type: "text",
+              text: "We're here to serve you an unforgettable experience",
+            },
+            general: {
+              displayName: "",
+              type: "general",
+              style: {
+                backgroundColor: "#1d293d",
+                color: "#ffffff",
+              },
+            },
+            contactBlock: {
+              displayName: "Blocks",
+              type: "list",
+              style: {
+                backgroundColor: "#314158",
+                borderColor: "#45556c",
+                color: "#ffffff",
+                iconColor: '#ffba00'
+              },
+              data: {
+                items: [
+                  {
+                    iconName: "mdi-light:clock",
+                    title: "Opening Hours",
+                    description:
+                      "Mon-Sat: 11:00 AM - 10:00 PM | Sun: 12:00 PM - 9:00 PM",
+                  },
+                  {
+                    iconName: "system-uicons:location",
+                    title: "Location",
+                    description: "123 Gourmet Street, Culinary District",
+                  },
+                  {
+                    iconName: "solar:phone-outline",
+                    title: "Contact Us",
+                    description: "+1 (555) 123-4567",
+                  },
+                ],
+              },
+            },
+          },
+        },
       },
       set: (partEditorData) =>
         set({ partEditorData: { ...get().partEditorData, ...partEditorData } }),
+      setSection: (sectionKey, sectionPartData) =>
+        set({
+          partEditorData: {
+            ...get().partEditorData,
+            sections: {
+              ...get().partEditorData.sections,
+              [sectionKey]: {
+                ...get().partEditorData.sections[sectionKey],
+                ...sectionPartData,
+              },
+            },
+          },
+        }),
     }),
     {
       name: "useEditorTemplateState",
