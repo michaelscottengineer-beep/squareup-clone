@@ -1,9 +1,5 @@
-import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import CategorySection from "../components/categories/CategorySection";
-import Header from "../components/Header";
-import IntroduceSection from "../components/IntroduceSection";
 import ListCategory from "../components/categories/ListCategory";
-import "./ShopLayout.css";
 
 import  { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
