@@ -14,7 +14,9 @@ const PhoCharlestonHeader = () => {
       }}
     >
       <div className=" template-phoCharleston header phoCharlestonContainer mx-auto flex flex-col gap-3 py-4">
-        <div>Logo</div>
+        <div>
+          <img src={headerData.elements.logo.data?.src} alt="logo" className="w-14 h-14 mx-auto" />
+        </div>
         <Separator />
         <div className="nav flex justify-center px-4">
           <NavigationMenuDemo />

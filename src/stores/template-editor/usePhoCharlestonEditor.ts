@@ -83,6 +83,13 @@ const usePhoCharlestonEditor = create<TStoreState>()(
               ],
             },
           },
+          logo: {
+            "type": "image",
+            displayName: "",
+            data: {
+              src: "/restaurant_placeholder.png"
+            }
+          }
         },
       },
       aboutUs: {

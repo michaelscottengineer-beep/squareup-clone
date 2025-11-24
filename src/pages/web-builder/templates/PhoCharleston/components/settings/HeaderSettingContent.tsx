@@ -6,9 +6,9 @@ import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEdi
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ColorSetting from "../../../../../../components/templates/settings/ColorSetting";
 import HeaderNavSetting from "./HeaderNavSetting";
+import ImageSetting from "@/components/templates/settings/ImageSetting";
 
 const HeaderSettingContent = () => {
-
   return (
     <div>
       <SheetSettingHeader title="Header Settings"></SheetSettingHeader>
@@ -17,8 +17,33 @@ const HeaderSettingContent = () => {
         <GeneralColorTabs />
 
         <HeaderNavSetting />
+
+        <LogoSetting />
       </div>
     </div>
+  );
+};
+
+const LogoSetting = () => {
+  const headerData = usePhoCharlestonEditor((state) => state.header);
+  const setData = usePhoCharlestonEditor((state) => state.set);
+  const elementData = headerData.elements.logo;
+  if (!elementData) return <div>Does not exists element: general</div>;
+  return (
+    <ImageSetting
+      value={elementData.data?.value}
+      onValueChange={(src) => {
+        setData("header", {
+          logo: {
+            ...elementData,
+            data: {
+              ...elementData.data,
+              src,
+            },
+          },
+        });
+      }}
+    />
   );
 };
 
@@ -30,7 +55,7 @@ const GeneralColorTabs = () => {
 
   return (
     <Tabs defaultValue="Background">
-      <TabsList >
+      <TabsList>
         <TabsTrigger value="Background">Background</TabsTrigger>
         <TabsTrigger value="Text">Text</TabsTrigger>
       </TabsList>
@@ -52,7 +77,7 @@ const GeneralColorTabs = () => {
         />
       </TabsContent>
       <TabsContent value="Text">
-          <ColorSetting
+        <ColorSetting
           value={elementData.style?.color ?? ""}
           onValueChange={(val) => {
             setData("header", {
