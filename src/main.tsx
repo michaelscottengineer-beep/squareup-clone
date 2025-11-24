@@ -34,6 +34,7 @@ import WebBuilderEditorLayout from "./pages/web-builder/web-build-editor/WebBuil
 import RestaurantLanding from "./pages/web-builder/templates/RestaurantLanding";
 import TemplateEditor from "./pages/web-builder/user-editor/TemplateEditor";
 import WebSitePage from "./pages/website/WebSitePage";
+import PhoCharleston from "./pages/web-builder/templates/PhoCharleston";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
   {
     path: '/web-builder/templates',
     element: <RestaurantLanding />
+  },
+  {
+    path: '/web-builder/templates/pho-charleston',
+    element: <PhoCharleston />
   },
   {
     path: '/web-builder/templates/:templateId/editor',

@@ -8,9 +8,6 @@ import {
 } from "@/components/ui/sheet";
 import { Edit, Trash2, X } from "lucide-react";
 
-import SheetHeaderSettingContent from "./components/HeaderSetting";
-import SheetContactSectionSettingContent from "./components/ContactSectionSheeting";
-import StatisticSectionSetting from "./components/StatisticSectionSetting";
 
 interface EditOverlayProps {
   partEditorKey: string;
@@ -38,9 +35,6 @@ const SettingSheet = ({ partEditorKey }: SettingSheetProps) => {
         </Button>
       </SheetTrigger>
       <SheetContent showCloseButton={false} className="overflow-y-auto">
-        {partEditorKey === "header" && <SheetHeaderSettingContent />}
-        {partEditorKey === "contactSection" && <SheetContactSectionSettingContent />}
-        {partEditorKey === "statisticSection" && <StatisticSectionSetting />}
       </SheetContent>
     </Sheet>
   );

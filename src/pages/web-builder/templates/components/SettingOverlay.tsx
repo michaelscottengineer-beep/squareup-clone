@@ -8,25 +8,21 @@ import {
 } from "@/components/ui/sheet";
 import { Edit, Trash2, X } from "lucide-react";
 
-import SheetHeaderSettingContent from "./components/HeaderSetting";
-import SheetContactSectionSettingContent from "./components/ContactSectionSheeting";
-import StatisticSectionSetting from "./components/StatisticSectionSetting";
-
-interface EditOverlayProps {
-  partEditorKey: string;
+interface SettingOverlayProps {
+  settingContent?: React.ReactNode;
 }
-const EditOverlay = ({ partEditorKey }: EditOverlayProps) => {
+const SettingOverlay = ({ settingContent }: SettingOverlayProps) => {
   return (
     <div className="bg-black/30 w-full h-full absolute top-0 left-0 backdrop-blur-[1px] edit-overlay">
-      <SettingSheet partEditorKey={partEditorKey} />
+      <SettingSheet settingContent={settingContent} />
     </div>
   );
 };
 
 interface SettingSheetProps {
-  partEditorKey: string;
+  settingContent?: React.ReactNode;
 }
-const SettingSheet = ({ partEditorKey }: SettingSheetProps) => {
+const SettingSheet = ({ settingContent }: SettingSheetProps) => {
   return (
     <Sheet>
       <SheetTrigger
@@ -38,13 +34,10 @@ const SettingSheet = ({ partEditorKey }: SettingSheetProps) => {
         </Button>
       </SheetTrigger>
       <SheetContent showCloseButton={false} className="overflow-y-auto">
-        {partEditorKey === "header" && <SheetHeaderSettingContent />}
-        {partEditorKey === "contactSection" && <SheetContactSectionSettingContent />}
-        {partEditorKey === "statisticSection" && <StatisticSectionSetting />}
+        {settingContent}
       </SheetContent>
     </Sheet>
   );
 };
 
-
-export default EditOverlay;
+export default SettingOverlay;
