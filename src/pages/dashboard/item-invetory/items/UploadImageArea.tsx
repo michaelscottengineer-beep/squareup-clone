@@ -28,6 +28,7 @@ const UploadImageArea = ({ value, onValueChange }: UploadImageAreaProps) => {
     },
     onSuccess: (data, base64String) => {
       setSelectedImage(base64String);
+      console.log(base64String)
       onValueChange?.(data.image.url as string);
       toast.success("uploaded success");
     },

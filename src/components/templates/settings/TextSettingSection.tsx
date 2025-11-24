@@ -14,7 +14,7 @@ interface TextSettingSection {
     type: "text" | "fontSize" | "color",
     value: any
   ) => void;
-  label: string;
+  label?: string;
 }
 const TextSettingSection = ({
   label,

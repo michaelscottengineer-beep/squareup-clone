@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ButtonGroup } from "@/components/ui/button-group";
-import SettingSection from "../../components/settings";
+import SettingSection from "../../../../../../components/templates/settings";
 
 type TFormValues = {
   items: {

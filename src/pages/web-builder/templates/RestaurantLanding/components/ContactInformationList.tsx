@@ -8,7 +8,7 @@ import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { Plus, Save, Trash2 } from "lucide-react";
 import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import SettingSection from "../../components/settings";
+import SettingSection from "../../../../../components/templates/settings";
 import { useFieldArray, useForm } from "react-hook-form";
 import {
   Form,
@@ -20,10 +20,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ButtonGroup } from "@/components/ui/button-group";
-import IconSetting from "../../components/settings/IconSetting";
+import IconSetting from "../../../../../components/templates/settings/IconSetting";
 import { Icon } from "@iconify/react";
 import { Label } from "@/components/ui/label";
-import ColorSetting from "../../components/settings/ColorSetting";
+import ColorSetting from "../../../../../components/templates/settings/ColorSetting";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type TFormValues = {

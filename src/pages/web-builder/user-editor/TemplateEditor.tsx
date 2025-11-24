@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router";
 import RestaurantLanding from "../templates/RestaurantLanding";
 import { User } from "lucide-react";
 import useAuth from "@/hooks/use-auth";
-import SaveTemplateButton from "../templates/components/SaveTemplateButton";
+import SaveTemplateButton from "../../../components/templates/SaveTemplateButton";
 
 const TemplateEditor = () => {
   const { templateId } = useParams();

@@ -24,8 +24,8 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import NavigationList from "../components/NavigationList";
-import ColorSetting from "../../components/settings/ColorSetting";
-import TextSettingSection from "../../components/settings/TextSettingSection";
+import ColorSetting from "../../../../../components/templates/settings/ColorSetting";
+import TextSettingSection from "../../../../../components/templates/settings/TextSettingSection";
 import SheetSettingHeader from "./SheetSettingHeader";
 import ContactInformationList from "./ContactInformationList";
 import { Tabs, TabsList } from "@/components/ui/tabs";

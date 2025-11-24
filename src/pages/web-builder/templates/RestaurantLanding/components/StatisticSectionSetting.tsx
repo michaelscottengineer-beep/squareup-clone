@@ -1,39 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import useEditorTemplateState from "@/stores/use-editor-template-state";
-import { Edit, Trash2, X } from "lucide-react";
-import React, {
-  useState,
-  type CSSProperties,
-  type PropsWithChildren,
-} from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useNavigate } from "react-router";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import NavigationList from "../components/NavigationList";
-import ColorSetting from "../../components/settings/ColorSetting";
-import TextSettingSection from "../../components/settings/TextSettingSection";
+
+import ColorSetting from "@/components/templates/settings/ColorSetting";
+import TextSettingSection from "@/components/templates/settings/TextSettingSection";
 import SheetSettingHeader from "./SheetSettingHeader";
-import ContactInformationList from "./ContactInformationList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatisticInformationList from "./StatisticInformationList";
 
 const StatisticSectionSetting = () => {
-  const navigation = useNavigate();
-
   const setElemetData = useEditorTemplateState((state) => state.set);
   const setSection = useEditorTemplateState((state) => state.setSection);
   const sectionElementData = useEditorTemplateState(

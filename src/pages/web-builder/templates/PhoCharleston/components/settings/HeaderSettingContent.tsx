@@ -1,14 +1,13 @@
 import React from "react";
-import SettingOverlay from "../../components/SettingOverlay";
-import SheetSettingHeader from "../../components/SheetSettingHeader";
-import SettingSection from "../../components/settings";
+import SettingOverlay from "../../../../../../components/templates/SettingOverlay";
+import SheetSettingHeader from "../../../../../../components/templates/SheetSettingHeader";
+import SettingSection from "../../../../../../components/templates/settings";
 import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ColorSetting from "../../components/settings/ColorSetting";
+import ColorSetting from "../../../../../../components/templates/settings/ColorSetting";
 import HeaderNavSetting from "./HeaderNavSetting";
 
 const HeaderSettingContent = () => {
-  const headerData = usePhoCharlestonEditor((state) => state.header);
 
   return (
     <div>

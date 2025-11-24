@@ -8,7 +8,7 @@ import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { Plus, Save, Trash2 } from "lucide-react";
 import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import SettingSection from "../../components/settings";
+import SettingSection from "../../../../../components/templates/settings";
 import { useFieldArray, useForm } from "react-hook-form";
 import {
   Form,

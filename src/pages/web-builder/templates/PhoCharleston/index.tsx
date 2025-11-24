@@ -2,95 +2,80 @@ import "@/styles/phoCharlestonTemplate.css";
 
 import { Separator } from "@/components/ui/separator";
 import React from "react";
+import PhoCharlestonHeader from "./components/Header";
+import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
+import { Button } from "@/components/ui/button";
+import SettingOverlay from "../../../../components/templates/SettingOverlay";
+import AboutUsSettingContent from "./components/settings/AboutUsSettingContent";
+import { cn } from "@/lib/utils";
 
 const PhoCharleston = () => {
-  const headerData = usePhoCharlestonEditor((state) => state.header);
+  const aboutUsData = usePhoCharlestonEditor((state) => state.aboutUs);
+
+  const layoutValue = aboutUsData.elements.layout.data?.value;
 
   return (
-    <div
-      className="relative"
-      style={{
-        ...headerData.elements.general.style,
-      }}
-    >
-      <div className=" template-phoCharleston header phoCharlestonContainer mx-auto flex flex-col gap-3 py-4">
-        <div>Logo</div>
-        <Separator />
-        <div className="nav flex justify-center px-4">
-          <NavigationMenuDemo />
+    <div>
+      <PhoCharlestonHeader />
+
+      <div className="relative">
+        <div
+          className={cn("aboutUs flex p-20 gap-10  mt-4", {
+            "flex-row items-center": layoutValue === "LTR",
+            "flex-row-reverse items-center ": layoutValue === "RTL",
+            "flex-col": layoutValue === "TTB",
+            "flex-col-reverse": layoutValue === "BTT",
+          })}
+        >
+          <div className="left flex flex-col gap-4 basis-1/2">
+            <div className="head">
+              <div
+                className="heading"
+                style={{
+                  ...aboutUsData.elements.heading.style,
+                }}
+              >
+                {aboutUsData.elements.heading.text}
+              </div>
+              <div
+                className="subHeading"
+                style={{
+                  ...aboutUsData.elements.subHeading.style,
+                }}
+              >
+                {aboutUsData.elements.subHeading.text}
+              </div>
+            </div>
+
+            <p
+              style={{
+                ...aboutUsData.elements.description.style,
+              }}
+            >
+              {aboutUsData.elements.description.text}
+            </p>
+
+            <Button
+              className="w-max "
+              style={{ ...aboutUsData.elements.redirectButton.style }}
+            >
+              {aboutUsData.elements.redirectButton.text}
+            </Button>
+          </div>
+
+          <div className="right basis-1/2">
+            <img
+              src={aboutUsData.elements.image.data?.src}
+              alt="about-right-2"
+              className="rounded-md "
+            />
+          </div>
         </div>
+
+        <SettingOverlay settingContent={<AboutUsSettingContent />} />
       </div>
-      <SettingOverlay settingContent={<HeaderSettingContent />} />
     </div>
   );
 };
-
-import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Link, useLocation } from "react-router";
-import SettingOverlay from "../components/SettingOverlay";
-import HeaderSettingContent from "./components/HeaderSettingContent";
-import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
-
-export function NavigationMenuDemo() {
-  const isMobile = useIsMobile();
-  const nav = usePhoCharlestonEditor((state) => state.header.elements.nav);
-
-  const location = useLocation();
-  const pathname = location.pathname;
-
-  return (
-    <NavigationMenu viewport={isMobile}>
-      <NavigationMenuList className="flex-wrap">
-        {nav.data?.items.map((item: { label: string; href: string }) => {
-          return (
-            <NavigationMenuItem key={item.href}>
-              <ListItem
-                to={item.href}
-                title={item.label}
-                className={`hover:text-[${nav.style?.activeColor}]`}
-                style={{
-                  color: pathname.endsWith(item.href)
-                    ? nav.style?.color
-                    : "inherit",
-                }}
-              ></ListItem>
-            </NavigationMenuItem>
-          );
-        })}
-      </NavigationMenuList>
-    </NavigationMenu>
-  );
-}
-
-function ListItem({
-  title,
-  children,
-  to,
-  ...props
-}: React.ComponentPropsWithoutRef<"li"> & { to: string }) {
-  const nav = usePhoCharlestonEditor((state) => state.header.elements.nav);
-
-  return (
-    <li {...props}>
-      <NavigationMenuLink
-        asChild
-        className={`hover:text-[${nav.style?.activeColor}] hover:bg-transparent uppercase`}
-      >
-        <Link to={to}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  );
-}
 
 export default PhoCharleston;

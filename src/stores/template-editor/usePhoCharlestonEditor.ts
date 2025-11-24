@@ -9,7 +9,14 @@ export type TElementProperties = {
     activeColor?: string | CSSProperties["color"];
   };
   text?: string | number;
-  type: "text" | "button" | "list" | "checkbox" | "general";
+  type:
+    | "text"
+    | "button"
+    | "list"
+    | "checkbox"
+    | "general"
+    | "image"
+    | "layout";
   displayName: string;
   data?: Record<string, any>;
 };
@@ -22,6 +29,7 @@ export type TPartEditorData = {
 type TTemplateEditorStateStore = {
   header: TPartEditorData;
   footer: TPartEditorData;
+  aboutUs: TPartEditorData;
 };
 
 type TTemplateEditorStackStateStore = {
@@ -60,7 +68,7 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             type: "list",
             displayName: "Navigation Items",
             style: {
-              activeColor: '#ff0000'
+              activeColor: "#ff0000",
             },
             data: {
               items: [
@@ -75,7 +83,65 @@ const usePhoCharlestonEditor = create<TStoreState>()(
               ],
             },
           },
-
+        },
+      },
+      aboutUs: {
+        isHidden: false,
+        elements: {
+          heading: {
+            displayName: "Heading",
+            type: "text",
+            text: "About Us",
+            style: {
+              fontSize: "50px",
+              color: "#333333",
+              fontWeight: "bold",
+            },
+          },
+          subHeading: {
+            displayName: "Sub Heading",
+            type: "text",
+            text: "Hạ Long Café",
+            style: {
+              fontSize: "20px",
+              color: "#5D6E58",
+            },
+          },
+          description: {
+            displayName: "Description",
+            type: "text",
+            text: "Authenticate Vietnamese food and bubble tea owned by a Vietnamese family in downtown Charleston.",
+            style: {
+              fontSize: "18px",
+              color: "#333333",
+            },
+          },
+          redirectButton: {
+            displayName: "Redirect Button",
+            type: "button",
+            text: "OUR MENU",
+            style: {
+              fontSize: "18px",
+              color: "#D7D9D6",
+              backgroundColor: "#474947",
+              padding: "20px 20px",
+            },
+          },
+          image: {
+            displayName: "Image",
+            type: "image",
+            style: {},
+            data: {
+              src: "/about_right_2.jpg",
+            },
+          },
+          layout: {
+            displayName: "Change Layout",
+            type: "layout",
+            data: {
+              value: "LTR"
+            },
+          },
         },
       },
       footer: {
