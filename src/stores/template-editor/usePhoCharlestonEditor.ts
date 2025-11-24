@@ -23,6 +23,7 @@ export type TElementProperties = {
 
 export type TPartEditorData = {
   isHidden?: boolean;
+  order?: number;
   elements: Record<string, TElementProperties>;
 };
 
@@ -30,6 +31,9 @@ type TTemplateEditorStateStore = {
   header: TPartEditorData;
   footer: TPartEditorData;
   aboutUs: TPartEditorData;
+  sections: {
+    [sectionName: string]: TPartEditorData;
+  };
 };
 
 type TTemplateEditorStackStateStore = {
@@ -42,7 +46,10 @@ type TTemplateEditorFunctionStore = {
     key: string,
     partEditorData: Record<string, TElementProperties>
   ) => void;
+  setAllData: (data: TTemplateEditorStateStore) => void;
   setHidden: (key: string, isHidden: boolean) => void;
+  addStack: (data: TTemplateEditorStateStore, type: "undo" | "redo") => void;
+  removeStack: (type: "undo" | "redo") => void;
 };
 
 type TStoreState = TTemplateEditorStateStore &
@@ -53,6 +60,7 @@ const usePhoCharlestonEditor = create<TStoreState>()(
     (set, get) => ({
       stackRedo: [],
       stackUndo: [],
+      sections: {},
       header: {
         isHidden: false,
         elements: {
@@ -84,12 +92,12 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             },
           },
           logo: {
-            "type": "image",
+            type: "image",
             displayName: "",
             data: {
-              src: "/restaurant_placeholder.png"
-            }
-          }
+              src: "/restaurant_placeholder.png",
+            },
+          },
         },
       },
       aboutUs: {
@@ -146,7 +154,7 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             displayName: "Change Layout",
             type: "layout",
             data: {
-              value: "LTR"
+              value: "LTR",
             },
           },
         },
@@ -165,11 +173,30 @@ const usePhoCharlestonEditor = create<TStoreState>()(
           },
         });
       },
+      setAllData: (data) => {
+        return set({ ...data });
+      },
       setHidden: (key, isHidden) => {
         const relatedKey = key as keyof TTemplateEditorStateStore;
         const prevData = get()[relatedKey];
 
         set({ [relatedKey]: { ...prevData, isHidden } });
+      },
+
+      addStack: (data, type) => {
+        if (type === "undo")
+          return set({ stackUndo: [...get().stackUndo, data] });
+        return set({ stackRedo: [...get().stackRedo, data] });
+      },
+      removeStack: (type) => {
+        if (type === "undo") {
+          const arr = get().stackUndo;
+
+          return set({ stackUndo: arr.slice(0, arr.length - 1) });
+        }
+
+        const arr = get().stackRedo;
+        return set({ stackRedo: arr.slice(0, arr.length - 1) });
       },
     }),
     {

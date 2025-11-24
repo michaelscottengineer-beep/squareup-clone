@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import SettingOverlay from "../../../../components/templates/SettingOverlay";
 import AboutUsSettingContent from "./components/settings/AboutUsSettingContent";
 import { cn } from "@/lib/utils";
+import ListeningStack from "./components/ListeningStack";
 
 const PhoCharleston = () => {
   const aboutUsData = usePhoCharlestonEditor((state) => state.aboutUs);
@@ -74,6 +75,8 @@ const PhoCharleston = () => {
 
         <SettingOverlay settingContent={<AboutUsSettingContent />} />
       </div>
+
+      <ListeningStack />
     </div>
   );
 };
