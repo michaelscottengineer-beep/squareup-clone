@@ -282,6 +282,53 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             },
           },
         },
+        special: {
+          elements: {
+            general: {
+              displayName: "",
+              type: "general",
+              style: {
+                backgroundColor: "#3E413D",
+                color: "#D7D9D6",
+              },
+            },
+            title: {
+              displayName: "Title",
+              text: "Specials",
+              type: "text",
+              style: {
+                fontSize: "50px",
+                color: "#B9C1B6",
+              },
+            },
+            description: {
+              displayName: "Description",
+              text: "Breakfast combo: Served every day! Includes coffee and a sandwich. Only $10.99",
+              type: "text",
+              style: {
+                color: "#D7D9D6",
+                fontSize: "18px",
+              },
+            },
+            hours: {
+              displayName: "Hours ",
+              text: "09:00 AM - 11:00 AM",
+              type: "text",
+              style: {
+                fontSize: "18px",
+                color: "#D7D9D6",
+              },
+            },
+            redirectButton: {
+              type: "button",
+              text: "All specials",
+              displayName: "",
+              data: {
+                url: "/specials",
+              },
+            },
+          },
+        },
       },
       header: {
         isHidden: false,
