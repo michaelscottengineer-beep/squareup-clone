@@ -30,6 +30,8 @@ const CarouselIntroduce = () => {
   const carouselIntroduceData = usePhoCharlestonEditor(
     (state) => state.sections["carouselIntroduce"]
   );
+  const isEditing = usePhoCharlestonEditor((state) => state.isEditing);
+
   const carouselData = carouselIntroduceData.elements.carousel.data;
   return (
     <div className="relative">
@@ -89,8 +91,9 @@ const CarouselIntroduce = () => {
           })}
         </div>
       </Carousel>
-
-      <SettingOverlay settingContent={<CarouselIntroduceSettingContent />} />
+      {isEditing && (
+        <SettingOverlay settingContent={<CarouselIntroduceSettingContent />} />
+      )}
     </div>
   );
 };

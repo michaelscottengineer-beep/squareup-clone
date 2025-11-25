@@ -5,6 +5,7 @@ import React from "react";
 
 const PhoCharlestonHeader = () => {
   const headerData = usePhoCharlestonEditor((state) => state.header);
+  const isEditing = usePhoCharlestonEditor((state) => state.isEditing);
 
   return (
     <div
@@ -15,14 +16,20 @@ const PhoCharlestonHeader = () => {
     >
       <div className=" template-phoCharleston header phoCharlestonContainer mx-auto flex flex-col gap-3 py-4">
         <div>
-          <img src={headerData.elements.logo.data?.src} alt="logo" className="w-14 h-14 mx-auto" />
+          <img
+            src={headerData.elements.logo.data?.src}
+            alt="logo"
+            className="w-14 h-14 mx-auto"
+          />
         </div>
         <Separator />
         <div className="nav flex justify-center px-4">
           <NavigationMenuDemo />
         </div>
       </div>
-      <SettingOverlay settingContent={<HeaderSettingContent />} />
+      {isEditing && (
+        <SettingOverlay settingContent={<HeaderSettingContent />} />
+      )}
     </div>
   );
 };

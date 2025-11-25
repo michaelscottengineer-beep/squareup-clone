@@ -13,6 +13,7 @@ const AboutUs = ({ aboutUsKey }: AboutUsProps) => {
   const aboutUsData = usePhoCharlestonEditor(
     (state) => state.sections[aboutUsKey]
   );
+  const isEditing = usePhoCharlestonEditor((state) => state.isEditing);
 
   const layoutValue = aboutUsData.elements.layout.data?.value;
 
@@ -71,7 +72,11 @@ const AboutUs = ({ aboutUsKey }: AboutUsProps) => {
         </div>
       </div>
 
-      <SettingOverlay settingContent={<AboutUsSettingContent aboutUsKey={aboutUsKey} />} />
+      {isEditing && (
+        <SettingOverlay
+          settingContent={<AboutUsSettingContent aboutUsKey={aboutUsKey} />}
+        />
+      )}
     </div>
   );
 };

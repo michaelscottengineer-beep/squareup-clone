@@ -10,19 +10,17 @@ const ListeningStack = () => {
 
   const header = usePhoCharlestonEditor((state) => state.header);
   const footer = usePhoCharlestonEditor((state) => state.footer);
-  const aboutUs = usePhoCharlestonEditor((state) => state.aboutUs);
   const sections = usePhoCharlestonEditor((state) => state.sections);
 
   useEffect(() => {
     const data = {
       header,
       footer,
-      aboutUs,
       sections,
     };
 
     if (stackUndo.length === 0) {
-      addStack({ header, footer, aboutUs, sections }, "undo");
+      addStack({ header, footer, sections }, "undo");
     } else {
       const lastData = stackUndo[stackUndo.length - 1];
 
@@ -43,10 +41,10 @@ const ListeningStack = () => {
 
       const json = JSON.stringify(sortedData);
       if (jsonLast !== json) {
-        addStack({ header, footer, aboutUs, sections }, "undo");
+        addStack({ header, footer, sections }, "undo");
       }
     }
-  }, [header, footer, aboutUs, sections]);
+  }, [header, footer, sections]);
 
   useEffect(() => {
     const handleUndo = () => {

@@ -27,6 +27,9 @@ export type TPartEditorData = {
   elements: Record<string, TElementProperties>;
 };
 
+type TOtherState = {
+  isEditing?: boolean;
+};
 type TTemplateEditorStateStore = {
   header: TPartEditorData;
   footer: TPartEditorData;
@@ -53,14 +56,17 @@ type TTemplateEditorFunctionStore = {
   setHidden: (key: string, isHidden: boolean) => void;
   addStack: (data: TTemplateEditorStateStore, type: "undo" | "redo") => void;
   removeStack: (type: "undo" | "redo") => void;
+  toggleEdit: (o: boolean) => void;
 };
 
 type TStoreState = TTemplateEditorStateStore &
   TTemplateEditorStackStateStore &
-  TTemplateEditorFunctionStore;
+  TTemplateEditorFunctionStore &
+  TOtherState;
 const usePhoCharlestonEditor = create<TStoreState>()(
   persist(
     (set, get) => ({
+      isEditing: false,
       stackRedo: [],
       stackUndo: [],
       sections: {
@@ -422,6 +428,7 @@ const usePhoCharlestonEditor = create<TStoreState>()(
         const arr = get().stackRedo;
         return set({ stackRedo: arr.slice(0, arr.length - 1) });
       },
+      toggleEdit: (o) => set({ isEditing: o }),
     }),
     {
       name: "usePhoCharlestonEditor",

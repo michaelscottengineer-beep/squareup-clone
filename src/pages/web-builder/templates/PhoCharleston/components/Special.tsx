@@ -10,6 +10,7 @@ const Special = () => {
   const specialData = usePhoCharlestonEditor(
     (state) => state.sections["special"]
   );
+  const isEditing = usePhoCharlestonEditor((state) => state.isEditing);
 
   return (
     <div className="relative">
@@ -51,7 +52,9 @@ const Special = () => {
           {specialData.elements.redirectButton.text}
         </Button>
       </div>
-      <SettingOverlay settingContent={<SpecialSettingContent />} />
+      {isEditing && (
+        <SettingOverlay settingContent={<SpecialSettingContent />} />
+      )}
     </div>
   );
 };
