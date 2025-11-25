@@ -30,7 +30,10 @@ const ImageSetting = ({ value, label, onValueChange }: ImageSettingProps) => {
   return (
     <SettingSection label={label}>
       <InputGroup>
-        <InputGroupInput value={src} onChange={(e) => setSrc(e.target.value)} />
+        <InputGroupInput value={src} onChange={(e) => {
+          setSrc(e.target.value);
+          onValueChange?.(e.target.value);
+        }} />
         <InputGroupAddon align={"inline-end"}>
           <InputGroupButton onClick={() => setOpen(true)} className="text-primary">
             Or Upload

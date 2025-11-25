@@ -6,9 +6,14 @@ import ImageSetting from "@/components/templates/settings/ImageSetting";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FlexLayoutSetting from "@/components/templates/settings/FlexLayoutSetting";
 
-const AboutUsSettingContent = () => {
-  const aboutUsData = usePhoCharlestonEditor((state) => state.aboutUs);
-  const setData = usePhoCharlestonEditor((state) => state.set);
+interface AboutUsSettingContentProps {
+  aboutUsKey: string;
+}
+const AboutUsSettingContent = ({ aboutUsKey }: AboutUsSettingContentProps) => {
+  const aboutUsData = usePhoCharlestonEditor(
+    (state) => state.sections[aboutUsKey]
+  );
+  const setSection = usePhoCharlestonEditor((state) => state.setSection);
   const aboutUsElements = aboutUsData.elements;
 
   return (
@@ -46,7 +51,7 @@ const AboutUsSettingContent = () => {
                     else if (type === "color")
                       newData.style = { ...newData.style, color: value };
 
-                    setData("aboutUs", {
+                    setSection(aboutUsKey, {
                       [key]: {
                         ...aboutUsElements[key],
                         ...newData,
@@ -65,7 +70,7 @@ const AboutUsSettingContent = () => {
                 label="Image"
                 value={value.data?.src}
                 onValueChange={(url) => {
-                  setData("aboutUs", {
+                  setSection(aboutUsKey, {
                     [key]: {
                       ...aboutUsElements[key],
                       data: {
@@ -84,7 +89,7 @@ const AboutUsSettingContent = () => {
                 label={"Change layout"}
                 value={value.data?.value}
                 onValueChange={(value) => {
-                  setData("aboutUs", {
+                  setSection(aboutUsKey, {
                     [key]: {
                       ...aboutUsElements[key],
                       data: {

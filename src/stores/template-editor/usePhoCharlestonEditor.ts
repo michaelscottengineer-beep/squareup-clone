@@ -30,7 +30,6 @@ export type TPartEditorData = {
 type TTemplateEditorStateStore = {
   header: TPartEditorData;
   footer: TPartEditorData;
-  aboutUs: TPartEditorData;
   sections: {
     [sectionName: string]: TPartEditorData;
   };
@@ -43,6 +42,10 @@ type TTemplateEditorStackStateStore = {
 
 type TTemplateEditorFunctionStore = {
   set: (
+    key: string,
+    partEditorData: Record<string, TElementProperties>
+  ) => void;
+  setSection: (
     key: string,
     partEditorData: Record<string, TElementProperties>
   ) => void;
@@ -60,7 +63,185 @@ const usePhoCharlestonEditor = create<TStoreState>()(
     (set, get) => ({
       stackRedo: [],
       stackUndo: [],
-      sections: {},
+      sections: {
+        aboutUsCatering: {
+          isHidden: false,
+          elements: {
+            heading: {
+              displayName: "Heading",
+              type: "text",
+              text: "Catering",
+              style: {
+                fontSize: "50px",
+                color: "#333333",
+                fontWeight: "bold",
+              },
+            },
+            subHeading: {
+              displayName: "Sub Heading",
+              type: "text",
+              text: "Let us cater your next event",
+              style: {
+                fontSize: "20px",
+                color: "#5D6E58",
+              },
+            },
+            description: {
+              displayName: "Description",
+              type: "text",
+              text: "Whatever your event, we have the perfect catering options to choose from.",
+              style: {
+                fontSize: "18px",
+                color: "#333333",
+              },
+            },
+            redirectButton: {
+              displayName: "Redirect Button",
+              type: "button",
+              text: "catering",
+              style: {
+                fontSize: "18px",
+                color: "#ffffff",
+                backgroundColor: "#537a82",
+                
+              },
+            },
+            image: {
+              displayName: "Image",
+              type: "image",
+              style: {},
+              data: {
+                src: "/about_right_2.jpg",
+              },
+            },
+            layout: {
+              displayName: "Change Layout",
+              type: "layout",
+              data: {
+                value: "LTR",
+              },
+            },
+          },
+        },
+        aboutUsGroupAndParties: {
+          isHidden: false,
+          elements: {
+            heading: {
+              displayName: "Heading",
+              type: "text",
+              text: "Groups and Parties",
+              style: {
+                fontSize: "50px",
+                color: "#333333",
+                fontWeight: "bold",
+              },
+            },
+            subHeading: {
+              displayName: "Sub Heading",
+              type: "text",
+              text: "Tailored events for all occasions",
+              style: {
+                fontSize: "20px",
+                color: "#5D6E58",
+              },
+            },
+            description: {
+              displayName: "Description",
+              type: "text",
+              text: "Host your special event at Hạ Long Café. Whatever the occasion, our tailored service will bring your vision to life.",
+              style: {
+                fontSize: "18px",
+                color: "#333333",
+              },
+            },
+            redirectButton: {
+              displayName: "Redirect Button",
+              type: "button",
+              text: "Book an event",
+              style: {
+                fontSize: "18px",
+                color: "#D7D9D6",
+                backgroundColor: "#474947",
+                
+              },
+            },
+            image: {
+              displayName: "Image",
+              type: "image",
+              style: {},
+              data: {
+                src: "/about_right_2.jpg",
+              },
+            },
+            layout: {
+              displayName: "Change Layout",
+              type: "layout",
+              data: {
+                value: "RTL",
+              },
+            },
+          },
+        },
+        aboutUs: {
+          isHidden: false,
+          elements: {
+            heading: {
+              displayName: "Heading",
+              type: "text",
+              text: "About Us",
+              style: {
+                fontSize: "50px",
+                color: "#333333",
+                fontWeight: "bold",
+              },
+            },
+            subHeading: {
+              displayName: "Sub Heading",
+              type: "text",
+              text: "Hạ Long Café",
+              style: {
+                fontSize: "20px",
+                color: "#5D6E58",
+              },
+            },
+            description: {
+              displayName: "Description",
+              type: "text",
+              text: "Authenticate Vietnamese food and bubble tea owned by a Vietnamese family in downtown Charleston.",
+              style: {
+                fontSize: "18px",
+                color: "#333333",
+              },
+            },
+            redirectButton: {
+              displayName: "Redirect Button",
+              type: "button",
+              text: "OUR MENU",
+              style: {
+                fontSize: "18px",
+                color: "#D7D9D6",
+                backgroundColor: "#474947",
+                
+              },
+            },
+            image: {
+              displayName: "Image",
+              type: "image",
+              style: {},
+              data: {
+                src: "/about_right_2.jpg",
+              },
+            },
+            layout: {
+              displayName: "Change Layout",
+              type: "layout",
+              data: {
+                value: "LTR",
+              },
+            },
+          },
+        },
+      },
       header: {
         isHidden: false,
         elements: {
@@ -100,65 +281,7 @@ const usePhoCharlestonEditor = create<TStoreState>()(
           },
         },
       },
-      aboutUs: {
-        isHidden: false,
-        elements: {
-          heading: {
-            displayName: "Heading",
-            type: "text",
-            text: "About Us",
-            style: {
-              fontSize: "50px",
-              color: "#333333",
-              fontWeight: "bold",
-            },
-          },
-          subHeading: {
-            displayName: "Sub Heading",
-            type: "text",
-            text: "Hạ Long Café",
-            style: {
-              fontSize: "20px",
-              color: "#5D6E58",
-            },
-          },
-          description: {
-            displayName: "Description",
-            type: "text",
-            text: "Authenticate Vietnamese food and bubble tea owned by a Vietnamese family in downtown Charleston.",
-            style: {
-              fontSize: "18px",
-              color: "#333333",
-            },
-          },
-          redirectButton: {
-            displayName: "Redirect Button",
-            type: "button",
-            text: "OUR MENU",
-            style: {
-              fontSize: "18px",
-              color: "#D7D9D6",
-              backgroundColor: "#474947",
-              padding: "20px 20px",
-            },
-          },
-          image: {
-            displayName: "Image",
-            type: "image",
-            style: {},
-            data: {
-              src: "/about_right_2.jpg",
-            },
-          },
-          layout: {
-            displayName: "Change Layout",
-            type: "layout",
-            data: {
-              value: "LTR",
-            },
-          },
-        },
-      },
+
       footer: {
         isHidden: false,
         elements: {},
@@ -170,6 +293,19 @@ const usePhoCharlestonEditor = create<TStoreState>()(
           [relatedKey]: {
             ...prevData,
             elements: { ...prevData.elements, ...newData },
+          },
+        });
+      },
+      setSection: (key, newData) => {
+        const relatedKey = key as keyof TTemplateEditorStateStore;
+        const prevData = get().sections[relatedKey];
+        return set({
+          sections: {
+            ...get().sections,
+            [relatedKey]: {
+              ...prevData,
+              elements: { ...prevData.elements, ...newData },
+            },
           },
         });
       },

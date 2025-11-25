@@ -55,7 +55,7 @@ const ListeningStack = () => {
       const lastData = stackUndo[stackUndo.length - 1];
       addStack(lastData, "redo");
       removeStack("undo");
-      if(stackUndo.length - 1 > 0) setAllData(stackUndo[stackUndo.length - 2]);
+      if (stackUndo.length - 1 > 0) setAllData(stackUndo[stackUndo.length - 2]);
     };
 
     const handleRedo = () => {

@@ -1,10 +1,10 @@
 import React from "react";
-import SettingOverlay from "../../../../../../components/templates/SettingOverlay";
-import SheetSettingHeader from "../../../../../../components/templates/SheetSettingHeader";
-import SettingSection from "../../../../../../components/templates/settings";
+import SettingOverlay from "@/components/templates/SettingOverlay";
+import SheetSettingHeader from "@/components/templates/SheetSettingHeader";
+import SettingSection from "@/components/templates/settings";
 import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ColorSetting from "../../../../../../components/templates/settings/ColorSetting";
+import ColorSetting from "@/components/templates/settings/ColorSetting";
 import HeaderNavSetting from "./HeaderNavSetting";
 import ImageSetting from "@/components/templates/settings/ImageSetting";
 
