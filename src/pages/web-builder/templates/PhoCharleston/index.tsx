@@ -6,10 +6,16 @@ import ListeningStack from "./components/ListeningStack";
 import AboutUs from "./components/AboutUs";
 import CarouselIntroduce from "./components/CarouselIntroduce";
 import Special from "./components/Special";
-import { createContext, useEffect, type PropsWithChildren } from "react";
+import {
+  createContext,
+  useEffect,
+  useRef,
+  type PropsWithChildren,
+} from "react";
 import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
 import { Button } from "@/components/ui/button";
 import { Edit, X } from "lucide-react";
+import PublishTemplateButton from "@/components/templates/PublishTemplateButton";
 
 const PhoCharlestonContext = createContext<{
   isEditing: boolean;
@@ -29,15 +35,16 @@ interface PhoCharlestonProps {
   isAllowedToEdit?: boolean;
 }
 
-const PhoCharleston = ({ isAllowedToEdit  }: PhoCharlestonProps) => {
+const PhoCharleston = ({ isAllowedToEdit }: PhoCharlestonProps) => {
   const toggleEdit = usePhoCharlestonEditor((state) => state.toggleEdit);
+  const outerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isAllowedToEdit) toggleEdit(true);
   }, [isAllowedToEdit]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={outerRef}>
       <PhoCharlestonHeader />
 
       <AboutUs aboutUsKey="aboutUsCatering" />
@@ -49,6 +56,7 @@ const PhoCharleston = ({ isAllowedToEdit  }: PhoCharlestonProps) => {
 
       <StackEvent />
 
+      <PublishTemplateButton outerHTML={outerRef} />
       {isAllowedToEdit && <ToggleEditButton />}
     </div>
   );

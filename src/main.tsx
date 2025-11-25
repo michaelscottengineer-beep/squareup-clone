@@ -35,6 +35,7 @@ import RestaurantLanding from "./pages/web-builder/templates/RestaurantLanding";
 import TemplateEditor from "./pages/web-builder/user-editor/TemplateEditor";
 import WebSitePage from "./pages/website/WebSitePage";
 import PhoCharleston from "./pages/web-builder/templates/PhoCharleston";
+import webBuilderRouter from "./routes/webBuilderRoute";
 
 const router = createBrowserRouter([
   {
@@ -73,26 +74,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "/websites/:websiteId",
-    element: <WebSitePage />,
-  },
-  {
-    path: "/web-builder/editor",
-    element: <WebBuilderEditorLayout />,
-  },
-  {
-    path: '/web-builder/templates',
-    element: <RestaurantLanding />
-  },
-  {
-    path: '/web-builder/templates/pho-charleston',
-    element: <PhoCharleston />
-  },
-  {
-    path: '/web-builder/templates/:templateId/editor',
-    element: <TemplateEditor />
-  },
+  ...webBuilderRouter,
   {
     path: "/invoice-preview",
     element: <ScreenInvoicePreviewPage />,
