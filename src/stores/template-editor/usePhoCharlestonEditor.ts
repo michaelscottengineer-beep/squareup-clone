@@ -103,7 +103,6 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 fontSize: "18px",
                 color: "#ffffff",
                 backgroundColor: "#537a82",
-                
               },
             },
             image: {
@@ -162,7 +161,6 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 fontSize: "18px",
                 color: "#D7D9D6",
                 backgroundColor: "#474947",
-                
               },
             },
             image: {
@@ -221,7 +219,6 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 fontSize: "18px",
                 color: "#D7D9D6",
                 backgroundColor: "#474947",
-                
               },
             },
             image: {
@@ -237,6 +234,50 @@ const usePhoCharlestonEditor = create<TStoreState>()(
               type: "layout",
               data: {
                 value: "LTR",
+              },
+            },
+          },
+        },
+        carouselIntroduce: {
+          elements: {
+            carousel: {
+              type: "list",
+              displayName: "",
+              data: {
+                items: [
+                  {
+                    title: "Authentic</br>Vietnamese cuisine",
+                    img: "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/81/9861ff410b4ef3938433b5b80dbe3c/:original",
+                    buttonText: "Our menu",
+                    buttonUrl: "/my-menu",
+                  },
+                  {
+                    title: "Order online",
+                    subTitle: "Take us home with you!",
+                    img: "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/1e/81044a6db943a1a357c78b68cc3c05/:original",
+                    buttonText: "Order online",
+                    buttonUrl: "/order-now",
+                  },
+                  {
+                    title: "Groups</br>and parties",
+                    img: "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/1e/81044a6db943a1a357c78b68cc3c05/:original",
+                    buttonText: "Book an event",
+                    buttonUrl: "/book-event",
+                  },
+                  {
+                    img: "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/98/07525854d34cf9be5e9618e378f43c/:original",
+                    title: "Catering",
+                    subTitle: "Tailored to your needs",
+                    buttonText: "Cater with us",
+                    buttonUrl: "/cater",
+                  },
+                  {
+                    img: "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/98/07525854d34cf9be5e9618e378f43c/:original",
+                    title: "Taiwanese</br>Bubble tea",
+                    buttonText: "our drinks",
+                    buttonUrl: "/my-drinks",
+                  },
+                ],
               },
             },
           },

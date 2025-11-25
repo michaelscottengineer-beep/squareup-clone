@@ -4,6 +4,7 @@ import PhoCharlestonHeader from "./components/Header";
 
 import ListeningStack from "./components/ListeningStack";
 import AboutUs from "./components/AboutUs";
+import CarouselIntroduce from "./components/CarouselIntroduce";
 
 const PhoCharleston = () => {
   return (
@@ -12,6 +13,8 @@ const PhoCharleston = () => {
 
       <AboutUs aboutUsKey="aboutUsCatering" />
       <AboutUs aboutUsKey="aboutUsGroupAndParties" />
+
+      <CarouselIntroduce />
       <AboutUs aboutUsKey="aboutUs" />
       <ListeningStack />
     </div>
