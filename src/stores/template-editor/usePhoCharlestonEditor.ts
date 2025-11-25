@@ -30,7 +30,7 @@ export type TPartEditorData = {
 type TOtherState = {
   isEditing?: boolean;
 };
-type TTemplateEditorStateStore = {
+export type TTemplateEditorStateStore = {
   header: TPartEditorData;
   footer: TPartEditorData;
   sections: {

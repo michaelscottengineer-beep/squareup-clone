@@ -14,13 +14,16 @@ import { toast } from "sonner";
 
 interface PublishTemplateButtonProps {
   outerHTML: React.RefObject<HTMLDivElement | null>;
+  templateData: any;
 }
-const PublishTemplateButton = ({ outerHTML }: PublishTemplateButtonProps) => {
+const PublishTemplateButton = ({
+  outerHTML,
+  templateData,
+}: PublishTemplateButtonProps) => {
   const { user } = useAuth();
   const [iTemplateName, setITemplateName] = useState("");
   const [imgUrl, setImgUrl] = useState("");
 
-  const partData = useEditorTemplateState((state) => state.partEditorData);
   const mutate = useMutation({
     mutationFn: async () => {
       const keys = templateFirebaseKey({});
@@ -34,7 +37,7 @@ const PublishTemplateButton = ({ outerHTML }: PublishTemplateButtonProps) => {
           createdBy: user?.uid,
         },
         outerHTML: outerHTML.current?.outerHTML,
-        partData,
+        partData: templateData,
       });
     },
     onSuccess: () => {

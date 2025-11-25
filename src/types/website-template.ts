@@ -1,3 +1,4 @@
+import type { TTemplateEditorStateStore } from "@/stores/template-editor/usePhoCharlestonEditor";
 import type { TPartEditorData } from "@/stores/use-editor-template-state";
 
 export type TWebsiteTemplate = {
@@ -20,5 +21,5 @@ export type TWebsite = {
     templateId: string;
   };
   outerHTML: string;
-  partData: TPartEditorData;
+  partData: TTemplateEditorStateStore;
 };

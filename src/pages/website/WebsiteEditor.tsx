@@ -13,7 +13,11 @@ const WebsiteEditor = () => {
   const { user } = useAuth();
   const { websiteId } = useParams();
 
-  const { data: item, isLoading } = useQuery({
+  const {
+    data: item,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["users", user?.uid, "websites", websiteId],
     queryFn: async () => {
       try {
@@ -28,16 +32,39 @@ const WebsiteEditor = () => {
         console.error(err);
       }
     },
+    enabled: !!user?.uid,
   });
 
-  if (!item && !isLoading) {
-    return <div>Does not exists!</div>;
+  if (isLoading || !user?.uid) {
+    return (
+      <div className="text-xl font-bold text-center mt-10">Loading...</div>
+    );
   }
-  
+
+  if (!item) {
+    return (
+      <div className="text-xl font-bold text-center mt-10">
+        Does not exists!
+      </div>
+    );
+  }
+
+  if (!item.basicInfo) {
+    return (
+      <div className="text-xl font-bold text-center mt-10">
+        Does not exists!
+      </div>
+    );
+  }
+
   return (
     <div>
-      {item?.basicInfo.templateId === "-Oetd5d1QjSd_6GNpA3W" && (
-        <PhoCharleston isAllowedToEdit />
+      {item?.basicInfo?.templateId === "-Oety8bsI_mi1GYk0T3k" && (
+        <PhoCharleston
+          isAllowedToEdit
+          createdBy={item.basicInfo.createdBy}
+          initData={item.partData}
+        />
       )}
     </div>
   );
