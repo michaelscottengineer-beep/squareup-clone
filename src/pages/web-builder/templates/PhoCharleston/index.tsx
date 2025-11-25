@@ -26,6 +26,7 @@ import useAuth from "@/hooks/use-auth";
 import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { db } from "@/firebase";
 import { toast } from "sonner";
+import InformationSection from "./components/InfomationSection";
 
 const PhoCharlestonContext = createContext<{
   isEditing: boolean;
@@ -73,9 +74,13 @@ const PhoCharleston = ({ isAllowedToEdit, createdBy, initData}: PhoCharlestonPro
         <CarouselIntroduce />
         <Special />
         <AboutUs aboutUsKey="aboutUs" />
+
+        <InformationSection/>
       </div>
       <StackEvent />
       <PublishTemplate outerHTML={outerRef} />
+
+      {user?.role === "admin" && <ToggleEditButton />}
       {isAllowedToEdit && createdBy === user?.uid && <ToggleEditButton />}
       {isAllowedToEdit && createdBy === user?.uid && (
         <UserActionButton outerHTML={outerRef} />

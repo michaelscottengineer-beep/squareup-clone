@@ -335,6 +335,109 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             },
           },
         },
+        informationSection: {
+          isHidden: false,
+          elements: {
+            general: {
+              displayName: "General",
+              type: "general",
+              style: {
+                backgroundColor: "#3E413D",
+                color: "#D7D9D6",
+              },
+            },
+            locationTitle: {
+              displayName: "Location Title",
+              type: "text",
+              text: "LOCATION",
+              style: {
+                fontSize: "24px",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+            },
+            locationAddress: {
+              displayName: "Location Address",
+              type: "text",
+              text: "281 Meeting Street\nCharleston, SC\n29401",
+              style: {
+                fontSize: "16px",
+                color: "#B9C1B6",
+                lineHeight: "1.6",
+              },
+            },
+            hoursTitle: {
+              displayName: "Hours Title",
+              type: "text",
+              text: "HOURS",
+              style: {
+                fontSize: "24px",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+            },
+            hoursFriSat: {
+              displayName: "Hours Fri, Sat",
+              type: "text",
+              text: "Fri, Sat\n9:00 am - 9:00 pm",
+              style: {
+                fontSize: "16px",
+                color: "#B9C1B6",
+                lineHeight: "1.6",
+              },
+            },
+
+            socialTitle: {
+              displayName: "Social Title",
+              type: "text",
+              text: "FIND US ON...",
+              style: {
+                fontSize: "24px",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+            },
+            socialLinks: {
+              displayName: "Social Links",
+              type: "list",
+              data: {
+                items: [
+                  { icon: "facebook", url: "#", label: "Facebook" },
+                  { icon: "instagram", url: "#", label: "Instagram" },
+                  { icon: "yelp", url: "#", label: "Yelp" },
+                ],
+              },
+            },
+            contactTitle: {
+              displayName: "Contact Title",
+              type: "text",
+              text: "CONTACT US",
+              style: {
+                fontSize: "24px",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+            },
+            contactPhone: {
+              displayName: "Contact Phone",
+              type: "text",
+              text: "(843)-501-7477",
+              style: {
+                fontSize: "16px",
+                color: "#B9C1B6",
+              },
+            },
+            contactEmail: {
+              displayName: "Contact Email",
+              type: "text",
+              text: "halongcafe01@gmail.com",
+              style: {
+                fontSize: "16px",
+                color: "#B9C1B6",
+              },
+            },
+          },
+        },
       },
       header: {
         isHidden: false,
