@@ -1,58 +1,45 @@
 import { DataTable } from "@/components/ui/data-table";
-import React, { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { equalTo, get, orderByChild, query, ref } from "firebase/database";
-import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
+import {useQuery } from "@tanstack/react-query";
+import { equalTo, get, ref } from "firebase/database";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { db } from "@/firebase";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { Search } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+
 import { useNavigate } from "react-router";
 
-import type { TOrderCartItem, TOrderDocumentData } from "@/types/checkout";
-import type { TWebsiteTemplate } from "@/types/website-template";
+import type { TWebsite } from "@/types/website-template";
 import { myWebsiteColumns } from "./myWebsiteColumns";
+import useAuth from "@/hooks/use-auth";
 
 const MyWebsiteLayout = () => {
   const navigate = useNavigate();
 
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
-
+  const { user } = useAuth();
   const { data: items, isLoading } = useQuery({
-    queryKey: ["restaurants", restaurantId, "allWebsites"],
+    queryKey: ["websites", user?.uid],
     queryFn: async () => {
       try {
-        const path = parseSegments("restaurants", restaurantId, "allWebsites");
+        const path = parseSegments("websites", user?.uid);
 
         const templatesRef = ref(db, path);
 
         const snap = await get(templatesRef);
 
         return snap.val()
-          ? convertFirebaseArrayData<TWebsiteTemplate>(snap.val())
+          ? convertFirebaseArrayData<TWebsite>(snap.val())
           : [];
       } catch (err) {
         console.error(err);
       }
     },
-    enabled: !!restaurantId
+    enabled: !!user?.uid,
   });
+
+  console.log(items)
 
   return (
     <div>
       {!items?.length ? (
-        <div>No orders found</div>
+        <div>No websites found</div>
       ) : (
         <DataTable columns={myWebsiteColumns} data={items} />
       )}

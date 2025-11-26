@@ -4,18 +4,12 @@ import { BiBorderOuter } from "react-icons/bi";
 import * as React from "react";
 import {
   AudioWaveform,
-  BookOpen,
   Bot,
   Briefcase,
   Command,
-  Frame,
   GalleryVerticalEnd,
   Globe,
   Home,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
   Users,
 } from "lucide-react";
 
@@ -199,7 +193,7 @@ const data = {
       items: [
         {
           title: "View Templates",
-          url: "/dashboard/my-websites/templates",
+          url: "/web-builder/templates",
         },
         {
           title: "Websites",

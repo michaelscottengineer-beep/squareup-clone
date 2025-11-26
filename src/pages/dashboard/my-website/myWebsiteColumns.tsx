@@ -23,15 +23,10 @@ import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { TOrderHistory } from "@/types/order";
 import useAuth from "@/hooks/use-auth";
-import type { TWebsiteTemplate } from "@/types/website-template";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import type { TWebsite, TWebsiteTemplate } from "@/types/website-template";
+
 import templateFirebaseKey from "@/factory/template/template.firebaseKey";
-export const myWebsiteColumns: ColumnDef<TWebsiteTemplate>[] = [
+export const myWebsiteColumns: ColumnDef<TWebsite>[] = [
   {
     accessorKey: "id",
     header: "#",
@@ -83,10 +78,10 @@ export const myWebsiteColumns: ColumnDef<TWebsiteTemplate>[] = [
         onSuccess: () => {
           toast.success("Create with this template success!");
         },
-        onError: (err) => { 
-          console.error(err)
-          toast.error('Create template error: ' + err.message)
-        }
+        onError: (err) => {
+          console.error(err);
+          toast.error("Create template error: " + err.message);
+        },
       });
 
       return (
@@ -100,12 +95,18 @@ export const myWebsiteColumns: ColumnDef<TWebsiteTemplate>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigate('/web-builder/templates/' + row.original.id + '/editor')
+                navigate("/websites/" + row.original.id + "/editor");
               }}
             >
               Edit
             </DropdownMenuItem>
-      
+            <DropdownMenuItem
+              onClick={() => {
+                navigate("/websites/" + row.original.id + "");
+              }}
+            >
+              View
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

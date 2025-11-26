@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,9 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Field>
-        <Button onClick={() => mutation.mutate()} className="mt-4">Sign in</Button>
+        <Button onClick={() => mutation.mutate()} className="mt-4">
+          Sign in
+        </Button>
       </div>
     </div>
   );

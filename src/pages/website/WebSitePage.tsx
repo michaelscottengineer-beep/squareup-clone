@@ -1,20 +1,15 @@
 import "@/styles/website.css";
 import { db } from "@/firebase";
-import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import useEditorTemplateState from "@/stores/use-editor-template-state";
 import type { TWebsite, TWebsiteTemplate } from "@/types/website-template";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import { parseSegments } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { User } from "lucide-react";
 import useAuth from "@/hooks/use-auth";
 
 const WebSitePage = () => {
   const { websiteId } = useParams();
-  const navigate = useNavigate();
-  const setPartData = useEditorTemplateState((state) => state.set);
   const { user } = useAuth();
 
 
