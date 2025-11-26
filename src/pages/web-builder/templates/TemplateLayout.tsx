@@ -35,7 +35,7 @@ const TemplateLayout = () => {
 
   const mutation = useMutation({
     mutationFn: async (template: TWebsiteTemplate) => {
-      const webRef = ref(db, parseSegments("websites", user?.uid));
+      const webRef = ref(db, parseSegments("websites"));
 
       const res = await push(webRef, {
         outerHTML: "",

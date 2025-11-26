@@ -17,7 +17,7 @@ const WebSitePage = () => {
     queryKey: ["users", user?.uid, "websites", websiteId, "published"],
     queryFn: async () => {
       try {
-        const path = parseSegments("websites", user?.uid, websiteId);
+        const path = parseSegments("websites", websiteId);
 
         const templatesRef = ref(db, path);
 
@@ -30,7 +30,7 @@ const WebSitePage = () => {
     },
     enabled: !!websiteId,
   });
-console.log(item)
+
   if (isLoading) return <div>Loading ...</div>;
   return (
     <div id="website-page">

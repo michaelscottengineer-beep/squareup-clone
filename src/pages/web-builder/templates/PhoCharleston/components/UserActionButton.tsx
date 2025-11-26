@@ -30,7 +30,7 @@ const UserActionButton = ({
       keys.addParams({ templateId: newTemplateKey });
 
       return await set(
-        ref(db, parseSegments("websites", user?.uid, websiteId, "partData")),
+        ref(db, parseSegments("websites", websiteId, "partData")),
         {
           header,
           footer,
@@ -54,13 +54,13 @@ const UserActionButton = ({
 
       const updates: { [key: string]: any } = {};
 
-      updates[parseSegments("websites", user?.uid, websiteId, "partData")] = {
+      updates[parseSegments("websites",  websiteId, "partData")] = {
         header,
         footer,
         sections,
       };
 
-      updates[parseSegments("websites", user?.uid, websiteId, "outerHTML")] =
+      updates[parseSegments("websites",  websiteId, "outerHTML")] =
         outerHTML.current?.outerHTML;
 
       return await update(ref(db), updates);

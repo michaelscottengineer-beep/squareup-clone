@@ -21,7 +21,7 @@ const WebsiteEditor = () => {
     queryKey: ["users", user?.uid, "websites", websiteId],
     queryFn: async () => {
       try {
-        const path = parseSegments("websites", user?.uid, websiteId);
+        const path = parseSegments("websites", websiteId);
 
         const templatesRef = ref(db, path);
 
