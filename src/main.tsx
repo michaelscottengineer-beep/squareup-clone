@@ -36,6 +36,7 @@ import TemplateEditor from "./pages/web-builder/user-editor/TemplateEditor";
 import WebSitePage from "./pages/website/WebSitePage";
 import PhoCharleston from "./pages/web-builder/templates/PhoCharleston";
 import webBuilderRouter from "./routes/webBuilderRoute";
+import NotFound from "./components/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <RegisterPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
