@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import { toast } from "sonner";
-import UploadImageArea from "../dashboard/item-invetory/items/UploadImageArea";
+import UploadImageArea from "@/components/UploadImageArea";
 
 const RestaurantForm = () => {
   const { user } = useAuth();

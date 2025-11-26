@@ -1,17 +1,8 @@
 import { DataTable } from "@/components/ui/data-table";
-import React, { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  equalTo,
-  get,
-  orderByChild,
-  push,
-  query,
-  ref,
-  set,
-} from "firebase/database";
+import { useQuery } from "@tanstack/react-query";
+import { get, ref } from "firebase/database";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import { convertFirebaseArrayData } from "@/utils/helper";
 import { db } from "@/firebase";
 import {
   InputGroup,
@@ -24,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
 import { restaurantTableColumns } from "./restaurantTableColumns";
-import type { TRestaurantJob, TRestaurantTable } from "@/types/restaurant";
+import type { TRestaurantTable } from "@/types/restaurant";
 
 import TableActionDialog from "./TableActionDialog";
 import tableFirebaseKey from "@/factory/table/table.firebaseKey";

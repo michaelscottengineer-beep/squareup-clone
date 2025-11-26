@@ -1,11 +1,8 @@
-import React, { useEffect, useState, type ReactNode } from "react";
+import React, { useEffect, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  equalTo,
   get,
-  orderByChild,
   push,
-  query,
   ref,
   set,
 } from "firebase/database";
@@ -16,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import type { TRestaurantJob } from "@/types/restaurant";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";

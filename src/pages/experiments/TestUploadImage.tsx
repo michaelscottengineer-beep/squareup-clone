@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import imgbbService from "@/services/imggbb.service";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import UploadImageArea from "../dashboard/item-invetory/items/UploadImageArea";
+import UploadImageArea from "@/components/UploadImageArea";
 
 const TestUploadImage = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);

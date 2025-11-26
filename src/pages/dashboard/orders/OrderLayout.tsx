@@ -1,13 +1,6 @@
 import { DataTable } from "@/components/ui/data-table";
-import React, { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  equalTo,
-  get,
-  orderByChild,
-  query,
-  ref,
-} from "firebase/database";
+import { useQuery } from "@tanstack/react-query";
+import { equalTo, get, orderByChild, query, ref } from "firebase/database";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { db } from "@/firebase";
@@ -17,13 +10,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+
 import { useNavigate } from "react-router";
 
 import type { TOrderCartItem, TOrderDocumentData } from "@/types/checkout";
@@ -33,22 +20,20 @@ const OrderLayout = () => {
   const navigate = useNavigate();
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
-  const [shippingMethod, setShippingMethod] = useState("all");
 
   const { data: items, isLoading } = useQuery({
-    queryKey: ["allOrders"],
+    queryKey: ["restaurants", restaurantId, "allOrders"],
     queryFn: async () => {
       try {
         const path = parseSegments("restaurants", restaurantId, "allOrders");
 
         const ordersRef = ref(db, path);
         let qr = null;
-            qr = query(
-            ordersRef,
-            orderByChild("basicInfo/orderStatus"),
-            equalTo("pending")
-          );
-      
+        qr = query(
+          ordersRef,
+          orderByChild("basicInfo/orderStatus"),
+          equalTo("pending")
+        );
 
         const snap = await get(qr ?? ordersRef);
 
@@ -62,9 +47,8 @@ const OrderLayout = () => {
     enabled: !!restaurantId,
   });
 
-  if (isLoading) return <div>Loading items...</div>;
+  if (isLoading) return <div>Loading orders...</div>;
 
-  console.log("orders", items);
   return (
     <div className="px-2 space-y-4">
       <div className="flex justify-between items-center">
@@ -100,7 +84,6 @@ const OrderLayout = () => {
 
         <div className="flex items-center gap-2  mb-3">
           {/* <QuickCreationDialog /> */}
- 
         </div>
       </div>
 

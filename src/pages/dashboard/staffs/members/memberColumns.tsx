@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import type { TItem } from "@/types/item";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -16,12 +14,9 @@ import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, remove, set, update } from "firebase/database";
+import { ref, remove } from "firebase/database";
 import { toast } from "sonner";
-import type { TOrder } from "@/types/checkout";
-import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
-import type { TOrderHistory } from "@/types/order";
 import useAuth from "@/hooks/use-auth";
 import type { TMember } from "@/types/staff";
 export const memberColumns: ColumnDef<TMember>[] = [
@@ -62,12 +57,10 @@ export const memberColumns: ColumnDef<TMember>[] = [
       <div className="capitalize">{row.original.basicInfo.job}</div>
     ),
   },
-    {
+  {
     accessorKey: "basicInfo.email",
     header: "Email",
-    cell: ({ row }) => (
-      <div className="">{row.original.basicInfo.email}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.original.basicInfo.email}</div>,
   },
   {
     accessorKey: "basicInfo.gender",
@@ -76,15 +69,24 @@ export const memberColumns: ColumnDef<TMember>[] = [
       return <div className="capitalize">{row.original.basicInfo.gender}</div>;
     },
   },
-    {
+  {
     accessorKey: "basicInfo.status",
     header: "Status",
     cell: ({ row }) => {
       const status = row.original.basicInfo.status;
-      return <div className={cn("capitalize font-medium w-max px-2 py-1 rounded-full text-xs", {
-        "bg-green-100 text-green-500": status === "accepted",
-        "bg-yellow-100 text-yellow-500": status === "pending",
-      })}>{status}</div>;
+      return (
+        <div
+          className={cn(
+            "capitalize font-medium w-max px-2 py-1 rounded-full text-xs",
+            {
+              "bg-green-100 text-green-500": status === "accepted",
+              "bg-yellow-100 text-yellow-500": status === "pending",
+            }
+          )}
+        >
+          {status}
+        </div>
+      );
     },
   },
   {
@@ -111,7 +113,6 @@ export const memberColumns: ColumnDef<TMember>[] = [
             "restaurants",
             restaurantId
           );
-
 
           return await Promise.all([
             remove(ref(db, staffPath)),

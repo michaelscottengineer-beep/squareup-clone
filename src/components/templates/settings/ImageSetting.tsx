@@ -11,7 +11,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import UploadImageArea from "@/pages/dashboard/item-invetory/items/UploadImageArea";
+import UploadImageArea from "@/components/UploadImageArea";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import SettingSection from ".";

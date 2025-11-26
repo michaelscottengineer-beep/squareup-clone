@@ -24,8 +24,6 @@ import { db } from "@/firebase";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import {
   type TOrderCartItem,
-  type TCheckoutFormDataValues,
-  type TOrder,
   type TOrderDocumentData,
 } from "@/types/checkout";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,7 +37,7 @@ export default function SuccessPay() {
   const shopId = search.get("shopId");
 
   const { data: order, isLoading } = useQuery({
-    queryKey: ["orders", orderId],
+    queryKey: ["restaurants", shopId, "orders", orderId],
     queryFn: async () => {
       const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", orderId));
       const doc = await get(orderInfoRef);

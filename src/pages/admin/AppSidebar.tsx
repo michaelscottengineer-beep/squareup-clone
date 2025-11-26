@@ -3,17 +3,8 @@ import { BiBorderOuter } from "react-icons/bi";
 
 import * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
   Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
   Home,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react";
 
 import {
@@ -26,7 +17,6 @@ import {
 import { NavMain } from "./NavMain";
 import { NavUser } from "./NavUser";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { IoPricetagOutline } from "react-icons/io5";
 
 // This is sample data.
 const data = {

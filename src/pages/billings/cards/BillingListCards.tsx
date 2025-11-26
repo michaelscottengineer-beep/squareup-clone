@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import useAuth from "@/hooks/use-auth";
 import type { TPaymentMethod } from "@/types/payment";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import React from "react";
 import { FaCcMastercard, FaCcVisa } from "react-icons/fa";
 
 const BillingListCards = () => {

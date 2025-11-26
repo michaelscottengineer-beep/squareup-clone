@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,14 +22,12 @@ export const columns: ColumnDef<TItem>[] = [
   {
     accessorKey: "name",
     header: "Item",
-    cell: ({ row, renderValue }) => (
+    cell: ({ row }) => (
       <div className="flex items-center gap-1">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
+        <img
+          src={row.original.image ?? ""}
+          className="object-cover w-10 h-10 rounded-md"
         />
-        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
         <div className="">{row.original.name}</div>
       </div>
     ),

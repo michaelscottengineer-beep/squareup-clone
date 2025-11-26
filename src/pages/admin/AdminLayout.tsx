@@ -1,8 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
-import NotificationBellRingMp3 from "@/components/NotificationBellRingMp3";
-import { Button } from "@/components/ui/button";
-import useBellSound from "@/stores/use-bell-sound";
 import { AppSidebar } from "./AppSidebar";
 import useAuth from "@/hooks/use-auth";
 

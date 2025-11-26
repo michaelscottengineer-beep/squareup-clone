@@ -1,6 +1,3 @@
-"use client";
-
-import * as React from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
 
 import {
@@ -9,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -39,7 +35,7 @@ export function TeamSwitcher() {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: restaurant } = useQuery({
-    queryKey: ["restaurants", "details", restaurantId],
+    queryKey: ["restaurants", restaurantId, "details"],
     queryFn: async () => {
       const resRef = ref(db, parseSegments("restaurants", restaurantId));
       const doc = await get(resRef);
@@ -91,7 +87,7 @@ export function TeamSwitcher() {
               <DropdownMenuLabel className="text-muted-foreground text-xs">
                 Restaurants
               </DropdownMenuLabel>
-              <ListRestaurant />
+              <RestaurantList />
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="gap-2 p-2"
@@ -114,7 +110,8 @@ export function TeamSwitcher() {
   );
 }
 
-const ListRestaurant = () => {
+
+const RestaurantList = () => {
   const { user, updateRestaurant, memberInfo } = useAuth();
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const setRestaurantId = useCurrentRestaurantId((state) => state.set);
@@ -127,7 +124,7 @@ const ListRestaurant = () => {
   const handleChange = (id: string) => {
     setRestaurantId(id);
     const restaurant = user?.restaurants?.[id];
-    console.log(restaurant, 'zz restaurant')
+    console.log(restaurant, "zz restaurant");
     updateRestaurant(restaurant);
   };
 

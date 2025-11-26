@@ -1,25 +1,11 @@
-import React, { useEffect, useState, type ReactNode } from "react";
+import React, { useEffect, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  equalTo,
-  get,
-  orderByChild,
-  push,
-  query,
-  ref,
-  set,
-} from "firebase/database";
+import { get, set } from "firebase/database";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { db } from "@/firebase";
 
 import { Button } from "@/components/ui/button";
-import type { TRestaurantJob, TRestaurantTable } from "@/types/restaurant";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import type { TRestaurantTable } from "@/types/restaurant";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -30,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import restaurantFirebaseKey from "@/factory/restaurant/restaurant.firebasekey";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import tableFirebaseKey from "@/factory/table/table.firebaseKey";

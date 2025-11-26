@@ -1,16 +1,13 @@
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "./AppSidebar";
+import { AppSidebar } from "./components/AppSidebar";
 import { Outlet } from "react-router";
-import NotificationBellRingMp3 from "@/components/NotificationBellRingMp3";
-import { Button } from "@/components/ui/button";
-import useBellSound from "@/stores/use-bell-sound";
+// import useBellSound from "@/stores/use-bell-sound";
 
 export default function DashboardPage() {
-  const set = useBellSound((state) => state.set);
+  // const set = useBellSound((state) => state.set);
 
   return (
     <div>

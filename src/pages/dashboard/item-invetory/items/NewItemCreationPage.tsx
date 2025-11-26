@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Upload, Settings2, Heart, Info, X } from "lucide-react";
@@ -26,7 +24,7 @@ import useItemCreationFormData from "@/stores/use-item-creation-form-data";
 import CategoriesSection from "./components/CategoriesSection";
 import { toast } from "sonner";
 import ModifierSection from "./ModifierSection";
-import UploadImageArea from "./UploadImageArea";
+import UploadImageArea from "@/components/UploadImageArea";
 import {
   InputGroup,
   InputGroupAddon,
@@ -65,7 +63,7 @@ export default function NewItemCreationPage() {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
 
   const { data: item } = useQuery({
-    queryKey: ["items", "details", itemId],
+    queryKey: ["restaurants", restaurantId, "allItems", "details", itemId],
     queryFn: async () => {
       const itemRef = ref(
         db,
@@ -76,7 +74,6 @@ export default function NewItemCreationPage() {
     },
     enabled: !!itemId,
   });
-
 
   const mutation = useMutation({
     mutationFn: async (formData: TItem) => {
@@ -155,7 +152,7 @@ export default function NewItemCreationPage() {
       toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
     },
     onError: (err) => {
-      console.error("save error", err)
+      console.error("save error", err);
       toast.error(`${itemId ? "Saved" : "Created"} error`, {
         description: err.message,
       });

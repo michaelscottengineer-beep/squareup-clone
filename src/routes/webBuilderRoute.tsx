@@ -1,5 +1,4 @@
 import PhoCharleston from "@/pages/web-builder/templates/PhoCharleston";
-import RestaurantLanding from "@/pages/web-builder/templates/RestaurantLanding";
 import TemplateLayout from "@/pages/web-builder/templates/TemplateLayout";
 import TemplateEditor from "@/pages/web-builder/user-editor/TemplateEditor";
 import WebBuilderEditorLayout from "@/pages/web-builder/web-build-editor/WebBuilderEditorLayout";

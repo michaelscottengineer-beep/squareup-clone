@@ -2,10 +2,8 @@ import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -23,21 +21,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SheetClose } from "@/components/ui/sheet";
 import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { memberJob, type TMember } from "@/types/staff";
+import { type TMember } from "@/types/staff";
 import { parseSegments } from "@/utils/helper";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
-import {
-  equalTo,
-  get,
-  orderByChild,
-  push,
-  query,
-  ref,
-  update,
-} from "firebase/database";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { get, push, ref, update } from "firebase/database";
 import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

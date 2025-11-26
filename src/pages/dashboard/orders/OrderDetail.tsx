@@ -1,9 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
-import { DataTable } from "@/components/ui/data-table";
-import type { TCartItem, TItem } from "@/types/item";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { get, push, ref } from "firebase/database";
+import { useQuery } from "@tanstack/react-query";
+import { get, ref } from "firebase/database";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { db } from "@/firebase";
@@ -16,8 +14,9 @@ import type {
 } from "@/types/checkout";
 import { formatDate } from "date-fns";
 import { Separator } from "@/components/ui/separator";
-import { Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import OrderInfoDelivery from "./components/OrderInfoDelivery";
+import OrderInfoDineIn from "./components/OrderInfoDineIn";
 
 const OrderDetail = () => {
   const { orderId } = useParams();
@@ -187,72 +186,6 @@ const OrderDetail = () => {
   );
 };
 
-const OrderInfoDineIn = ({ order }: { order: TOrder }) => {
-  return (
-    <>
-      <div className="grid grid-cols-2">
-        <span>Table Number:</span>
-        <span className="text-end">{order.basicInfo.dineIn.tableNumber}</span>
-      </div>
 
-      <div className="grid grid-cols-2">
-        <span>Phone Number:</span>
-        <span className="text-end">{order.basicInfo.dineIn.phoneNumber}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>FullName:</span>
-        <span className="text-end">{order.basicInfo.dineIn.yourName}</span>
-      </div>
-    </>
-  );
-};
-
-const OrderInfoDelivery = ({ order }: { order: TOrder }) => {
-  const delivery = order.basicInfo.delivery;
-  const { yourAddress } = delivery.deliveryInfo;
-
-  return (
-    <>
-      <div className="grid grid-cols-2">
-        <span>Phone Number:</span>
-        <span className="text-end">{delivery.phoneNumber}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>FullName:</span>
-        <span className="text-end">{delivery.yourName}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>Street Address:</span>
-        <span className="text-end">{yourAddress.streetAddress}</span>
-      </div>
-      <div className="grid grid-cols-2">
-        <span>Received At:</span>
-        <span className="text-end">{yourAddress.receivedAt}</span>
-      </div>
-      <div className="grid grid-cols-2">
-        <span>City:</span>
-        <span className="text-end">{yourAddress.city}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>State:</span>
-        <span className="text-end">{yourAddress.state}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>Notes:</span>
-        <span className="text-end">{delivery.deliveryInfo.note}</span>
-      </div>
-
-      <div className="grid grid-cols-2">
-        <span>Drop-off:</span>
-        <span className="text-end">{delivery.deliveryInfo.dropOffOption}</span>
-      </div>
-    </>
-  );
-};
 
 export default OrderDetail;

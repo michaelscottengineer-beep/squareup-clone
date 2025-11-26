@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import type { TItem } from "@/types/item";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -16,12 +14,11 @@ import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, remove, set, update } from "firebase/database";
+import { push, ref, update } from "firebase/database";
 import { toast } from "sonner";
 import type { TOrder } from "@/types/checkout";
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
-import type { TOrderHistory } from "@/types/order";
 import useAuth from "@/hooks/use-auth";
 export const orderColumns: ColumnDef<TOrder>[] = [
   {
