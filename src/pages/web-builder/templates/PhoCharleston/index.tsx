@@ -12,7 +12,10 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
-import usePhoCharlestonEditor, { type TPartEditorData, type TTemplateEditorStateStore } from "@/stores/template-editor/usePhoCharlestonEditor";
+import usePhoCharlestonEditor, {
+  type TPartEditorData,
+  type TTemplateEditorStateStore,
+} from "@/stores/template-editor/usePhoCharlestonEditor";
 import { Button } from "@/components/ui/button";
 import { Edit, Save, UploadCloud, X } from "lucide-react";
 import PublishTemplateButton from "@/components/templates/PublishTemplateButton";
@@ -27,6 +30,7 @@ import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { db } from "@/firebase";
 import { toast } from "sonner";
 import InformationSection from "./components/InfomationSection";
+import HeroBanner from "./components/HeroBanner";
 
 const PhoCharlestonContext = createContext<{
   isEditing: boolean;
@@ -49,7 +53,11 @@ interface PhoCharlestonProps {
   initData?: TTemplateEditorStateStore;
 }
 
-const PhoCharleston = ({ isAllowedToEdit, createdBy, initData}: PhoCharlestonProps) => {
+const PhoCharleston = ({
+  isAllowedToEdit,
+  createdBy,
+  initData,
+}: PhoCharlestonProps) => {
   const toggleEdit = usePhoCharlestonEditor((state) => state.toggleEdit);
   const setAllData = usePhoCharlestonEditor((state) => state.setAllData);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -60,14 +68,14 @@ const PhoCharleston = ({ isAllowedToEdit, createdBy, initData}: PhoCharlestonPro
   }, [isAllowedToEdit]);
 
   useEffect(() => {
-    if (initData) setAllData(initData)
-  }, [initData])
+    if (initData) setAllData(initData);
+  }, [initData]);
 
   return (
     <div className="relative">
       <div ref={outerRef}>
         <PhoCharlestonHeader />
-
+        <HeroBanner />
         <AboutUs aboutUsKey="aboutUsCatering" />
         <AboutUs aboutUsKey="aboutUsGroupAndParties" />
 
@@ -75,7 +83,7 @@ const PhoCharleston = ({ isAllowedToEdit, createdBy, initData}: PhoCharlestonPro
         <Special />
         <AboutUs aboutUsKey="aboutUs" />
 
-        <InformationSection/>
+        <InformationSection />
       </div>
       <StackEvent />
       <PublishTemplate outerHTML={outerRef} />

@@ -438,6 +438,17 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             },
           },
         },
+        heroBanner: {
+          elements: {
+            banner: {
+              displayName: "",
+              type: "image",
+              data: {
+                src: "/about_right_2.jpg",
+              },
+            },
+          },
+        },
       },
       header: {
         isHidden: false,

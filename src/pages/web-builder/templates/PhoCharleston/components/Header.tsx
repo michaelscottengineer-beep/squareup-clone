@@ -92,10 +92,10 @@ function ListItem({
     <li {...props}>
       <NavigationMenuLink
         asChild
-        className={`hover:text-[${nav.style?.activeColor}] hover:bg-transparent uppercase`}
+        className={`hover:text-[${nav.style?.activeColor}] hover:bg-transparent uppercase `}
       >
         <Link to={to}>
-          <div className="text-sm leading-none font-medium">{title}</div>
+          <div className="leading-none font-medium text-lg">{title}</div>
         </Link>
       </NavigationMenuLink>
     </li>
