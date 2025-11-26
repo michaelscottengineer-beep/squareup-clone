@@ -74,12 +74,12 @@ const UserActionButton = ({
   });
 
   return (
-    <div className="flex flex-col gap-2 fixed bottom-16 right-5">
-      <Button className="bg-purple-500" onClick={() => mutate.mutate()}>
-        <Save />
+    <div className="flex  gap-2  items-center ">
+      <Button className="bg-purple-500 hover:bg-purple-400" onClick={() => mutate.mutate()}>
+        <Save /> Save
       </Button>
       <Button onClick={() => publish()}>
-        <UploadCloud />
+        <UploadCloud /> Publish
       </Button>
     </div>
   );

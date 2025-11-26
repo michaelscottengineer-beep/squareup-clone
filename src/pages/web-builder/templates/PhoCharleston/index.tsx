@@ -20,6 +20,7 @@ import HeroBanner from "./components/HeroBanner";
 import { GallerySection } from "./components/GallerySection";
 import ToggleEditButton from "./components/ToggleEditButton";
 import UserActionButton from "./components/UserActionButton";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface PhoCharlestonProps {
   isAllowedToEdit?: boolean;
@@ -48,6 +49,17 @@ const PhoCharleston = ({
 
   return (
     <div className="relative">
+      <div className="flex items-center justify-between gap-2  p-4 border-b border-border">
+        <h1 className="text-muted-foreground text-lg font-bold">Panel</h1>
+        <div className="flex items-center gap-2 ">
+          {isAllowedToEdit && createdBy === user?.uid && (
+            <UserActionButton outerHTML={outerRef} />
+          )}
+          {!createdBy && <PublishTemplate outerHTML={outerRef} />}
+          {isAllowedToEdit && createdBy === user?.uid && <ToggleEditButton />}
+          {user?.role === "admin" && !createdBy && <ToggleEditButton />}
+        </div>
+      </div>
       <div ref={outerRef}>
         <PhoCharlestonHeader />
         <HeroBanner />
@@ -61,13 +73,6 @@ const PhoCharleston = ({
         <InformationSection />
       </div>
       <StackEvent />
-      {!createdBy && <PublishTemplate outerHTML={outerRef} />}
-
-      {user?.role === "admin" && <ToggleEditButton />}
-      {isAllowedToEdit && createdBy === user?.uid && <ToggleEditButton />}
-      {isAllowedToEdit && createdBy === user?.uid && (
-        <UserActionButton outerHTML={outerRef} />
-      )}
     </div>
   );
 };

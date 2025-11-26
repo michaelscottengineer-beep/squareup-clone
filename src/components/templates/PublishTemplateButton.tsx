@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import templateFirebaseKey from "@/factory/template/template.firebaseKey";
 import useAuth from "@/hooks/use-auth";
-import UploadImageArea from "@/pages/dashboard/item-invetory/items/UploadImageArea";
+import UploadImageArea from "@/components/UploadImageArea";
 import useEditorTemplateState from "@/stores/use-editor-template-state";
 import { useMutation } from "@tanstack/react-query";
 import { push, set } from "firebase/database";
@@ -27,7 +27,7 @@ const PublishTemplateButton = ({
   const mutate = useMutation({
     mutationFn: async () => {
       const keys = templateFirebaseKey({});
-      const newTemplateKey = "-Oety8bsI_mi1GYk0T3k";
+      const newTemplateKey = "-Oety8bsI_mi1GYk0T3k"; //|| push(keys.adminRootRef()).key
       keys.addParams({ templateId: newTemplateKey });
 
       return await set(keys.adminDetailsRef(), {
@@ -50,8 +50,8 @@ const PublishTemplateButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-5 right-16">
-          <UploadCloud />
+        <Button className="">
+          <UploadCloud /> Update
         </Button>
       </DialogTrigger>
       <DialogContent>
