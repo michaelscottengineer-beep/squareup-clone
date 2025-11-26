@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import usePhoCharlestonEditor from "@/stores/template-editor/usePhoCharlestonEditor";
-import { useNavigate, useNavigation } from "react-router";
+import { Link, useNavigate, useNavigation } from "react-router";
 import SettingOverlay from "@/components/templates/SettingOverlay";
 
 import CarouselIntroduceSettingContent from "./settings/CarouselIntroduceSettingContent";
@@ -59,10 +59,10 @@ const CarouselIntroduce = () => {
 
                 {item.buttonText && (
                   <Button
-                    onClick={() => navigate(item.buttonUrl)}
+                    asChild
                     className="bg-[#474947] border-2 text-lg uppercase border-[#BCBCBC] text-[#D7D9D6] hover:text-white hover:border-[#A5DD99] hover:bg-[#474947] w-max px-10 py-2 h-max"
                   >
-                    {item.buttonText}
+                    <Link to={item.buttonUrl}>{item.buttonText}</Link>
                   </Button>
                 )}
               </div>

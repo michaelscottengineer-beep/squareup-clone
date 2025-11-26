@@ -110,6 +110,9 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 color: "#ffffff",
                 backgroundColor: "#537a82",
               },
+              data: {
+                url: "/catering",
+              },
             },
             image: {
               displayName: "Image",
@@ -168,6 +171,9 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 color: "#D7D9D6",
                 backgroundColor: "#474947",
               },
+              data: {
+                url: "/menu",
+              },
             },
             image: {
               displayName: "Image",
@@ -225,6 +231,9 @@ const usePhoCharlestonEditor = create<TStoreState>()(
                 fontSize: "18px",
                 color: "#D7D9D6",
                 backgroundColor: "#474947",
+              },
+              data: {
+                url: "/menu",
               },
             },
             image: {

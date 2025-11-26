@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import SettingOverlay from "@/components/templates/SettingOverlay";
 import AboutUsSettingContent from "../components/settings/AboutUsSettingContent";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router";
 
 interface AboutUsProps {
   aboutUsKey: string;
@@ -58,8 +59,9 @@ const AboutUs = ({ aboutUsKey }: AboutUsProps) => {
           <Button
             className="w-max px-10 uppercase py-2"
             style={{ ...aboutUsData.elements.redirectButton.style }}
+            asChild
           >
-            {aboutUsData.elements.redirectButton.text}
+            <Link to={aboutUsData.elements.redirectButton.data?.url}> {aboutUsData.elements.redirectButton.text}</Link>
           </Button>
         </div>
 

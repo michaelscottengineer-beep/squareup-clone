@@ -27,7 +27,7 @@ const PublishTemplateButton = ({
   const mutate = useMutation({
     mutationFn: async () => {
       const keys = templateFirebaseKey({});
-      const newTemplateKey = push(keys.adminRootRef()).key;
+      const newTemplateKey = "-Oety8bsI_mi1GYk0T3k";
       keys.addParams({ templateId: newTemplateKey });
 
       return await set(keys.adminDetailsRef(), {
