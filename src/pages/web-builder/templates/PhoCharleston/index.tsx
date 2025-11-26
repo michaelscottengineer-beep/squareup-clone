@@ -6,10 +6,7 @@ import ListeningStack from "./components/ListeningStack";
 import AboutUs from "./components/AboutUs";
 import CarouselIntroduce from "./components/CarouselIntroduce";
 import Special from "./components/Special";
-import {
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 import usePhoCharlestonEditor, {
   type TTemplateEditorStateStore,
 } from "@/stores/template-editor/usePhoCharlestonEditor";
@@ -23,7 +20,6 @@ import HeroBanner from "./components/HeroBanner";
 import { GallerySection } from "./components/GallerySection";
 import ToggleEditButton from "./components/ToggleEditButton";
 import UserActionButton from "./components/UserActionButton";
-
 
 interface PhoCharlestonProps {
   isAllowedToEdit?: boolean;
@@ -65,7 +61,7 @@ const PhoCharleston = ({
         <InformationSection />
       </div>
       <StackEvent />
-      <PublishTemplate outerHTML={outerRef} />
+      {!createdBy && <PublishTemplate outerHTML={outerRef} />}
 
       {user?.role === "admin" && <ToggleEditButton />}
       {isAllowedToEdit && createdBy === user?.uid && <ToggleEditButton />}
