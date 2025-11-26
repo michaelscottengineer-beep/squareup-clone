@@ -31,7 +31,7 @@ const LogoSetting = () => {
   if (!elementData) return <div>Does not exists element: general</div>;
   return (
     <ImageSetting
-      value={elementData.data?.value}
+      value={elementData.data?.src}
       onValueChange={(src) => {
         setData("header", {
           logo: {
