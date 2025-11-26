@@ -449,6 +449,25 @@ const usePhoCharlestonEditor = create<TStoreState>()(
             },
           },
         },
+        gallerySection: {
+          elements: {
+            gallery: {
+              displayName: "",
+              type: "list",
+              data: {
+                items: [
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                  { image: "/about_right_2.jpg" },
+                ],
+              },
+            },
+          },
+        },
       },
       header: {
         isHidden: false,

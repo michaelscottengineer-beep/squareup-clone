@@ -50,7 +50,7 @@ const PublishTemplateButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-5 right-5">
+        <Button className="fixed bottom-5 right-16">
           <UploadCloud />
         </Button>
       </DialogTrigger>

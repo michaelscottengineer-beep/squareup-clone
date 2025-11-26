@@ -31,6 +31,7 @@ import { db } from "@/firebase";
 import { toast } from "sonner";
 import InformationSection from "./components/InfomationSection";
 import HeroBanner from "./components/HeroBanner";
+import { GallerySection } from "./components/GallerySection";
 
 const PhoCharlestonContext = createContext<{
   isEditing: boolean;
@@ -82,7 +83,7 @@ const PhoCharleston = ({
         <CarouselIntroduce />
         <Special />
         <AboutUs aboutUsKey="aboutUs" />
-
+        <GallerySection />
         <InformationSection />
       </div>
       <StackEvent />
