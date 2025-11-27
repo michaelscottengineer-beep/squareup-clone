@@ -5,7 +5,7 @@ export type TUser = {
   restaurants: {
     [id: string]: {
       id: string;
-      default: string;
+      default: boolean;
       staffId?: string;
       staffObj?: TMember;
     };

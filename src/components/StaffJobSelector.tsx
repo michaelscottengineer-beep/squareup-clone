@@ -59,7 +59,7 @@ const StaffJobSelector = ({
     <Select
       value={curValue}
       onValueChange={(val) => onValueChange?.(val)}
-      disabled
+      disabled={disabled}
     >
       <SelectTrigger className="w-full">
         {value ? <SelectValue placeholder="Select Job" /> : "Select Job"}

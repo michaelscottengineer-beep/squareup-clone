@@ -1,10 +1,6 @@
 import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -26,7 +22,15 @@ import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { type TMember } from "@/types/staff";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { get, push, ref, update } from "firebase/database";
+import {
+  equalTo,
+  get,
+  orderByChild,
+  push,
+  query,
+  ref,
+  update,
+} from "firebase/database";
 import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -86,8 +90,18 @@ const MemberForm = () => {
       // }
 
       // const userKey = Object.keys(user.val() ?? {})?.[0];
+      const existsStaffQuery = query(
+        ref(db, parseSegments("restaurants", restaurantId, "allStaffs")),
+        orderByChild("basicInfo/email"),
+        equalTo(basicInfo.email)
+      );
+      const existsStaff = await get(existsStaffQuery);
 
       let newStaffKey = null;
+
+      if (existsStaff.exists()) newStaffKey = existsStaff.key;
+      console.log("exists key", newStaffKey);
+
       if (staffId && staffId !== "new") newStaffKey = staffId;
       else {
         newStaffKey = push(

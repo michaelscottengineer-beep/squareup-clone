@@ -81,6 +81,9 @@ const AuthDropdown = () => {
         <DropdownMenuItem onClick={() => navigate("/billings")}>
           Billing
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate("/dashboard/restaurants/management")}>
+          Your Restaurant
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

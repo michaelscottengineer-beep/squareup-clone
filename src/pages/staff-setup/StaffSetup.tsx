@@ -2,10 +2,7 @@ import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogHeader,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -33,14 +30,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   equalTo,
   get,
-  orderByChild,
-  push,
-  query,
   ref,
   set,
   update,
 } from "firebase/database";
-import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
@@ -329,6 +322,7 @@ const StaffSetup = () => {
                         restaurantId={inviting?.restaurantId ??" "}
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
+                          disabled
                         />
                       </FormControl>
                       <FormMessage />
