@@ -31,6 +31,7 @@ const RegisterPage = () => {
         email: user.email,
         avatar: "",
         displayName: "",
+        customerId: 'cus_TQ00ka7jjNyZ8e',
       });
     },
     onSuccess: () => {
