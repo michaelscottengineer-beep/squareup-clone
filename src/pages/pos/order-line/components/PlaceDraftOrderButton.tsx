@@ -117,7 +117,7 @@ const PlaceDraftOrderButton = () => {
 
   return (
     <Button
-      className="bg-yellow-500/80"
+      className="bg-yellow-500/80 flex-1"
       onClick={() => {
         handlePlaceOrder();
       }}

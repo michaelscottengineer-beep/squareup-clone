@@ -165,9 +165,8 @@ const PlaceOrderButton = () => {
 
   return (
     <Button
-      className=""
+      className="flex-1"
       onClick={() => {
-        console.log(123);
         handlePlaceOrder();
       }}
     >
