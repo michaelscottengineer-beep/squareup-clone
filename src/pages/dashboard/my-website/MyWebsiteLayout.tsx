@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/ui/data-table";
-import {useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { equalTo, get, ref } from "firebase/database";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { db } from "@/firebase";
@@ -24,9 +24,7 @@ const MyWebsiteLayout = () => {
 
         const snap = await get(templatesRef);
 
-        return snap.val()
-          ? convertFirebaseArrayData<TWebsite>(snap.val())
-          : [];
+        return snap.val() ? convertFirebaseArrayData<TWebsite>(snap.val()) : [];
       } catch (err) {
         console.error(err);
       }
@@ -34,15 +32,10 @@ const MyWebsiteLayout = () => {
     enabled: !!user?.uid,
   });
 
-  console.log(items)
-
   return (
-    <div>
-      {!items?.length ? (
-        <div>No websites found</div>
-      ) : (
-        <DataTable columns={myWebsiteColumns} data={items} />
-      )}
+    <div className="px-4">
+      <h1 className="font-semibold text-lg mb-4">Your Websites</h1>
+      <DataTable columns={myWebsiteColumns} data={items ?? []} />
     </div>
   );
 };

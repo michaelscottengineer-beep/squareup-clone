@@ -38,20 +38,11 @@ const ItemLibraryPage = () => {
 
   if (isLoading) return <div>Loading items...</div>;
 
-  console.log(items);
   return (
     <div className="px-2">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-4 max-w-[300px]">
-          <InputGroup>
-            <InputGroupInput placeholder="Search..." className="rounded-full" />
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-
-        <div className="flex items-center gap-2  mb-3">
+      <h1 className="text-xl font-bold">Items</h1>
+      <div className="flex gap-2 items-end mb-4">
+        <div className="flex items-center gap-2 ml-auto   flex-wrap">
           <QuickCreationDialog />
           <Button
             className="rounded-full px-5 py-3"

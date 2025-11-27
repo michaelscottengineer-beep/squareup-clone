@@ -5,10 +5,8 @@ import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import type { TRestaurant } from "@/types/restaurant";
 import { parseSegments } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
-import { equalTo, get,  ref } from "firebase/database";
-import {  Star, User } from "lucide-react";
-
-
+import { equalTo, get, ref } from "firebase/database";
+import { Star, User } from "lucide-react";
 
 const RatingStatistic = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
@@ -35,10 +33,11 @@ const RatingStatistic = () => {
       Array.from<number>({ length: 5 }).reduce((acc, cur, i) => {
         const key = (i + 1 + "star") as keyof typeof ratingInfo;
         const val = ratingInfo[key] * (i + 1);
+        console.log(ratingInfo, key, val);
         return val + acc;
       }, 0) / ratingInfo["totalRating"];
 
-    return avg;
+    return avg ? avg : 0;
   };
   return (
     <div className="my-4">

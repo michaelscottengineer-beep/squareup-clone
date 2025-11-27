@@ -1,7 +1,7 @@
 
 import { Separator } from "@/components/ui/separator";
 import type { TRating } from "@/types/rating";
-import { Filter, ListFilter, Star, User } from "lucide-react";
+import {  Star, User } from "lucide-react";
 
 
 const RatingCard = ({ rating }: { rating: TRating }) => {

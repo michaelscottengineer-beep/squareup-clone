@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 const QuickCreationDialog = () => {
+ 
   const queryClient = useQueryClient();
 
   const form = useForm<Pick<TItem, "name" | "price">>({
@@ -62,13 +63,13 @@ const QuickCreationDialog = () => {
       <DialogTrigger asChild>
         <Button
           variant={"ghost"}
-          className="justify-start gap-3  py-2 h-max  rounded-full px-4 hover:bg-muted"
+          className="justify-start gap-3 h-max  rounded-full hover:bg-muted"
         >
           <div className="p-2 h-max w-max bg-muted rounded-md">
-            <Plus className="w-5! h-5!" />
+            <Plus className="w-4! h-4!" />
           </div>
 
-          <span className="text-base">Quick create</span>
+          <span className="text-base max-md:text-sm">Quick create</span>
         </Button>
       </DialogTrigger>
       <DialogContent className=" " showCloseButton={false}>

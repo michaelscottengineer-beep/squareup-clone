@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PromotionForm from "./PromotionForm";
+import PromotionForm from "./components/PromotionForm";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Edit, X } from "lucide-react";

@@ -1,30 +1,7 @@
-"use client";
+import { Search } from "lucide-react";
 
-import * as React from "react";
-import { ChevronsUpDown, Plus, Search } from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
 import useAuth from "@/hooks/use-auth";
-import { useQuery } from "@tanstack/react-query";
-import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { get, ref } from "firebase/database";
-import { db } from "@/firebase";
-import { parseSegments } from "@/utils/helper";
-import type { TRestaurant } from "@/types/restaurant";
+
 import { useNavigate } from "react-router";
 import {
   InputGroup,
@@ -50,14 +27,7 @@ const RestaurantManagement = () => {
   return (
     <div className="px-2">
       <div className="flex justify-between mb-3 items-center">
-        <div className="flex gap-4 max-w-[300px]">
-          <InputGroup>
-            <InputGroupInput placeholder="Search..." className="rounded-full" />
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
+        <div className="flex gap-4 max-w-[300px]"></div>
 
         <div className="flex items-center gap-2">
           {/* <QuickCreationDialog /> */}
@@ -70,11 +40,7 @@ const RestaurantManagement = () => {
         </div>
       </div>
 
-      {!restaurants?.length ? (
-        <div>No items</div>
-      ) : (
-        <DataTable columns={restaurantColumns} data={restaurants} />
-      )}
+      <DataTable columns={restaurantColumns} data={restaurants ?? []} />
     </div>
   );
 };

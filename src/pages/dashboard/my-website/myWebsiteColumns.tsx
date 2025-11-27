@@ -38,7 +38,7 @@ export const myWebsiteColumns: ColumnDef<TWebsite>[] = [
   },
   {
     accessorKey: "basicInfo.createdBy",
-    header: "Date",
+    header: "Created By",
     cell: ({ row }) => (
       <div className="">{row.original.basicInfo.createdBy}</div>
     ),
@@ -56,33 +56,6 @@ export const myWebsiteColumns: ColumnDef<TWebsite>[] = [
     id: "actions",
     cell: function Actions({ row }) {
       const navigate = useNavigate();
-      const queryClient = useQueryClient();
-      const { user } = useAuth();
-
-      const restaurantId = useCurrentRestaurantId((state) => state.id);
-
-      const mutation = useMutation({
-        mutationFn: async () => {
-          const keys = templateFirebaseKey({ restaurantId });
-
-          const templateRef = keys.restaurantRootRef();
-
-          return await push(templateRef, {
-            ...row.original,
-            basicInfo: {
-              ...row.original.basicInfo,
-              createdBy: user?.uid,
-            },
-          });
-        },
-        onSuccess: () => {
-          toast.success("Create with this template success!");
-        },
-        onError: (err) => {
-          console.error(err);
-          toast.error("Create template error: " + err.message);
-        },
-      });
 
       return (
         <DropdownMenu>
@@ -95,7 +68,8 @@ export const myWebsiteColumns: ColumnDef<TWebsite>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigate("/websites/" + row.original.id + "/editor");
+                navigate("/websites/" + row.original.id + "/editor", {
+                });
               }}
             >
               Edit

@@ -1,6 +1,7 @@
 import {
   SidebarInset,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "./components/AppSidebar";
 import { Outlet } from "react-router";
@@ -12,14 +13,11 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="relative  ">
-        <SidebarProvider className="! min-! max-! ">
-          <AppSidebar className="fixed  " />
-          <SidebarInset>
-            <main className="flex-1">
-              <div className=" px-10 py-10">
-                <Outlet />
-              </div>
-            </main>
+        <SidebarProvider className="">
+          <AppSidebar className="fixed " />
+          <SidebarInset className="max-w-[calc(100%-var(--sidebar-width))] p-4 max-sm:max-w-full">
+            <Outlet />
+            <SidebarTrigger className="absolute -left-2" />
           </SidebarInset>
         </SidebarProvider>
       </div>

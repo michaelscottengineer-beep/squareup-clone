@@ -52,15 +52,6 @@ const data = {
   ],
   navMain: [
     {
-      title: "Home",
-      isActive: true,
-      icon: Home,
-      url: "/dashboard",
-      items: [],
-      canView: ["employee", "admin"],
-    },
-
-    {
       title: "Payments & Invoices",
       url: "#",
       icon: BiBorderOuter,
@@ -97,10 +88,6 @@ const data = {
         {
           title: "Modifiers",
           url: "/dashboard/items/modifiers",
-        },
-        {
-          title: "Settings",
-          url: "#",
         },
       ],
       canView: ["admin"],

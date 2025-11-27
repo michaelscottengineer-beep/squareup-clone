@@ -69,14 +69,16 @@ function AssignItemsDialog({ onSubmit }: AssignItemsDialogProps) {
                 <X />
               </Button>
             </DialogClose>
-            <Button
-              className="rounded-full px-5 py-3 w-max"
-              onClick={() => {
-                submitButtonRef.current?.click();
-              }}
-            >
-              Assign Items
-            </Button>
+            <DialogClose asChild>
+              <Button
+                className="rounded-full px-5 py-3 w-max"
+                onClick={() => {
+                  submitButtonRef.current?.click();
+                }}
+              >
+                Assign Items
+              </Button>
+            </DialogClose>
           </DialogHeader>
 
           {/* Main heading */}

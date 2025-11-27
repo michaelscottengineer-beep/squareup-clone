@@ -36,7 +36,7 @@ export default function PromotionDatePicker({
           <Button
             variant="outline"
             id="date"
-            className="w-48 justify-between font-normal"
+            className="max-w-48 justify-between font-normal"
             disabled={disabled}
           >
             {date ? date.toLocaleDateString() : "Select date"}

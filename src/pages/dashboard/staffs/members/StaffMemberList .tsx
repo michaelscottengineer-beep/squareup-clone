@@ -28,21 +28,13 @@ const StaffMemberList = () => {
   });
 
   return (
-    <div className="space-y-8">
-      <div className="header flex items-center justify-between">
-        <h1 className="text-2xl font-medium">Staff Member List</h1>
-        <div>
-          <Button onClick={() => navigate("/dashboard/staffs/members/new")}>
-            Add Member
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <Button onClick={() => navigate("/dashboard/staffs/members/new")}>
+        Add Member
+      </Button>
 
-      <div>
-        <DataTable
-          columns={memberColumns}
-          data={staffs ?? []}
-        />
+      <div className="">
+        <DataTable columns={memberColumns} data={staffs ?? []} />
       </div>
     </div>
   );

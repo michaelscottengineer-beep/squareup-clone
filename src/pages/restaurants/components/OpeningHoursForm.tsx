@@ -21,7 +21,7 @@ import type { TOpeningHours } from "@/types/restaurant";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, ref, set } from "firebase/database";
-import { Edit, X } from "lucide-react";
+import { Edit, Plus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -149,8 +149,11 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {fields.map((field, index) => {
             return (
-              <div key={field.id} className="flex items-center gap-8 mb-2">
-                <div className="flex items-center gap-2">
+              <div
+                key={field.id}
+                className="flex items-center gap-8 mb-2 flex-wrap border-b border-border pb-4 px-4"
+              >
+                <div className="flex items-center gap-2 ">
                   <FormField
                     control={form.control}
                     name={`openingHours.${index}.dow.from`}
@@ -286,9 +289,9 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
                   <Button
                     onClick={() => remove(index)}
                     size={"icon-sm"}
-                    className="p-0 bg-transparent text-destructive hover:bg-destructive/20"
+                    className="p-0 bg-transparent text-destructive hover:bg-destructive/20 ml-auto"
                   >
-                    <X />
+                    <X /> Remove
                   </Button>
                 )}
               </div>
@@ -306,6 +309,7 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
                 }}
                 variant={"secondary"}
               >
+                <Plus />
                 Add
               </Button>
               <Button type="submit">Update</Button>

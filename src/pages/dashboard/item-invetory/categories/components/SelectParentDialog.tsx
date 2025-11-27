@@ -75,7 +75,8 @@ const SelectParentCategoryDialog = ({
                   <X />
                 </Button>
               </DialogClose>
-              <Button
+              <DialogClose asChild>
+                <Button
                 className="rounded-full px-5 py-3 w-max"
                 onClick={() => {
                   console.log("change selectedCateiD", selectedCateId);
@@ -84,6 +85,7 @@ const SelectParentCategoryDialog = ({
               >
                 Done
               </Button>
+              </DialogClose>
             </DialogHeader>
 
             {/* Main heading */}

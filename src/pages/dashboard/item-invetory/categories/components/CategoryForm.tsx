@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import CreateItemDialog from "./AssignItemsDialog";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { get, push, ref, set } from "firebase/database";
 import { db } from "@/firebase";
@@ -17,17 +17,20 @@ import { parseSegments } from "@/utils/helper";
 import SelectParentCategoryDialog from "./SelectParentDialog";
 import { useForm } from "react-hook-form";
 import type { TCategory } from "@/types/category";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export default function CategoryForm() {
   const form = useForm<TCategory>({
     defaultValues: {
       basicInfo: {
         name: "",
-        image: ""
+        image: "",
       },
       items: [],
-    }
+    },
   });
+  const navigate = useNavigate();
 
   const [categoryName, setCategoryName] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -38,11 +41,11 @@ export default function CategoryForm() {
   const [parentId, setParentId] = useState("");
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () => {
       let prefix = parseSegments("/restaurants/", restaurantId, "/allGroups");
-
       const categoriesRef = ref(db, prefix);
       const newCategoriesRef = push(categoriesRef);
 
@@ -62,6 +65,16 @@ export default function CategoryForm() {
         image: "",
         parentId,
       });
+    },
+    onSuccess: () => {
+      toast.success("Create successfully!");
+      queryClient.invalidateQueries({
+        queryKey: ["restaurants", restaurantId, "allGroups"],
+      });
+      navigate(-1);
+    },
+    onError: (err) => {
+      toast.error("Error: " + err.message);
     },
   });
 
@@ -191,7 +204,10 @@ export default function CategoryForm() {
         </div>
 
         {/* Parent Category */}
-        <SelectParentCategoryDialog defaultValue={parentId} onChange={setParentId} />
+        <SelectParentCategoryDialog
+          defaultValue={parentId}
+          onChange={setParentId}
+        />
         {/* Items Section */}
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4">Items</h2>
@@ -214,7 +230,7 @@ export default function CategoryForm() {
         <div className="mb-8 pb-6 border-b border-border"></div>
 
         {/* Sales Channels and Hours */}
-        {parentId === '0' && (
+        {parentId === "0" && (
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-6">Sales channels and hours</h2>
 

@@ -116,6 +116,7 @@ export default function CreateItemForm({
               image: "",
               type: "",
               modifiers: [],
+              promotions: [],
               selected: false,
             })
           }

@@ -46,21 +46,12 @@ const PermissionLayout = () => {
 
   if (isLoading) return <div>Loading items...</div>;
 
-  console.log("orders", items);
   return (
     <div className="px-2 space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="flex gap-4 max-w-[300px]">
-            <InputGroup>
-              <InputGroupInput
-                placeholder="Search..."
-                className="rounded-full"
-              />
-              <InputGroupAddon>
-                <Search />
-              </InputGroupAddon>
-            </InputGroup>
+         
           </div>
 
           {/* <Select

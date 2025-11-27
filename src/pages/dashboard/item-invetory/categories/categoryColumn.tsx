@@ -17,40 +17,25 @@ import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ref, remove } from "firebase/database";
 import { toast } from "sonner";
+import type { TCategory } from "@/types/category";
 
-export const columns: ColumnDef<TItem>[] = [
+export const categoryColumn: ColumnDef<TCategory>[] = [
   {
     accessorKey: "name",
     header: "Item",
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
-        <img
-          src={row.original.image ?? ""}
-          className="object-cover w-10 h-10 rounded-md"
-        />
-        <div className="">{row.original.name}</div>
+        <div className="">{row.original.basicInfo.name}</div>
       </div>
     ),
   },
   {
-    accessorKey: "category",
-    header: "Reporting Category",
+    accessorKey: "categoryParent",
+    header: "Parent",
     cell: ({ row }) => (
-      <div className="">
-        {row.original.categories?.map((cate) => cate.basicInfo.name)?.join(",")}
-      </div>
+      <div className="">{row.original.basicInfo.parentId}</div>
     ),
   },
-  {
-    accessorKey: "amount",
-    header: "Availability",
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-    cell: ({ row }) => <div className="">${row.original.price}</div>,
-  },
-
   {
     id: "actions",
     cell: function Actions({ row }) {
@@ -65,34 +50,9 @@ export const columns: ColumnDef<TItem>[] = [
 
           const itemRef = ref(
             db,
-            parseSegments(prefix, "allItems", row.original.id)
+            parseSegments(prefix, "allGroups", row.original.id)
           );
           await remove(itemRef);
-
-          const deletedModifiers = row.original.modifiers?.map(async (m) => {
-            const modifierRef = ref(
-              db,
-              parseSegments(
-                prefix,
-                "allModifiers",
-                m.id,
-                "items",
-                row.original.id
-              )
-            );
-
-            return await remove(modifierRef);
-          });
-
-          const deletedCategories = row.original.categories?.map(async (m) => {
-            const categoryRef = ref(
-              db,
-              parseSegments(prefix, "allGroups", m.id, "items", row.original.id)
-            );
-            return await remove(categoryRef);
-          });
-
-          return Promise.all([...deletedCategories, ...deletedModifiers]);
         },
         onSuccess: () => {
           toast.success("deleted successfully");
@@ -106,6 +66,7 @@ export const columns: ColumnDef<TItem>[] = [
           });
         },
       });
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -118,14 +79,10 @@ export const columns: ColumnDef<TItem>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigate("/dashboard/items/library/" + row.original.id)
+                navigate("/dashboard/items/categories/" + row.original.id)
               }
             >
               Edit
-            </DropdownMenuItem>
-
-            <DropdownMenuItem onClick={() => mutation.mutate()}>
-              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

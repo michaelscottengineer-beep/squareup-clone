@@ -5,17 +5,9 @@ import { cn } from "@/lib/utils";
 import { Edit, X } from "lucide-react";
 import { useState } from "react";
 
-import OpeningHoursForm from "./OpeningHoursForm";
+import OpeningHoursForm from "./components/OpeningHoursForm";
 
 const RestaurantSettingsPage = () => {
-  return (
-    <div>
-      <OpeningHoursSection />
-    </div>
-  );
-};
-
-const OpeningHoursSection = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   return (

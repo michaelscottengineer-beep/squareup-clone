@@ -1,20 +1,17 @@
-"use client";
-
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Upload, Settings2, Heart, Info, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import CreateItemDialog from "./AssignItemsDialog";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import CreateItemDialog from "./components/AssignItemsDialog";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { get, push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import type { TItem } from "@/types/item";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
-import SelectParentCategoryDialog from "./SelectParentDialog";
+import SelectParentCategoryDialog from "./components/SelectParentDialog";
 import { useForm } from "react-hook-form";
 import type { TCategory, TCategoryDocumentData } from "@/types/category";
 import { useNavigate, useParams } from "react-router";
@@ -25,11 +22,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import type { SwitchProps } from "@radix-ui/react-switch";
-import CategoryChannelSelection from "./CategoryChannelSelection";
+import CategoryChannelSelection from "./components/CategoryChannelSelection";
+import { toast } from "sonner";
 
 export default function CategoryFormPage() {
-  const { cateId } = useParams(); // Destructure to get the 'slug' directly
+  const { cateId } = useParams();
   const navigate = useNavigate();
   const form = useForm<TCategory>({
     defaultValues: {
@@ -40,6 +37,7 @@ export default function CategoryFormPage() {
       items: [],
     },
   });
+  const queryClient = useQueryClient();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -84,26 +82,18 @@ export default function CategoryFormPage() {
 
       await set(basicInfoRef, formData.basicInfo);
     },
-  });
-
-  const saveMutate = useMutation({
-    mutationFn: async (formData: TCategory) => {
-      const prefix = parseSegments(
-        "/restaurants/",
-        restaurantId,
-        "/allGroups",
-        cateId
-      );
-      for (const item of formData.items) {
-        const itemRef = ref(db, parseSegments(prefix, "/items/", item.id));
-        await set(itemRef, item);
-      }
-
-      const basicInfoRef = ref(db, parseSegments(prefix, "/basicInfo"));
-
-      await set(basicInfoRef, formData.basicInfo);
+    onSuccess: () => {
+      toast.success("Create successfully!");
+      queryClient.invalidateQueries({
+        queryKey: ["restaurants", restaurantId, "allGroups"],
+      });
+      navigate(-1);
+    },
+    onError: (err) => {
+      toast.error("Error: " + err.message);
     },
   });
+
 
   useEffect(() => {
     if (!category) return;
@@ -156,7 +146,7 @@ export default function CategoryFormPage() {
 
   return (
     <Dialog
-      open={!!cateId }
+      open={!!cateId}
       onOpenChange={(o) => {
         if (!o) navigate(-1);
       }}

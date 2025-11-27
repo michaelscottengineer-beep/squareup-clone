@@ -15,8 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 import { equalTo, get, orderByChild, query, ref } from "firebase/database";
 import { ListFilter, Star, User } from "lucide-react";
 import React, { useState } from "react";
-import RatingCard from "./RatingCard";
-import RatingStatistic from "./RatingStatistic";
+import RatingCard from "./components/RatingCard";
+import RatingStatistic from "./components/RatingStatistic";
 
 const RestaurantRating = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
@@ -77,7 +77,7 @@ const RestaurantRating = () => {
     },
     enabled: !!restaurantId,
   });
-console.log(ratings, restaurantId)
+
   return (
     <div>
       <h1 className="text-2xl font-semibold">RestaurantRating</h1>
@@ -111,7 +111,7 @@ console.log(ratings, restaurantId)
         </Select>
       </div>
       <div className="space-y-4">
-        {!ratings?.length && <div>No items</div>}
+        {!ratings?.length && <div>No ratings</div>}
         {ratings?.map((rating) => {
           return <RatingCard rating={rating} key={rating.id} />;
         })}

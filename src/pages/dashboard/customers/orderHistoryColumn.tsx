@@ -1,39 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import type { TItem } from "@/types/item";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Copy, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router";
 
-import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ref, remove } from "firebase/database";
 import { toast } from "sonner";
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { TOrderHistory } from "@/types/order";
-import type { TOrder } from "@/types/checkout";
 
 export const orderHistoryColumns: ColumnDef<TOrderHistory>[] = [
   {
     accessorKey: "OrderId",
     header: "Order",
-    cell: ({ row, renderValue }) => (
+    cell: ({ row }) => (
       <div className="flex items-center gap-1">
-        {/* <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        /> */}
         <div className="">{row.original.basicInfo.orderId}</div>
         <Button
           onClick={async () => {
@@ -84,18 +73,13 @@ export const orderHistoryColumns: ColumnDef<TOrderHistory>[] = [
       );
     },
   },
-    {
+  {
     accessorKey: "basicInfo.createdBy",
     header: "Action By",
     cell: ({ row }) => {
       const createdByObj = row.original.basicInfo.createdByObj;
 
-      return (
-        <div
-        >
-          {createdByObj.email}
-        </div>
-      );
+      return <div>{createdByObj.email}</div>;
     },
   },
   {
@@ -131,7 +115,9 @@ export const orderHistoryColumns: ColumnDef<TOrderHistory>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigate("/dashboard/orders/" + row.original.basicInfo.orderId)}
+              onClick={() =>
+                navigate("/dashboard/orders/" + row.original.basicInfo.orderId)
+              }
             >
               View
             </DropdownMenuItem>
