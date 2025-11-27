@@ -20,15 +20,9 @@ import React, { useMemo } from "react";
 import { MdTableRestaurant } from "react-icons/md";
 import { useNavigate } from "react-router";
 
-const statusBgColors: Record<string, string> = {
-  reserved: "bg-[#E9F4F5] text-[#0B605D]",
-  onDine: "bg-[#FAE7E2]  text-[#D44A0C]",
-  free: "bg-[#EDEFFE] text-gray-400",
-};
-
 const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
-  const setTableName = usePosOrderLineState(state => state.setTableNo);
+  const setTableName = usePosOrderLineState((state) => state.setTableNo);
   const navigate = useNavigate();
 
   const { data: tables } = useQuery({
@@ -40,7 +34,6 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
     },
     enabled: !!restaurantId,
   });
-  console.log("tables", tables);
 
   const resolveHeaderText = (status?: TRestaurantTable["status"]) => {
     switch (status?.tableStatus) {
@@ -118,11 +111,11 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
         return (
           <Card
             key={table.id}
-            className="flex items-center gap-2 flex-row h-full basis-[100px] shrink-0 py-2 px-2  "
+            className="flex items-center gap-2 flex-row h-full max-lg:flex-col basis-[100px] shrink-0 py-2 px-2  "
           >
             <div
               className={cn(
-                "text-pretty font-medium w-full max-w-16 p-1  rounded-md flex  justify-center items-center h-full text-center",
+                "text-pretty font-medium w-full max-w-16 p-1 px-2  max-lg:max-w-full rounded-md flex  justify-center items-center h-full text-center",
                 {
                   "table-on-dine": status?.tableStatus === "on dine",
                   "table-available":
@@ -136,7 +129,7 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
             </div>
 
             <CardContent className="space-y-2 flex-1">
-              <CardTitle>{resolveTitle(status)}</CardTitle>
+              {/* <CardTitle>{resolveTitle(status)}</CardTitle> */}
 
               <div className="flex items-center gap-2">
                 <div className="flex text-sm items-center gap-1">
@@ -168,10 +161,14 @@ const TableStatusList = ({ selectedTab }: { selectedTab: string }) => {
                 </span>
               </div>
               {status?.customerInfo?.name && (
-                <Button className="flex items-center text-xs" size={"sm"} onClick={() => {
-                  setTableName(table.basicInfo.name);
-                  navigate("/pos/order-line");
-                }}>
+                <Button
+                  className="flex items-center text-xs"
+                  size={"sm"}
+                  onClick={() => {
+                    setTableName(table.basicInfo.name);
+                    navigate("/pos/order-line");
+                  }}
+                >
                   <Plus className="size-3!" />
                   Order
                 </Button>

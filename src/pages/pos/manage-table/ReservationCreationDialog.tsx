@@ -41,7 +41,7 @@ const ReservationCreationDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full">
+        <Button className="w-full flex-wrap">
           <Plus /> <span>Add New Reservation</span>
         </Button>
       </DialogTrigger>
