@@ -120,15 +120,13 @@ const RestaurantList = () => {
   const { data: restaurants } = useUserRestaurantsQuery(
     (restaurantIds ?? []).filter((resId) => resId !== restaurantId)
   );
-  console.log("member info", memberInfo);
+
   const handleChange = (id: string) => {
     setRestaurantId(id);
     const restaurant = user?.restaurants?.[id];
-    console.log(restaurant, "zz restaurant");
     updateRestaurant(restaurant);
   };
 
-  console.log("teams", restaurants);
   return restaurants?.map((res, index) => (
     <DropdownMenuItem
       key={res.id}

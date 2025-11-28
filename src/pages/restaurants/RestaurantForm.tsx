@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import UploadImageArea from "@/components/UploadImageArea";
 
 const RestaurantForm = () => {
-  const { user, updateRestaurant } = useAuth();
+  const { user, updateUserRestaurant } = useAuth();
   const { restaurantId } = useParams();
   const queryClient = useQueryClient();
 
@@ -96,7 +96,10 @@ const RestaurantForm = () => {
       };
       updates[parseSegments(restaurantPrefixSegment, "statistics")] =
         data.statistics;
-      return await update(ref(db), updates);
+      return {
+        res: await update(ref(db), updates),
+        restaurantId: newRestaurantId,
+      };
     },
 
     onSuccess: (data, variables) => {
@@ -105,7 +108,7 @@ const RestaurantForm = () => {
       queryClient.invalidateQueries({
         queryKey: restaurantQueyKeys.userRestaurantKeys(),
       });
-      updateRestaurant({ ...variables, default: false });
+      updateUserRestaurant({ id: data.restaurantId ?? "", default: false });
     },
     onError: (err) => {
       console.error(

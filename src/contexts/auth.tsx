@@ -5,12 +5,15 @@ import type { TUser } from "@/types/user";
 import { parseSegments } from "@/utils/helper";
 import { onAuthStateChanged } from "firebase/auth";
 import { get, ref } from "firebase/database";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 interface AuthContextProps {
   user: TUser | null;
   memberInfo: TMember | null;
   updateRestaurant: (data: TUser["restaurants"][number] | undefined) => void;
+  updateUserRestaurant: (
+    data: TUser["restaurants"][number] | undefined
+  ) => void;
 }
 const AuthContext = createContext<AuthContextProps | null>(null);
 const AuthProvider = ({ children }: React.PropsWithChildren) => {
@@ -34,12 +37,16 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         const restaurants = Object.values(userInfo?.restaurants ?? {});
         const currentRestaurantId = useCurrentRestaurantId.getState().id;
         const defaultRestaurantId = restaurants.find((res) => res.default);
-        console.log("default restaurant", defaultRestaurantId, currentRestaurantId);
+        console.log(
+          "default restaurant",
+          defaultRestaurantId,
+          currentRestaurantId
+        );
         if (!currentRestaurantId) {
           const resId = defaultRestaurantId?.id ?? restaurants?.[0]?.id;
           if (resId) useCurrentRestaurantId.getState().set(resId);
 
-          if (defaultRestaurantId?.staffId ||  restaurants?.[0]?.staffId) {
+          if (defaultRestaurantId?.staffId || restaurants?.[0]?.staffId) {
             updateRestaurant(defaultRestaurantId || restaurants?.[0]);
           }
         } else {
@@ -54,7 +61,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         setUser(null);
         if (
           !window.location.href.includes("/signin") &&
-          !window.location.href.includes("/signup") && 
+          !window.location.href.includes("/signup") &&
           !window.location.href.includes("/setup")
         )
           window.location.href = window.location.origin + "/signin";
@@ -64,7 +71,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     return ubSub;
   }, []);
 
-  async function updateRestaurant(
+  const updateRestaurant = useCallback(async function (
     data: TUser["restaurants"]["number"] | undefined
   ) {
     if (!data?.staffId) {
@@ -79,10 +86,44 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     console.log("staff info after reset", staff.val());
     if (staff.exists()) setMemberInfo({ ...staff.val() });
     else setMemberInfo(null);
-  }
+  },
+  []);
+
+  const updateUserRestaurant = useCallback(
+    async function (data: TUser["restaurants"]["number"] | undefined) {
+      console.log("UPDATE USER RESTAURANT", user, data);
+      if (!user || !data?.id) {
+        return;
+      }
+      const restaurantId = data.id;
+      console.log("updated data", {
+        ...user,
+        restaurants: {
+          ...user.restaurants,
+          [restaurantId]: {
+            ...data,
+          },
+        },
+      });
+
+      useCurrentRestaurantId.getState().set(restaurantId);
+      setUser({
+        ...user,
+        restaurants: {
+          ...user.restaurants,
+          [restaurantId]: {
+            ...data,
+          },
+        },
+      });
+    },
+    [user]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, updateRestaurant, memberInfo }}>
+    <AuthContext.Provider
+      value={{ user, updateRestaurant, updateUserRestaurant, memberInfo }}
+    >
       {children}
     </AuthContext.Provider>
   );
