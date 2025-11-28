@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import useAuth from "@/hooks/use-auth";
 import type { TPaymentMethod } from "@/types/payment";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ interface ListCardProps {
 }
 
 const ListCard = ({ onChange }: ListCardProps) => {
+  const { user } = useAuth();
   const { data: methods } = useQuery({
     queryKey: ["payment_methods"],
     queryFn: async () => {
@@ -20,7 +22,7 @@ const ListCard = ({ onChange }: ListCardProps) => {
           import.meta.env.VITE_BASE_URL + "/payment_methods",
           {
             body: JSON.stringify({
-              customerId: "cus_TQ00ka7jjNyZ8e",
+              customerId: user?.customerId,
             }),
             headers: {
               "Content-Type": "application/json", // IMPORTANT
@@ -36,6 +38,7 @@ const ListCard = ({ onChange }: ListCardProps) => {
         return [];
       }
     },
+    enabled: !!user?.customerId,
   });
 
   useEffect(() => {
@@ -44,7 +47,6 @@ const ListCard = ({ onChange }: ListCardProps) => {
     }
   }, [methods]);
 
-  console.log(methods);
   return (
     <div>
       <RadioGroup
