@@ -16,39 +16,60 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
 
   const { mutate: addUser } = useMutation({
     mutationFn: async (data: UserCredential) => {
       const { user } = data;
       const userRef = ref(db, "users/" + user.uid);
+
       console.log(user.uid, userRef);
       console.log({
         uid: user?.uid,
         project: db.app.options.projectId,
       });
+      const customerRes = await fetch(
+        import.meta.env.VITE_BASE_URL + "/create-customer",
+        {
+          method: "POST",
+          body: JSON.stringify({ fullName, email }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const customerRet = await customerRes.json();
+
+      if (!customerRet.id) {
+        throw new Error("Create customer error!");
+      }
 
       return await set(userRef, {
         email: user.email,
         avatar: "",
-        displayName: "",
-        customerId: 'cus_TQ00ka7jjNyZ8e',
+        displayName: fullName,
+        customerId: customerRet.id,
       });
     },
     onSuccess: () => {
+      toast.success("Register successfully!");
       navigate("/");
     },
     onError: (e) => {
-      console.log(e);
+      console.error(e);
+      auth.currentUser?.delete()
+      toast.error("Register error: " + e.message);
     },
   });
   const mutation = useMutation({
     mutationFn: () => createUserWithEmailAndPassword(auth, email, password),
     onSuccess: async (data) => {
       addUser(data);
-      toast.success("Signup successfully");
+      // toast.success("Signup successfully");
     },
-    onError: () => {
-      toast.error("Signup failed");
+    onError: (e) => {
+      console.error(e);
+      toast.error("Signup failed: " + e.message);
     },
   });
 
@@ -62,8 +83,9 @@ const RegisterPage = () => {
       <div className="px-10 w-[400px] space-y-3">
         <img src="squareup-logo.png" className="w-[100px]" alt="logo" />
 
-        <h1 className="text-muted-foreground text-sm">Let’s create your account</h1>
-
+        <h1 className="text-muted-foreground text-sm">
+          Let’s create your account
+        </h1>
 
         <form className="space-y-3" onSubmit={handleSubmit}>
           <Field>
@@ -86,6 +108,18 @@ const RegisterPage = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="fullName-input">Full Name</FieldLabel>
+            <Input
+              id="fullName-input"
+              type="text"
+              placeholder="Enter full name"
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
           </Field>
 

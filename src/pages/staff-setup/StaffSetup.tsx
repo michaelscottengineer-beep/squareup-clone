@@ -1,9 +1,6 @@
 import StaffJobSelector from "@/components/StaffJobSelector";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -27,13 +24,7 @@ import { memberJob, type TInviting, type TMember } from "@/types/staff";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  equalTo,
-  get,
-  ref,
-  set,
-  update,
-} from "firebase/database";
+import { equalTo, get, ref, set, update } from "firebase/database";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
@@ -110,6 +101,25 @@ const StaffSetup = () => {
     mutationFn: async (data: FormValues) => {
       const basicInfo = data.basicInfo;
 
+      const customerRes = await fetch(
+        import.meta.env.VITE_BASE_URL + "/create-customer",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            fullName: basicInfo.fullName,
+            email: basicInfo.email,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const customerRet = await customerRes.json();
+
+      if (!customerRet.id) {
+        throw new Error("Create customer error!");
+      }
+
       const { user } = await createUserWithEmailAndPassword(
         auth,
         basicInfo.email,
@@ -146,7 +156,7 @@ const StaffSetup = () => {
         email: basicInfo.email,
         role: "user",
         avatar: "",
-        customerId: "",
+        customerId: customerRet.id,
       });
 
       updates[
@@ -319,7 +329,7 @@ const StaffSetup = () => {
                       <FormLabel>Job</FormLabel>
                       <FormControl>
                         <StaffJobSelector
-                        restaurantId={inviting?.restaurantId ??" "}
+                          restaurantId={inviting?.restaurantId ?? " "}
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
                           disabled
