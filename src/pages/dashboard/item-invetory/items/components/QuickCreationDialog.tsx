@@ -27,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 const QuickCreationDialog = () => {
- 
   const queryClient = useQueryClient();
 
   const form = useForm<Pick<TItem, "name" | "price">>({
@@ -48,7 +47,9 @@ const QuickCreationDialog = () => {
     },
     onSuccess: () => {
       toast.success("Created successfully");
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({
+        queryKey: ["restaurants", restaurantId, "allItems"],
+      });
     },
     onError: () => [toast.error("Created error")],
   });

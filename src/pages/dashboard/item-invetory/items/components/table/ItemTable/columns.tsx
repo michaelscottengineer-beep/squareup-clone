@@ -92,12 +92,12 @@ export const columns: ColumnDef<TItem>[] = [
             return await remove(categoryRef);
           });
 
-          return Promise.all([...deletedCategories, ...deletedModifiers]);
+          return Promise.all([...(deletedCategories ?? []), ...(deletedModifiers ?? [])]);
         },
         onSuccess: () => {
           toast.success("deleted successfully");
           queryClient.invalidateQueries({
-            queryKey: ["allItems"],
+            queryKey: ["restaurants", restaurantId, "allItems"],
           });
         },
         onError: (err) => {

@@ -6,13 +6,6 @@ import { get, ref } from "firebase/database";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
 import { db } from "@/firebase";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { Search } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
@@ -53,11 +46,7 @@ const ItemLibraryPage = () => {
         </div>
       </div>
 
-      {!items?.length ? (
-        <div>No items</div>
-      ) : (
-        <DataTable columns={columns} data={items} />
-      )}
+      <DataTable columns={columns} data={items ?? []} />
     </div>
   );
 };

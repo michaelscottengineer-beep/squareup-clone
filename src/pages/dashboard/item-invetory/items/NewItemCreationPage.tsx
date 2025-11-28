@@ -4,7 +4,7 @@ import { Upload, Settings2, Heart, Info, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { get, push, ref, set } from "firebase/database";
 import { db } from "@/firebase";
@@ -43,6 +43,7 @@ import PromotionSection from "./PromotionSection";
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const form = useForm<TItem>({
     defaultValues: {
       categories: [],
@@ -150,6 +151,9 @@ export default function NewItemCreationPage() {
     },
     onSuccess: () => {
       toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
+      queryClient.invalidateQueries({
+        queryKey: ["restaurants", restaurantId, "allItems"],
+      });
     },
     onError: (err) => {
       console.error("save error", err);
