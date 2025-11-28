@@ -45,7 +45,7 @@ const ModifierHomePage = () => {
       </div>
 
       <DataTable columns={modifierColumns} data={modifiers ?? []} />
-      {!modifiers?.length && <EmptyModifier />}
+      {/* {!modifiers?.length && <EmptyModifier />} */}
     </div>
   );
 };

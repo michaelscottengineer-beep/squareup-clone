@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import {
+  convertFirebaseArrayData,
+  convertSegmentToQueryKey,
+  parseSegments,
+} from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import { useNavigate } from "react-router";
@@ -11,15 +15,17 @@ import { useNavigate } from "react-router";
 import type { TOption } from "@/types/option";
 import { optionColumns } from "./option-columns";
 import EmptyOption from "./components/EmptyOption";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 const OptionsPage = () => {
   const navigate = useNavigate();
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId });
 
   const { data: options, isLoading } = useQuery({
-    queryKey: ["options"],
+    queryKey: convertSegmentToQueryKey(keys.allOptions()),
     queryFn: async () => {
-      const segments = parseSegments("restaurants", restaurantId, "allOptions");
+      const segments = keys.allOptions();
       const optionsRef = ref(db, segments);
 
       const ret = await get(optionsRef);
@@ -28,7 +34,7 @@ const OptionsPage = () => {
   });
   if (isLoading)
     return <div className="font-bold text-xl">Loading options...</div>;
- 
+
   return (
     <div>
       <div className="flex items-center mb-10 justify-between">
@@ -42,7 +48,7 @@ const OptionsPage = () => {
       </div>
 
       <DataTable columns={optionColumns} data={options ?? []} />
-      {!options?.length && <EmptyOption />}
+      {/* {!options?.length && <Em'ptyOption />} */}
     </div>
   );
 };

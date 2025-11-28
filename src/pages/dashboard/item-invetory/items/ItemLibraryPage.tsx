@@ -10,17 +10,19 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
 import QuickCreationDialog from "./components/QuickCreationDialog";
+import restaurantFirebaseKey, { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 const ItemLibraryPage = () => {
   const navigate = useNavigate();
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId });
 
   const { data: items, isLoading } = useQuery({
     queryKey: ["restaurants", restaurantId, "allItems"],
     queryFn: async () => {
-      const path = parseSegments("restaurants", restaurantId, "allItems");
-
+      //  parseSegments("restaurants", restaurantId, "allItems")
+      const path = keys.allItems();
       const itemsRef = ref(db, path);
       const snap = await get(itemsRef);
 

@@ -6,11 +6,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import type { TModifier } from "@/types/modifier";
 import type { TOption } from "@/types/option";
-import { parseSegments } from "@/utils/helper";
+import { convertSegmentToQueryKey, parseSegments } from "@/utils/helper";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -46,6 +47,7 @@ export const optionColumns: ColumnDef<TOption>[] = [
       const queryClient = useQueryClient();
 
       const restaurantId = useCurrentRestaurantId((state) => state.id);
+      const keys = useRestaurantFirebaseKey({restaurantId});
 
       const mutation = useMutation({
         mutationFn: async () => {
@@ -60,7 +62,7 @@ export const optionColumns: ColumnDef<TOption>[] = [
         onSuccess: () => {
           toast.success("deleted successfully");
           queryClient.invalidateQueries({
-            queryKey: ["options"],
+            queryKey: convertSegmentToQueryKey(keys.allOptions()),
           });
         },
         onError: (err) => {

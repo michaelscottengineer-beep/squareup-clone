@@ -10,7 +10,12 @@ import { get, push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import type { TItem } from "@/types/item";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import {
+  convertFirebaseArrayData,
+  convertSegmentToQueryKey,
+  initFirebaseUpdateVariable,
+  parseSegments,
+} from "@/utils/helper";
 import SelectParentCategoryDialog from "./components/SelectParentDialog";
 import { useForm } from "react-hook-form";
 import type { TCategory, TCategoryDocumentData } from "@/types/category";
@@ -24,6 +29,7 @@ import {
 } from "@/components/ui/form";
 import CategoryChannelSelection from "./components/CategoryChannelSelection";
 import { toast } from "sonner";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 export default function CategoryFormPage() {
   const { cateId } = useParams();
@@ -33,6 +39,7 @@ export default function CategoryFormPage() {
       basicInfo: {
         name: "",
         image: "",
+        hasChannel: false,
       },
       items: [],
     },
@@ -44,64 +51,72 @@ export default function CategoryFormPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId, categoryId: cateId });
 
   const { data: category } = useQuery({
-    queryKey: ["categories", "details", cateId],
+    queryKey: [...convertSegmentToQueryKey(keys.allGroups()), cateId],
     queryFn: async () => {
-      const cateRef = ref(
-        db,
-        parseSegments("/restaurants/", restaurantId, "/allGroups", cateId)
-      );
+      const cateRef = keys.detailedCategoryRef();
       const data = await get(cateRef);
       return data;
     },
-    enabled: !!cateId,
+    enabled: !!cateId && !!restaurantId,
   });
 
   const mutation = useMutation({
     mutationFn: async (formData: TCategory) => {
       let categoryId = null;
-
-      let prefix = parseSegments("/restaurants/", restaurantId, "/allGroups");
+      let prefix = keys.allGroups();
 
       if (!cateId) {
-        const categoriesRef = ref(db, prefix);
+        const categoriesRef = ref(db, keys.allGroups());
         const newCategoriesRef = push(categoriesRef);
-
         categoryId = newCategoriesRef.key;
       } else categoryId = cateId;
 
-      prefix = parseSegments(prefix, categoryId);
+      keys.setParams({ categoryId });
+      prefix = keys.detailedCategory();
 
+      const updates = initFirebaseUpdateVariable();
       for (const item of formData.items) {
-        const itemRef = ref(db, parseSegments(prefix, "/items/", item.id));
-        await set(itemRef, item);
+        // const itemRef = ref(db, );
+        // await set(itemRef, item);
+        updates[parseSegments(prefix, "/items/", item.id)] = item;
       }
 
-      const basicInfoRef = ref(db, parseSegments(prefix, "/basicInfo"));
+      // const basicInfoRef = ref(db, parseSegments(prefix, "/basicInfo"));
+      updates[keys.categoryBasicInfo()] = formData.basicInfo;
+      // await set(basicInfoRef, formData.basicInfo);
 
-      await set(basicInfoRef, formData.basicInfo);
+      return await update(ref(db), updates);
     },
     onSuccess: () => {
       toast.success("Create successfully!");
       queryClient.invalidateQueries({
-        queryKey: ["restaurants", restaurantId, "allGroups"],
+        queryKey: convertSegmentToQueryKey(keys.allGroups()),
       });
       navigate(-1);
     },
     onError: (err) => {
+      console.error(err);
       toast.error("Error: " + err.message);
     },
   });
-
 
   useEffect(() => {
     if (!category) return;
     console.log(category);
     const ret = category.val() as TCategoryDocumentData;
     if (!ret) return;
-    form.reset({ ...ret, items: convertFirebaseArrayData<TItem>(ret.items) });
-    console.log(ret, "reset");
+    form.reset({
+      ...form.getValues(),
+      ...ret,
+      basicInfo: {
+        ...form.getValues('basicInfo'),
+        ...ret.basicInfo,
+      },
+      items: convertFirebaseArrayData<TItem>(ret.items),
+    });
   }, [category]);
 
   const handleDrag = (e: React.DragEvent) => {

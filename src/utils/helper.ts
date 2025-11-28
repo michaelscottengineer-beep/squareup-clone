@@ -15,6 +15,15 @@ export function convertFirebaseArrayData<T>(data: { [id: string]: T }) {
     []) as T[];
 }
 
+export function initFirebaseUpdateVariable() {
+  const updates: { [key: string]: any } = {};
+  return updates;
+}
+
+export function convertSegmentToQueryKey(segment: string) {
+  return segment.split('/')
+};
+
 export const calcItemPrice = (
   price: number,
   quantity: number,
@@ -79,7 +88,6 @@ export function getConcatAddress(
   return [street, city, state + " " + zip].join(", ");
 }
 
-
-export const renderGender = () => { 
-  return {}
-}
+export const renderGender = () => {
+  return {};
+};

@@ -3,25 +3,26 @@ import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { useQuery } from "@tanstack/react-query";
 import { get, ref } from "firebase/database";
 import { db } from "@/firebase";
-import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
+import { convertFirebaseArrayData, convertSegmentToQueryKey, parseSegments } from "@/utils/helper";
 import type { TCategory } from "@/types/category";
 
 import { Outlet } from "react-router";
 import { DataTable } from "@/components/ui/data-table";
 import { categoryColumn } from "./categoryColumn";
 import EmptyCategory from "./components/EmptyCategory";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 const CategoriesHomePage = () => {
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId});
 
   const { data: categories, isLoading } = useQuery({
-    queryKey: ["restaurants", restaurantId, "allGroups"],
+    queryKey: convertSegmentToQueryKey(keys.allGroups()),
     queryFn: async () => {
       const categoriesRef = ref(
         db,
-        parseSegments("/restaurants/", restaurantId, "/allGroups")
+        keys.allGroups()
       );
-
       const categories = await get(categoriesRef);
       return convertFirebaseArrayData<TCategory>(categories.val());
     },

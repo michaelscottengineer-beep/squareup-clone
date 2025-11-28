@@ -25,16 +25,22 @@ import {
 } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { parseSegments } from "@/utils/helper";
+import {
+  convertSegmentToQueryKey,
+  initFirebaseUpdateVariable,
+  parseSegments,
+} from "@/utils/helper";
 import { db } from "@/firebase";
-import { get, push, ref, set } from "firebase/database";
+import { get, push, ref, set, update } from "firebase/database";
 import { toast } from "sonner";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 export default function OptionFormPage() {
   const { optionId } = useParams(); // Destructure to get the 'slug' directly
   const navigate = useNavigate();
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId, optionId });
 
   const form = useForm<TOption>({
     defaultValues: {
@@ -55,12 +61,9 @@ export default function OptionFormPage() {
   const optionType = form.watch("basicInfo.type");
 
   const { data: option } = useQuery({
-    queryKey: ["options", "details", optionId],
+    queryKey: [...convertSegmentToQueryKey(keys.allOptions()), optionId],
     queryFn: async () => {
-      const optionRef = ref(
-        db,
-        parseSegments("/restaurants/", restaurantId, "/allOptions", optionId)
-      );
+      const optionRef = ref(db, keys.detailedOption());
       const data = await get(optionRef);
       return data;
     },
@@ -70,31 +73,27 @@ export default function OptionFormPage() {
   const mutation = useMutation({
     mutationFn: async (data: TOption) => {
       let currentOptionId = optionId ?? null;
-      const prefix = parseSegments("restaurants", restaurantId, "allOptions");
+      const prefix = keys.allOptions();
 
       if (!currentOptionId) {
         const newRef = await push(ref(db, prefix));
         currentOptionId = newRef.key;
       }
 
-      const basicInfoRef = ref(
-        db,
-        parseSegments(prefix, currentOptionId, "basicInfo")
+      keys.setParams({ optionId: currentOptionId });
+
+      const updates = initFirebaseUpdateVariable();
+
+      updates[keys.optionBasicInfo()] = data.basicInfo;
+
+      updates[parseSegments(keys.detailedOption(), "list")] = data.list.map(
+        (item) => {
+          if (!item.color) item.color = "#000";
+          return item;
+        }
       );
-      const listRef = ref(db, parseSegments(prefix, currentOptionId, "list"));
 
-      const promise = [
-        await set(basicInfoRef, data.basicInfo),
-        await set(
-          listRef,
-          data.list.map((item) => {
-            if (!item.color) item.color = "#000";
-            return item;
-          })
-        ),
-      ];
-
-      return Promise.all(promise);
+      return await update(ref(db), updates);
     },
     onSuccess: () => {
       toast.success(`${optionId ? "Edit" : "Created"} successfully`);

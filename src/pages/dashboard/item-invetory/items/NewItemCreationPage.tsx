@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { get, push, ref, set } from "firebase/database";
+import { get, push, ref, set, update } from "firebase/database";
 import { db } from "@/firebase";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import type { TItem } from "@/types/item";
-import { parseSegments } from "@/utils/helper";
+import { initFirebaseUpdateVariable, parseSegments } from "@/utils/helper";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import {
@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PromotionSection from "./PromotionSection";
+import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 
 export default function NewItemCreationPage() {
   const { itemId } = useParams(); // Destructure to get the 'slug' directly
@@ -62,14 +63,12 @@ export default function NewItemCreationPage() {
   });
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
+  const keys = useRestaurantFirebaseKey({ restaurantId, itemId });
 
   const { data: item } = useQuery({
-    queryKey: ["restaurants", restaurantId, "allItems", "details", itemId],
+    queryKey: ["restaurants", restaurantId, "allItems", itemId],
     queryFn: async () => {
-      const itemRef = ref(
-        db,
-        parseSegments("/restaurants/", restaurantId, "/allItems", itemId)
-      );
+      const itemRef = ref(db, keys.detailedItem());
       const data = await get(itemRef);
       return data;
     },
@@ -78,28 +77,28 @@ export default function NewItemCreationPage() {
 
   const mutation = useMutation({
     mutationFn: async (formData: TItem) => {
-      let currentItemId = itemId ?? null;
+      // let currentItemId = itemId ?? null;
       const prefix = parseSegments("/restaurants/", restaurantId);
       const itemInfo = { ...formData };
 
-      if (!currentItemId) {
-        const itemsRef = ref(db, parseSegments(prefix, "allItems"));
-        const newItemRef = await push(itemsRef, formData);
-        const newItemId = newItemRef.key;
-        currentItemId = newItemId;
-      } else {
-        const itemsRef = ref(
-          db,
-          parseSegments(prefix, "allItems", currentItemId)
-        );
-        await set(itemsRef, formData);
+      let currentItemId = null;
+      if (itemId) currentItemId = itemId;
+      else {
+        const newItemRef = await push(keys.allItemsRef());
+        currentItemId = newItemRef.key;
       }
+
+      keys.setParams({ itemId: currentItemId });
+      const updates = initFirebaseUpdateVariable();
+
+      updates[keys.detailedItem()] = formData;
+      // await set(keys.detailedItemRef(), formData);
 
       // delete (itemInfo as any).categories;
       // delete (itemInfo as any).modifiers;
       // delete (itemInfo as any).promotions;
 
-      const promise = formData.categories.map(async (cate) => {
+      for (const cate of formData.categories) {
         const segments = parseSegments(
           prefix,
           "allGroups",
@@ -107,18 +106,14 @@ export default function NewItemCreationPage() {
           "items",
           currentItemId
         );
-        const itemCategoryRef = ref(db, segments);
-        console.log({
-          ...itemInfo,
-          selected: true,
-        });
-        return await set(itemCategoryRef, {
-          ...itemInfo,
-          selected: true,
-        });
-      });
 
-      const promise2 = formData.modifiers.map(async (modifier) => {
+        updates[segments] = {
+          ...itemInfo,
+          selected: true,
+        };
+      }
+
+      for (const modifier of formData.modifiers) {
         const segments = parseSegments(
           prefix,
           "allModifiers",
@@ -126,28 +121,24 @@ export default function NewItemCreationPage() {
           "items",
           currentItemId
         );
-        const itemModifierRef = ref(db, segments);
 
-        return await set(itemModifierRef, {
-          ...itemInfo,
-        });
-      });
+        updates[segments] = itemInfo;
+      }
 
-      const promise3 = formData.promotions.map(async (promotion) => {
-        const segments = parseSegments(
+
+     for (const promotion of formData.promotions) {
+           const segments = parseSegments(
           prefix,
           "allPromotions",
           promotion.id,
           "items",
           currentItemId
         );
-        const itemPromotionRef = ref(db, segments);
 
-        return await set(itemPromotionRef, {
-          ...itemInfo,
-        });
-      });
-      return Promise.all([...promise, ...promise2, ...promise3]);
+        updates[segments] = itemInfo;
+      }
+
+      return await update(ref(db), updates);
     },
     onSuccess: () => {
       toast.success(`${itemId ? "Saved" : "Created"} items successfully`);
@@ -168,7 +159,7 @@ export default function NewItemCreationPage() {
     console.log(item);
     const ret = item.val() as TItem;
     if (!ret) return;
-    form.reset({ ...ret });
+    form.reset({ ...form.getValues(), ...ret });
     useItemCreationFormData.getState().setCategories(ret.categories ?? []);
     useItemCreationFormData.getState().setModifiers(ret.modifiers ?? []);
     useItemCreationFormData.getState().setPromotions(ret.promotions ?? []);
