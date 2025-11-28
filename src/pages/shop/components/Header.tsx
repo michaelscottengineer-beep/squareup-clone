@@ -17,11 +17,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User } from "lucide-react";
 import useAuth from "@/hooks/use-auth";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 const Header = () => {
-  const restaurantId = useCurrentRestaurantId((state) => state.id);
-
+  const {shopId: restaurantId} = useParams();
   const { data: promotions, isLoading } = useQuery({
     queryKey: ["allPromotions"],
     queryFn: async () => {
@@ -41,8 +40,8 @@ const Header = () => {
   return (
     <div className="border-b border-border h-20 flex ">
       <div className="flex items-center flex-1 bg-white z-10 shop-container justify-between py-3 px-5 sticky top-0 ">
-        <div>Heade1r</div>
-        <div>Header</div>
+        <div>Bar</div>
+        <div>Nav</div>
 
         <div className="flex items-center gap-4">
           <PromotionSheet

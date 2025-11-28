@@ -11,6 +11,7 @@ type TCreateCheckoutSessionPayload = {
   }[];
   orderId: string;
   shopId: string;
+  customerId: string;
 };
 
 const checkoutService = {
@@ -18,6 +19,7 @@ const checkoutService = {
     line_items,
     orderId,
     shopId,
+    customerId,
   }: TCreateCheckoutSessionPayload) => {
     try {
       const res = await fetch(
@@ -28,6 +30,7 @@ const checkoutService = {
             line_items,
             orderId,
             shopId,
+            customerId,
           }),
           headers: {
             "Content-Type": "application/json",

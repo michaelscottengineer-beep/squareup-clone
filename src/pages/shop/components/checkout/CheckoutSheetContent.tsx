@@ -103,9 +103,12 @@ const CheckoutSheetContent = () => {
         },
       };
 
-      updates[restaurantCustomerPath.order()] = { id: newOrderRef.key, createdAt: new Date().toISOString() };
+      updates[restaurantCustomerPath.order()] = {
+        id: newOrderRef.key,
+        createdAt: new Date().toISOString(),
+      };
       updates[restaurantCustomerPath.statistics.totalOrder()] = increment(1);
-      console.log(updates)
+      console.log(updates);
 
       await update(ref(db), updates);
       const basicInfoRef = ref(db, parseSegments(prefixSegment, "basicInfo"));
@@ -131,13 +134,7 @@ const CheckoutSheetContent = () => {
         });
       });
 
-      console.log("basic info", {
-        ...orderInfo,
-        status: "pending",
-        orderStatus: "pending",
-        createdBy: user?.uid,
-        createdAt: new Date().toISOString(),
-      });
+  
       const promise2 = [
         await set(basicInfoRef, {
           ...orderInfo,
@@ -191,6 +188,7 @@ const CheckoutSheetContent = () => {
         line_items,
         orderId: newOrderRef.key,
         shopId,
+        customerId: user?.customerId ?? "",
       });
     },
     onSuccess: (data) => {

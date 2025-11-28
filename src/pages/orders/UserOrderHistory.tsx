@@ -107,8 +107,6 @@ const UserOrderHistory = () => {
   console.log(orders, orderIds, user?.uid);
   return (
     <div>
-      <Header />
-
       <div className="shop-container mt-10">
         <h1 className="text-2xl font-medium mb-4">Order History</h1>
 

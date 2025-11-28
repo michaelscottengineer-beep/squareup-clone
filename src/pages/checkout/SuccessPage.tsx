@@ -17,21 +17,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import useAuth from "@/hooks/use-auth";
 import { get, ref, set } from "firebase/database";
 import { db } from "@/firebase";
 import { convertFirebaseArrayData, parseSegments } from "@/utils/helper";
-import {
-  type TOrderCartItem,
-  type TOrderDocumentData,
-} from "@/types/checkout";
+import { type TOrderCartItem, type TOrderDocumentData } from "@/types/checkout";
 import { Skeleton } from "@/components/ui/skeleton";
 import useCart from "@/stores/use-cart";
 
 export default function SuccessPay() {
   const [search] = useSearchParams();
-
+  const navigate = useNavigate();
   const { user } = useAuth();
   const orderId = search.get("orderId");
   const shopId = search.get("shopId");
@@ -39,22 +36,28 @@ export default function SuccessPay() {
   const { data: order, isLoading } = useQuery({
     queryKey: ["restaurants", shopId, "orders", orderId],
     queryFn: async () => {
-      const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", orderId));
+      const orderInfoRef = ref(
+        db,
+        parseSegments("restaurants", shopId, "allOrders", orderId)
+      );
       const doc = await get(orderInfoRef);
       return { ...doc.val(), id: orderId } as TOrderDocumentData;
     },
     enabled: !!orderId && !!user?.uid && !!shopId,
   });
 
-  const {mutate: updateStatus} = useMutation({
+  const { mutate: updateStatus } = useMutation({
     mutationFn: async (order: TOrderDocumentData) => {
-     const orderInfoRef = ref(db, parseSegments("restaurants", shopId, "allOrders", orderId, 'basicInfo'));
-     return await set(orderInfoRef,  {
-      ...order.basicInfo,
-      status: "success"
-     })
-    }
-  })
+      const orderInfoRef = ref(
+        db,
+        parseSegments("restaurants", shopId, "allOrders", orderId, "basicInfo")
+      );
+      return await set(orderInfoRef, {
+        ...order.basicInfo,
+        status: "success",
+      });
+    },
+  });
 
   const orderDetails = {
     orderNumber: order?.id,
@@ -75,7 +78,7 @@ export default function SuccessPay() {
   useEffect(() => {
     if (order?.id) {
       useCart.getState().clear();
-      updateStatus(order)
+      updateStatus(order);
     }
   }, [order]);
 
@@ -215,11 +218,14 @@ export default function SuccessPay() {
             <Download className="w-4 h-4 mr-2" />
             Download Receipt
           </Button>
-          <Button asChild variant={"secondary"}>
-            <Link to={"/shop/123"}>
-              <Home />
-              Home
-            </Link>
+          <Button
+            variant={"secondary"}
+            onClick={() => {
+              navigate(-2);
+            }}
+          >
+            <Home />
+            Home
           </Button>
           <Button className="w-full bg-blue-600 hover:bg-blue-700">
             Track Order
