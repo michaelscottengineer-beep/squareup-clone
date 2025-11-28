@@ -84,12 +84,10 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
       : `$${item.discount?.value} discount applied`;
 
   const availablePromotions = useAvailablePromotions(item.promotions, [item]);
-  console.log("promotions", item.promotions);
   const totalPromotion = availablePromotions.reduce((acc, pro) => {
     return acc + pro.basicInfo.discount;
   }, 0);
 
-  console.log("dis", item.discount, availablePromotions);
   return (
     <div className="space-y-2">
       <div className="w-max h-max p-1 flex items-center bg-secondary text-secondary-foreground rounded-full text-xs aspect-square shadow-lg">

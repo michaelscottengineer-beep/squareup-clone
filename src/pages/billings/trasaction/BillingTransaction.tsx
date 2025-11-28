@@ -23,7 +23,6 @@ const BillingTransaction = () => {
     enabled: !!user?.customerId
   });
 
-  console.log("user transactions ", transactions);
 
   return (
     <div>

@@ -50,7 +50,6 @@ const RestaurantJobLayout = () => {
 
   if (isLoading) return <div>Loading items...</div>;
 
-  console.log("orders", items);
   return (
     <div className="px-2 space-y-4">
       <h1 className="text-xl font-bold">Jobs</h1>

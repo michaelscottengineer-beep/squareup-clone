@@ -54,11 +54,9 @@ function ItemFormDialog() {
     },
   });
   const handleSubmit = (data: { items: TItemForm[] }) => {
-    console.log("alerrt data", data);
     mutation.mutate(data);
   };
 
-  console.log(data);
   return (
     <Dialog>
       <DialogTrigger asChild>

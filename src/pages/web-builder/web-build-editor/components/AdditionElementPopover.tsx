@@ -156,7 +156,6 @@ export default function AdditionElementPopover({
                 }
               )}
               onClick={() => {
-                console.log(example.json, 'json ẽamople');  
                 if (example.json) addHtml({...example.json, id: example.json.id + `${Math.random() * 999999}`} as any);
               }}
             >

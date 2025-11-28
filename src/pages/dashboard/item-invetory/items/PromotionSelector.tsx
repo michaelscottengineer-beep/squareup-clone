@@ -38,7 +38,6 @@ function PromotionSelector() {
         parseSegments("restaurants", restaurantId, "allPromotions")
       );
       const doc = await get(itemsRef);
-      console.log("docval", doc.val());
       return doc.val() ? convertFirebaseArrayData<TPromotion>(doc.val()) : [];
     },
     enabled: !!restaurantId,
@@ -49,7 +48,6 @@ function PromotionSelector() {
   }, []);
 
   const handleSelectChange = (value: TPromotion) => {
-    console.log(value);
     if (!selectedItems.includes(value)) {
       setSelectedItems([...selectedItems, value]);
     } else {
@@ -63,7 +61,6 @@ function PromotionSelector() {
     return selectedItems.includes(value) ? true : false;
   };
 
-  console.log("modifiers123,", selectedItems);
   return (
     <Dialog>
       <DialogTrigger asChild>

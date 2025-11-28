@@ -132,7 +132,6 @@ const RestaurantForm = () => {
   }, [restaurant]);
 
   const onSubmit = (data: TRestaurant) => {
-    console.log("data form", data);
     mutation.mutate(data);
   };
 

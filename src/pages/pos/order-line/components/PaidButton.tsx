@@ -60,7 +60,6 @@ const PaidButton = () => {
     socketRef.current.connect();
 
     socketRef.current.on("invoice:customer-confirmed", (isConfirmed) => {
-      console.log("Customer confirmation data:", isConfirmed);
       setIsCustomerConfirm(!!isConfirmed);
     });
 

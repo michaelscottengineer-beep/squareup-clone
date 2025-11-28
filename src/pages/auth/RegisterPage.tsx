@@ -23,11 +23,6 @@ const RegisterPage = () => {
       const { user } = data;
       const userRef = ref(db, "users/" + user.uid);
 
-      console.log(user.uid, userRef);
-      console.log({
-        uid: user?.uid,
-        project: db.app.options.projectId,
-      });
       const customerRes = await fetch(
         import.meta.env.VITE_BASE_URL + "/create-customer",
         {

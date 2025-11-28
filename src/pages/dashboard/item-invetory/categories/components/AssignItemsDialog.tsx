@@ -145,9 +145,7 @@ const ListItem = ({
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log(data, "checked data");
     const filteredItems = data.items.filter((it) => !!it.selected);
-    console.log("filteredItems", filteredItems);
     onChangeCallback?.(filteredItems);
   };
 

@@ -54,7 +54,6 @@ const IntroduceSection = () => {
     enabled: !!shopSlug,
   });
 
-  console.log(restaurant);
   const address = restaurant?.basicInfo?.addressInfo;
 
   return (
@@ -120,7 +119,6 @@ const OpeningHoursSection = () => {
         parseSegments("restaurants", shopSlug, "basicInfo", "openingHours")
       );
       const doc = await get(openHourRef);
-      console.log(doc);
       return doc.val() as TOpeningHours[];
     },
     enabled: !!shopSlug,

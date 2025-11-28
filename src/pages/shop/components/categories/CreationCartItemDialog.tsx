@@ -53,7 +53,6 @@ const CreationCartItemDialog = ({
     enabled: !!restaurantId,
   });
 
-  console.log("zz", curItem, curItem?.modifiers?.[0].list);
 
   if (!isShowDialogOnly && !curItem?.modifiers?.length && isOpen) {
     return (

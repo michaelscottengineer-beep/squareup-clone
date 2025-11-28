@@ -46,7 +46,6 @@ const SelectParentCategoryDialog = ({
     },
   });
 
-  console.log(categories);
   return (
     <div className="mb-8 pb-6 border-b border-border">
       <div className="flex items-start justify-between gap-4">
@@ -79,7 +78,6 @@ const SelectParentCategoryDialog = ({
                 <Button
                 className="rounded-full px-5 py-3 w-max"
                 onClick={() => {
-                  console.log("change selectedCateiD", selectedCateId);
                   onChange?.(selectedCateId);
                 }}
               >

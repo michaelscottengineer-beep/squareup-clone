@@ -96,10 +96,6 @@ const PlaceDraftOrderButton = () => {
         };
       }
 
-      console.log("incoming updates", updates);
-
-      console.log(data);
-
       return await update(ref(db), updates);
     },
     onSuccess: (data, vars) => {

@@ -36,7 +36,6 @@ function ModifierSelectionDialog() {
         parseSegments("restaurants", restaurantId, "allModifiers")
       );
       const doc = await get(itemsRef);
-      console.log("docval", doc.val());
       return doc.val() ? convertFirebaseArrayData<TModifier>(doc.val()) : [];
     },
     enabled: !!restaurantId,
@@ -47,7 +46,6 @@ function ModifierSelectionDialog() {
   }, []);
 
   const handleSelectChange = (value: TModifier) => {
-    console.log(value);
     if (!selectedItems.includes(value)) {
       setSelectedItems([...selectedItems, value]);
     } else {
@@ -61,7 +59,6 @@ function ModifierSelectionDialog() {
     return selectedItems.includes(value) ? true : false;
   };
 
-  console.log("modifiers123,", selectedItems);
   return (
     <Dialog>
       <DialogTrigger asChild>

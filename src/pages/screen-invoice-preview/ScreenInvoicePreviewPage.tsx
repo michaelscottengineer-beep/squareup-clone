@@ -11,7 +11,6 @@ const ScreenInvoicePreviewPage = () => {
     socketRef.current = io(import.meta.env.VITE_BASE_URL + "/invoice-preview");
     socketRef.current.connect();
     socketRef.current.on("customer:invoice-viewer", (data) => {
-      console.log("Invoice viewer data:", data);
       setInvoiceData(data);
     });
     return () => {

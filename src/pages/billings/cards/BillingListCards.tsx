@@ -28,7 +28,7 @@ const BillingListCards = () => {
 
         return ret?.data as TPaymentMethod[];
       } catch (err) {
-        console.log(err);
+        console.error(err);
         return [];
       }
     },

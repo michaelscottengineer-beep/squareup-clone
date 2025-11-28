@@ -156,21 +156,15 @@ export default function NewItemCreationPage() {
 
   useEffect(() => {
     if (!itemId || !item) return;
-    console.log(item);
     const ret = item.val() as TItem;
     if (!ret) return;
     form.reset({ ...form.getValues(), ...ret });
     useItemCreationFormData.getState().setCategories(ret.categories ?? []);
     useItemCreationFormData.getState().setModifiers(ret.modifiers ?? []);
     useItemCreationFormData.getState().setPromotions(ret.promotions ?? []);
-    console.log(ret, "reset");
   }, [item]);
 
   const onSubmit = (data: TItem) => {
-    console.log(data);
-    console.log("cate g", useItemCreationFormData.getState().modifiers);
-    console.log("cate g", useItemCreationFormData.getState().categories);
-    console.log("cate g", useItemCreationFormData.getState().promotions);
     mutation.mutate({
       ...data,
       categories: useItemCreationFormData.getState().categories,

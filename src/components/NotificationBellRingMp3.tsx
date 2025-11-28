@@ -7,7 +7,6 @@ const NotificationBellRingMp3 = () => {
   const ref = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    console.log(isRing);
     if (isRing) {
       ref.current?.play();
     }

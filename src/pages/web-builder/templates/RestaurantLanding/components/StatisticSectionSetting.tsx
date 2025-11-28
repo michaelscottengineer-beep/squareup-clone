@@ -13,7 +13,6 @@ const StatisticSectionSetting = () => {
     (state) => state.partEditorData.sections
   );
   const statisticSectionData = sectionElementData.statisticSection;
-  console.log(sectionElementData);
 
   return (
     <div>

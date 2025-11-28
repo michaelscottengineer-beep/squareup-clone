@@ -105,7 +105,6 @@ export default function CategoryFormPage() {
 
   useEffect(() => {
     if (!category) return;
-    console.log(category);
     const ret = category.val() as TCategoryDocumentData;
     if (!ret) return;
     form.reset({

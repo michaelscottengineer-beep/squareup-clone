@@ -67,7 +67,6 @@ const usePosOrderLineState = create<TCartStore>((set, get) => ({
 
 const usePosOrderLineSubtotal = () => {
   const items = usePosOrderLineState((state) => state.selectedItems);
-  console.log(items);
   const total = useMemo(() => {
     return Object.values(items).reduce((acc, item) => {
       const availablePromotions = getAvailablePromotions(item.promotions);
@@ -102,7 +101,6 @@ const usePosOrderLineSubtotal = () => {
     }, 0);
   }, [items]);
 
-  console.log("Subtotal calc:", total);
   return Number(total.toFixed(2));
 };
 export default usePosOrderLineState;

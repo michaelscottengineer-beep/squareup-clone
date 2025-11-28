@@ -69,7 +69,6 @@ const StaffSetup = () => {
     enabled: !!invitingId,
   });
 
-  console.log(inviting);
   const { data: staff } = useQuery({
     queryKey: [
       "restaurants",
@@ -86,12 +85,7 @@ const StaffSetup = () => {
         )
       );
       const doc = await get(staffRef);
-      console.log(doc.exists(), [
-        "restaurants",
-        inviting?.restaurantId,
-        "allStaffs",
-        staffId,
-      ]);
+    
       return { ...doc.val(), id: staffId } as TMember;
     },
     enabled: !!inviting,
@@ -174,13 +168,11 @@ const StaffSetup = () => {
       navigate("/signin");
     },
     onError: (err) => {
-      console.log(`Setup member error`, err);
       toast.error(`Setup member error : ` + err.message);
     },
   });
 
   useEffect(() => {
-    console.log("SS", staff);
     if (staff)
       form.reset({
         ...form.getValues(),
@@ -191,7 +183,6 @@ const StaffSetup = () => {
   }, [staff]);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     mutation.mutate(data);
   };
 

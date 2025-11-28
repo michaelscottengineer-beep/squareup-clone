@@ -68,7 +68,6 @@ const OrderInvoice = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const items = Object.entries(data.cartItems).map(
         ([key, item]) =>
           ({

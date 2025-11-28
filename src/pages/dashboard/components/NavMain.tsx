@@ -36,7 +36,6 @@ export function NavMain({
   const {memberInfo, user} = useAuth();
 
   const itemWithPermission = items.filter(item => {
-    console.log("asf", memberInfo)
     return !memberInfo ||  item.canView.includes(memberInfo?.basicInfo?.role) ;
   });
   if (!user?.uid) return <div>Loading Items....</div>
@@ -102,7 +101,6 @@ const MenuReceiveOrder = () => {
 
     socketRef.current?.on("connected", () => {});
     socketRef.current?.on("admin:receive-order", (order) => {
-      console.log("received order", order);
       set(true);
       setReceivedOrder(order);
     });
@@ -112,7 +110,6 @@ const MenuReceiveOrder = () => {
     };
   }, []);
 
-  console.log(receivedOrder);
   return (
     <SidebarMenuItem>
       <SidebarMenuButton

@@ -107,15 +107,12 @@ export default function OptionFormPage() {
 
   useEffect(() => {
     if (!optionId || !option) return;
-    console.log("your option edit", option);
     const ret = option.val() as TOption;
     if (!ret) return;
     form.reset({ ...ret, id: optionId });
-    console.log(ret, "reset");
   }, [option]);
 
   const onSubmit = (data: TOption) => {
-    console.log(data);
     mutation.mutate(data);
   };
 
@@ -374,7 +371,6 @@ const AddOption = ({ type, onChange }: AppOptionProps) => {
     }
   };
 
-  console.log("color", color);
   return (
     <div
       className={cn("mt-4", {

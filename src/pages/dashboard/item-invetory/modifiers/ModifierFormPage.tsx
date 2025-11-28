@@ -146,19 +146,15 @@ export default function ModifierFormPage() {
 
   useEffect(() => {
     if (!modifierId || !modifier) return;
-    console.log(modifier);
     const ret = modifier.val() as TModifier;
     if (!ret) return;
     form.reset({ ...ret });
-    console.log(ret, "reset");
   }, [modifier]);
 
   const onSubmit = (data: TModifier) => {
-    console.log(data);
     mutation.mutate(data);
   };
 
-  console.log("kind", form.getValues("basicInfo.kind"));
   return (
     <Dialog
       open={true}

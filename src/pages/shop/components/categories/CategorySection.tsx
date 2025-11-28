@@ -32,7 +32,6 @@ interface ItemCardProps {
   item: TItem;
 }
 const ItemCard = ({ item }: ItemCardProps) => {
-  console.log("promotionspromotions ", item.name, item.promotions);
   const [isOpenCreation, setIsOpenCreation] = useState(false);
 
   const discountText =

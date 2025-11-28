@@ -12,13 +12,11 @@ const orderFirebaseKey = (initKeys: TOrderFirebaseKey) => {
     initKeys,
     addParams: function (para: Partial<TOrderFirebaseKey>) {
       keys.initKeys = { ...keys.initKeys, ...para };
-      console.log("my keys", keys.initKeys);
     },
     root: () =>
       parseSegments("restaurants", keys.initKeys.restaurantId, "allOrders"),
     rootRef: () => ref(db, keys.root()),
     details: function () {
-      console.log(this, keys);
       if (!keys.initKeys.orderId) throw new Error("missing orderId");
       return parseSegments(...[keys.root(), keys.initKeys.orderId]);
     },

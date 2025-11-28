@@ -16,7 +16,6 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
     (state) => state.setCurrentCategoryId
   );
 
-  console.log(category.items);
   return (
     <div
       className={cn(

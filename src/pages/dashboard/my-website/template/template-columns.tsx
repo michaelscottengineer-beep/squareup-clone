@@ -88,7 +88,6 @@ export const templateColumns: ColumnDef<TWebsiteTemplate>[] = [
             },
           };
 
-          console.log(updates);
    
           return await update(ref(db), updates);
         },

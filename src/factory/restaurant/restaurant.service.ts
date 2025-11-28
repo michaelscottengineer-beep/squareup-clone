@@ -55,7 +55,7 @@ const restaurantService = {
 
       return Promise.all(promise);
     } catch (err) {
-      console.log("err", err);
+      console.error("err", err);
       return [];
     }
   },

@@ -93,7 +93,6 @@ const MenuReceiveOrder = () => {
 
     socketRef.current?.on("connected", () => {});
     socketRef.current?.on("admin:receive-order", (order) => {
-      console.log("received order", order);
       set(true);
       setReceivedOrder(order);
     });
@@ -103,7 +102,6 @@ const MenuReceiveOrder = () => {
     };
   }, []);
 
-  console.log(receivedOrder);
   return (
     <SidebarMenuItem>
       <SidebarMenuButton

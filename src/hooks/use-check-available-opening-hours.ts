@@ -15,7 +15,6 @@ const useCheckAvailableOpeningHours = (shopId?: string) => {
         parseSegments("restaurants", shopId, "basicInfo", "openingHours")
       );
       const doc = await get(openHoursRef);
-      console.log(doc);
       return doc.val() as TOpeningHours[];
     },
     enabled: !!shopId,
@@ -28,7 +27,6 @@ const useCheckAvailableOpeningHours = (shopId?: string) => {
   const curHours = curDate.getHours();
   const curMinutes = curDate.getMinutes();
 
-  console.log('oening hours',data)
   return data.some((o) => {
     const dayFrom = daysOfWeek.indexOf(o.dow.from);
     const dayTo = daysOfWeek.indexOf(o.dow.to);

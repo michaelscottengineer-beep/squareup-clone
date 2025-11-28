@@ -111,7 +111,6 @@ const RatingForm = ({
     },
   });
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     onSubmitCallback?.(data);
     mutation.mutate(data);
   };

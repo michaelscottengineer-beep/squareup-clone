@@ -84,14 +84,13 @@ const AddPaymentMethodButton = () => {
       toast.success("created successfully");
     },
     onError: (err) => {
-      console.log(err, "error, creat payment method");
+      console.error(err, "error, creat payment method");
       toast.error("create error", {
         description: err.message,
       });
     },
   });
   const onSubmit = (data: FormValues) => {
-    console.log("Payment data:", data);
     mutation.mutate(data);
     return;
     alert("Card added successfully!");

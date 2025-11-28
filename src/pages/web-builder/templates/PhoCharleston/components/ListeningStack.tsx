@@ -69,7 +69,6 @@ const ListeningStack = () => {
       const ctrlKey = e.ctrlKey;
       const zKey = e.key === "z";
       const yKey = e.key === "y";
-      console.log("keys", ctrlKey, zKey, yKey);
       if (ctrlKey && zKey && !yKey) handleUndo();
       if (ctrlKey && yKey && !zKey) handleRedo();
     };

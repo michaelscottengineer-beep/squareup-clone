@@ -10,7 +10,6 @@ export const GallerySection = () => {
     (state) => state.sections["gallerySection"]
   );
   const gallerySectionElements = sectionData.elements;
-  console.log(gallerySectionElements);
   return (
     <div className="relative">
       <div className="grid grid-cols-5">

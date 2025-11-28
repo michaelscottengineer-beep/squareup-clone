@@ -32,6 +32,8 @@ import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayou
 import ScreenInvoicePreviewPage from "./pages/screen-invoice-preview/ScreenInvoicePreviewPage";
 import webBuilderRouter from "./routes/webBuilderRoute";
 import NotFound from "./components/NotFound";
+import experimentRoute from "./routes/experimentRoute";
+import posRoute from "./routes/posRoute";
 
 const router = createBrowserRouter([
   {
@@ -54,9 +56,7 @@ const router = createBrowserRouter([
       { path: "/shop/:shopId", element: <ShopLayout /> },
       { path: "/shop/:shopId", element: <ShopLayout /> },
       { path: "/checkout/success", element: <SuccessPay /> },
-      { path: "/test/img", element: <TestUploadImage /> },
-      { path: "/test/state", element: <A /> },
-      { path: "/test/dropdown-menu", element: <DropdownMenuTest /> },
+      ...experimentRoute,
     ],
   },
 
@@ -79,20 +79,7 @@ const router = createBrowserRouter([
     path: "/setup/:invitingId",
     element: <StaffSetup />,
   },
-  {
-    path: "/pos",
-    element: <PosLayout />,
-    children: [
-      {
-        path: "order-line",
-        element: <OrderLineLayout />,
-      },
-      {
-        path: "manage-table",
-        element: <TableManagementLayout />,
-      },
-    ],
-  },
+  { ...posRoute },
   { ...dashboardRoute },
   {
     path: "/signin",

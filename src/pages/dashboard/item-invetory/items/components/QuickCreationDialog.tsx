@@ -55,7 +55,6 @@ const QuickCreationDialog = () => {
   });
 
   const onSubmit = (data: Pick<TItem, "name" | "price">) => {
-    console.log(data);
     mutation.mutate(data);
   };
 

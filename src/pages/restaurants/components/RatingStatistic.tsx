@@ -33,7 +33,6 @@ const RatingStatistic = () => {
       Array.from<number>({ length: 5 }).reduce((acc, cur, i) => {
         const key = (i + 1 + "star") as keyof typeof ratingInfo;
         const val = ratingInfo[key] * (i + 1);
-        console.log(ratingInfo, key, val);
         return val + acc;
       }, 0) / ratingInfo["totalRating"];
 

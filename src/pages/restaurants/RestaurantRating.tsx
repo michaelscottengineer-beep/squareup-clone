@@ -36,10 +36,8 @@ const RestaurantRating = () => {
           orderByChild("basicInfo/rate"),
           equalTo(Number(selectedValue))
         );
-        console.log(123123)
       }
       const doc = await get(qr ?? resRef);
-      console.log(doc.val());
       const data = Object.entries(
         (doc.val() ?? {}) as { [key: string]: TRating }
       ).map(async ([id, item]) => {

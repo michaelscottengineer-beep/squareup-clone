@@ -30,7 +30,6 @@ const ModifierHomePage = () => {
   });
   if (isLoading)
     return <div className="font-bold text-xl">Loading modifiers...</div>;
-  console.log(modifiers);
 
   return (
     <div>

@@ -61,7 +61,6 @@ const CheckoutSheetContent = () => {
 
   const mutation = useMutation({
     mutationFn: async (orderInfo: Partial<TCheckoutFormDataValues>) => {
-      console.log(items);
       let prefixSegment = parseSegments("restaurants", shopId, "allOrders");
       const newOrderRef = push(ref(db, prefixSegment));
       prefixSegment = parseSegments(prefixSegment, newOrderRef.key);
@@ -108,7 +107,6 @@ const CheckoutSheetContent = () => {
         createdAt: new Date().toISOString(),
       };
       updates[restaurantCustomerPath.statistics.totalOrder()] = increment(1);
-      console.log(updates);
 
       await update(ref(db), updates);
       const basicInfoRef = ref(db, parseSegments(prefixSegment, "basicInfo"));
@@ -224,7 +222,6 @@ const CheckoutSheetContent = () => {
       return;
     }
 
-    console.log("data submit", data);
     const obj = { ...data };
     if (data.shippingMethod === "Dine In") {
       delete (obj as any)["delivery"];
@@ -232,13 +229,11 @@ const CheckoutSheetContent = () => {
     } else if (data.shippingMethod === "Delivery") {
       delete (obj as any)["dineIn"];
       delete (obj as any)["pickup"];
-      console.log(123);
     } else if (data.shippingMethod === "Pickup") {
       delete (obj as any)["dineIn"];
       delete (obj as any)["delivery"];
     }
 
-    console.log("new data submit with ojb", obj);
     mutation.mutate(obj);
   };
 

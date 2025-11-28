@@ -132,9 +132,6 @@ const PlaceOrderButton = () => {
         ...data.paymentInfo,
       };
 
-      console.log("incoming updates", updates);
-
-      console.log(data);
 
       socketRef.current?.emit("order:user-create", {
         ...data,

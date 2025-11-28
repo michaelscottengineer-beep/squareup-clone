@@ -56,7 +56,6 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
         parseSegments("restaurants", restaurantId, "basicInfo", "openingHours")
       );
       const doc = await get(openHourRef);
-      console.log(doc);
       return doc.val() as TOpeningHours[];
     },
     enabled: !!restaurantId,
@@ -91,7 +90,6 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
   }, [hours]);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     const openingHours = data.openingHours;
 
     for (let i = 0; i < openingHours.length; i++) {
@@ -126,7 +124,6 @@ const OpeningHoursForm = ({ isEdit }: OpeningHoursFormProps) => {
       return acc;
     }, {} as { [key: number]: number[] });
 
-    console.log(obj);
     for (const [key, val] of Object.entries(obj)) {
       if (val?.length && val.length > 1) {
         toast.error("Update failed", {

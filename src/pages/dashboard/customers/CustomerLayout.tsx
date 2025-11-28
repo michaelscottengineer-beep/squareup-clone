@@ -69,7 +69,6 @@ const CustomerLayout = () => {
 
   if (isLoading) return <div>Loading items...</div>;
 
-  console.log("orders", items);
   return (
     <div className="px-2 space-y-4">
       <div className="flex justify-between items-center">

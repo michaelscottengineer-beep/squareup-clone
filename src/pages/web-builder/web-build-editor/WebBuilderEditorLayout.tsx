@@ -142,7 +142,6 @@ const SidebarContent = () => {
 
   useEffect(() => {
     const handleClick = (e: PointerEvent) => {
-      console.log("click on", e.target);
     };
 
     document.body.addEventListener("click", handleClick);
@@ -153,16 +152,13 @@ const SidebarContent = () => {
   }, []);
   function handleDragEnd(event: DragEndEvent) {
     const { active, over, activatorEvent } = event;
-    console.log(active, over);
     // if (!over) return;
 
     const elementId = active.id;
     const elementData = active.data;
 
-    console.log("active drag end", elementId, elementData, active);
     update(elementId as string, elementData.current as any);
   }
-  console.log("my html", html);
   return (
     <DndContext onDragEnd={handleDragEnd}>
       {html.map((json) => {

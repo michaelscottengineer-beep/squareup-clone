@@ -100,7 +100,6 @@ const MemberForm = () => {
       let newStaffKey = null;
 
       if (existsStaff.exists()) newStaffKey = existsStaff.key;
-      console.log("exists key", newStaffKey);
 
       if (staffId && staffId !== "new") newStaffKey = staffId;
       else {
@@ -176,7 +175,6 @@ const MemberForm = () => {
   }, [staff]);
 
   const onSubmit = (data: TMember) => {
-    console.log(data);
     mutation.mutate(data);
   };
 

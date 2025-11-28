@@ -203,7 +203,6 @@ const ReservationCreationForm = ({
                   id="time-picker"
                   value={formatDate(new Date(field.value), "HH:mm:ss")}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     const [HH, mm, ss] = e.target.value.split(":");
                     const date = new Date(field.value);
                     date.setHours(parseInt(HH), parseInt(mm), parseInt(ss));

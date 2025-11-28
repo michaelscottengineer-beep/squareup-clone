@@ -12,7 +12,6 @@ const templateFirebaseKey = (initKeys: TTemplateFirebaseKey) => {
     initKeys,
     addParams: function (para: Partial<TTemplateFirebaseKey>) {
       keys.initKeys = { ...keys.initKeys, ...para };
-      console.log("my keys", keys.initKeys);
     },
     adminRoot: () => "website-templates",
     adminRootRef: () => ref(db, keys.adminRoot()),
@@ -23,7 +22,6 @@ const templateFirebaseKey = (initKeys: TTemplateFirebaseKey) => {
 
 
     adminDetails: function () {
-      console.log(this, keys);
       if (!keys.initKeys.templateId) throw new Error("missing templateId");
       return parseSegments(...[keys.adminRoot(), keys.initKeys.templateId]);
     },
@@ -34,7 +32,6 @@ const templateFirebaseKey = (initKeys: TTemplateFirebaseKey) => {
 
     
     restaurantDetails: function () {
-      console.log(this, keys);
       if (!keys.initKeys.templateId) throw new Error("missing templateId");
       return parseSegments(...[keys.restaurantRoot(), keys.initKeys.templateId]);
     },

@@ -15,7 +15,6 @@ const imgbbService = {
 
     const ret = await response.json();
     const data = ret.data;
-    console.log('uploaded img', data);
     return data
   },
 };

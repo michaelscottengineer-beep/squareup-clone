@@ -13,7 +13,6 @@ export const SpecialSettingContent = () => {
   const setSection = usePhoCharlestonEditor((state) => state.setSection);
   const specialElements = specialData.elements;
 
-  console.log(Object.entries(specialElements)[0][0]);
   return (
     <div>
       <SheetSettingHeader title="Section Setting"></SheetSettingHeader>

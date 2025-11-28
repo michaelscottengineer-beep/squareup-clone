@@ -29,7 +29,6 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     const ubSub = onAuthStateChanged(auth, async (userCredential) => {
-      console.log(userCredential);
       if (userCredential) {
         const userInfo = await getUserInfo(userCredential.uid);
         console.log("User is signed in:", userCredential.uid, userInfo);
@@ -37,11 +36,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
         const restaurants = Object.values(userInfo?.restaurants ?? {});
         const currentRestaurantId = useCurrentRestaurantId.getState().id;
         const defaultRestaurantId = restaurants.find((res) => res.default);
-        console.log(
-          "default restaurant",
-          defaultRestaurantId,
-          currentRestaurantId
-        );
+
         if (!currentRestaurantId) {
           const resId = defaultRestaurantId?.id ?? restaurants?.[0]?.id;
           if (resId) useCurrentRestaurantId.getState().set(resId);
@@ -51,7 +46,6 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
           }
         } else {
           const restaurant = userInfo?.restaurants?.[currentRestaurantId];
-          console.log("follow local ", restaurant, currentRestaurantId);
           updateRestaurant(restaurant);
         }
 
@@ -83,7 +77,6 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       parseSegments("restaurants", data.id, "allStaffs", data.staffId)
     );
     const staff = await get(staffRef);
-    console.log("staff info after reset", staff.val());
     if (staff.exists()) setMemberInfo({ ...staff.val() });
     else setMemberInfo(null);
   },
@@ -91,20 +84,11 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
   const updateUserRestaurant = useCallback(
     async function (data: TUser["restaurants"]["number"] | undefined) {
-      console.log("UPDATE USER RESTAURANT", user, data);
       if (!user || !data?.id) {
         return;
       }
       const restaurantId = data.id;
-      console.log("updated data", {
-        ...user,
-        restaurants: {
-          ...user.restaurants,
-          [restaurantId]: {
-            ...data,
-          },
-        },
-      });
+   
 
       useCurrentRestaurantId.getState().set(restaurantId);
       setUser({

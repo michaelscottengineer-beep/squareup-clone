@@ -26,7 +26,6 @@ const QuickCreate = ({ item, onClickCallback }: QuickCreateProps) => {
   };
 
   const handleSaveCartItem = () => {
-    console.log('save item', item)
     useCart.getState().add({
       ...item,
       amount,

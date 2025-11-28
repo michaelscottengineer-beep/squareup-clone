@@ -13,7 +13,6 @@ export default function useNavigateCategory(
     const currentHash = decodeURIComponent(location.hash);
 
     if (hashTarget === currentHash) {
-      console.log("navigate category", currentHash, hashTarget);
       element?.scrollIntoView({
         behavior: 'smooth',
         block: 'center',

@@ -24,7 +24,6 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
     initKeys,
     setParams: function (para: Partial<TRestaurantFirebaseKey>) {
       keys.initKeys = { ...keys.initKeys, ...para };
-      console.log(keys.initKeys)
     },
 
     root: () => "restaurants",

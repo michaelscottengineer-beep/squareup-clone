@@ -39,7 +39,6 @@ const SheetContactSectionSettingContent = () => {
     (state) => state.partEditorData.sections
   );
   const contactSectionData = sectionElementData.contactSection;
-  console.log(sectionElementData);
 
   return (
     <div>

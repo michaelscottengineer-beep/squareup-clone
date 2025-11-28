@@ -104,7 +104,6 @@ const UserOrderHistory = () => {
     },
     enabled: !!orderIds && orderIds.length > 0,
   });
-  console.log(orders, orderIds, user?.uid);
   return (
     <div>
       <div className="shop-container mt-10">

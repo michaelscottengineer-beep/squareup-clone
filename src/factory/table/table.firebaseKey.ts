@@ -12,13 +12,11 @@ const tableFirebaseKey = (initKeys: TTableFirebaseKey) => {
     initKeys,
     addParams: function (para: Partial<TTableFirebaseKey>) {
       keys.initKeys = { ...keys.initKeys, ...para };
-      console.log("my keys", keys.initKeys);
     },
     root: () =>
       parseSegments("restaurants", keys.initKeys.restaurantId, "allTables"),
     rootRef: () => ref(db, keys.root()),
     details: function () {
-      console.log(this, keys);
       if (!keys.initKeys.tableId) throw new Error("missing tableId");
       return parseSegments(...[keys.root(), keys.initKeys.tableId]);
     },

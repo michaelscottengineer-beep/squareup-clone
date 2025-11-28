@@ -81,7 +81,6 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
         equalTo(false)
       );
       const doc = await get(qr);
-      console.log(doc);
       return doc.val() ? convertFirebaseArrayData<TPromotion>(doc.val()) : [];
     },
     enabled: !!restaurantId,
@@ -101,7 +100,6 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
           !item.basicInfo.isDeleted || (item.basicInfo.isDeleted && item.id)
       );
       const promises = dataToActions.map(async (item) => {
-        console.log("id ", item.id ? "123" : "456");
         if (!item.id) return await push(promotionsRef, item);
         return await set(ref(db, parseSegments(prefix, item.id)), item);
       });
@@ -129,7 +127,6 @@ const PromotionForm = ({ isEdit }: PromotionFormProps) => {
   }, [promotions]);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     mutation.mutate(data);
   };
 

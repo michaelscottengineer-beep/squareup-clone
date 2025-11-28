@@ -16,7 +16,6 @@ const LoginPage = () => {
   const mutation = useMutation({
     mutationFn: () => signInWithEmailAndPassword(auth, email, password),
     onSuccess: (data) => {
-      console.log("signed in data", data);
       toast.success("Sign in successfully");
       window.location.href = window.location.origin + "/dashboard";
     },

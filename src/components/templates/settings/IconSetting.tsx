@@ -48,7 +48,6 @@ const IconSetting = ({ value, onValueChange }: IconSettingProps) => {
         }
       );
       const data = (await res.json()) as TIconfySearchResponse;
-      console.log(data);
       return data;
     },
     onSuccess: (data) => {
