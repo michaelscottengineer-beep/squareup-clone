@@ -17,14 +17,14 @@ const CategorySection = ({ categoryName, items }: CategorySectionProps) => {
   useNavigateCategory("#" + categoryName, categoryRef.current);
 
   return (
-    <div className="mt-8  " ref={categoryRef}>
+    <section className="mt-4" ref={categoryRef}>
       <h2 className="font-semibold text-xl mb-8">{categoryName}</h2>
       <div className="grid grid-cols-2 gap-8">
         {items.map((item) => {
           return <ItemCard key={item.id} item={item} />;
         })}
       </div>
-    </div>
+    </section>
   );
 };
 
