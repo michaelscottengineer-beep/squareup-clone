@@ -6,6 +6,7 @@ import CreationCartItemDialog from "./CreationCartItemDialog";
 import useNavigateCategory from "@/hooks/use-navigate-category";
 import { calcItemPrice } from "@/utils/helper";
 import { cn } from "@/lib/utils";
+import { Soup } from "lucide-react";
 
 interface CategorySectionProps {
   categoryName: string;
@@ -19,6 +20,16 @@ const CategorySection = ({ categoryName, items }: CategorySectionProps) => {
   return (
     <section className="mt-4" ref={categoryRef}>
       <h2 className="font-semibold text-xl mb-8">{categoryName}</h2>
+
+      {!items?.length && (
+        <div className="flex items-center justify-center mt-auto flex-col gap-4 ">
+          <Soup size={40} className="text-primary" />
+          <span className="text-xl">Empty</span>
+          <span className="text-muted-foreground">
+            This category does not exists any items
+          </span>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-8">
         {items.map((item) => {
           return <ItemCard key={item.id} item={item} />;
