@@ -1,23 +1,6 @@
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { useNavigate } from "react-router";
 
-import { db } from "@/firebase";
-import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
-import { parseSegments } from "@/utils/helper";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push, ref, remove, update } from "firebase/database";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import useAuth from "@/hooks/use-auth";
 import type { TMember } from "@/types/staff";
 import ActionsCell from "./components/ActionsCell";
 export const memberColumns: ColumnDef<TMember>[] = [
