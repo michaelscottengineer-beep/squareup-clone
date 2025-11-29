@@ -33,7 +33,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
       <div className="flex  flex-col">
         <span className="font-medium text-sm">{category.basicInfo.name}</span>
         <span className="text-gray-500 text-xs">
-          {Object.keys(category.items).length} Items
+          {Object.keys(category?.items ?? {}).length} Items
         </span>
       </div>
     </div>
