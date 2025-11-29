@@ -40,7 +40,7 @@ const DishSection = () => {
 
   return (
     <>
-      <div className="w-full border-t border-b border-border py-5 sticky top-[61px] bg-white z-10">
+      <div className="w-full border-t border-b border-border py-5 sticky top-20 bg-white z-10">
         <ListCategory categories={categories ?? []} />
       </div>
 

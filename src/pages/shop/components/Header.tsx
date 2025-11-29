@@ -38,8 +38,8 @@ const Header = () => {
   });
 
   return (
-    <div className="border-b border-border h-20 flex ">
-      <div className="flex items-center flex-1 bg-white z-10 shop-container justify-between py-3 px-5 sticky top-0 ">
+    <div className="border-b border-border h-20 flex sticky top-0 z-10 ">
+      <div className="flex items-center flex-1 bg-white shop-container justify-between ">
         <div>Bar</div>
         <div>Nav</div>
 
