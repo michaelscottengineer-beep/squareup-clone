@@ -108,6 +108,12 @@ const MemberForm = () => {
         ).key;
       }
 
+      const inviting = await push(ref(db, parseSegments("invites")), {
+        restaurantId,
+        email: data.basicInfo.email,
+        staffId: newStaffKey,
+      });
+
       const staffPath = parseSegments(
         "restaurants",
         restaurantId,
@@ -120,6 +126,7 @@ const MemberForm = () => {
         ...basicInfo,
         userUID: "",
         status: "pending",
+        invitingId: inviting.key,
       };
       // updates[parseSegments("users", userKey, "restaurants", restaurantId)] = {
       //   default: false,
@@ -128,12 +135,6 @@ const MemberForm = () => {
       // };
 
       update(ref(db), updates);
-
-      const inviting = await push(ref(db, parseSegments("invites")), {
-        restaurantId,
-        email: data.basicInfo.email,
-        staffId: newStaffKey,
-      });
 
       return await fetch(import.meta.env.VITE_BASE_URL + "/staff-inviting", {
         headers: {

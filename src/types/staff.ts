@@ -14,7 +14,8 @@ export type TMember = {
     createdAt: string;
     email: string;
     userUID: string;
-    status: "pending" | "accepted"
+    status: "pending" | "accepted" | "rejected" | "canceled";
+    invitingId: string
   };
 };
 

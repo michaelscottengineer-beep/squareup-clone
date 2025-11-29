@@ -18,13 +18,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SheetClose } from "@/components/ui/sheet";
+import { Spinner } from "@/components/ui/spinner";
 import { auth, db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { memberJob, type TInviting, type TMember } from "@/types/staff";
-import { parseSegments } from "@/utils/helper";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { initFirebaseUpdateVariable, parseSegments } from "@/utils/helper";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { equalTo, get, ref, set, update } from "firebase/database";
+import { equalTo, get, ref, remove, set, update } from "firebase/database";
+import { Check, X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
@@ -38,6 +45,7 @@ type FormValues = TMember & {
 const StaffSetup = () => {
   const navigate = useNavigate();
   const { invitingId } = useParams();
+  const queryClient = useQueryClient();
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -58,7 +66,7 @@ const StaffSetup = () => {
     },
   });
 
-  const { data: inviting } = useQuery({
+  const { data: inviting, isLoading } = useQuery({
     queryKey: ["invites", invitingId],
     queryFn: async () => {
       const inviteRef = ref(db, parseSegments(...["invites", invitingId]));
@@ -85,15 +93,46 @@ const StaffSetup = () => {
         )
       );
       const doc = await get(staffRef);
-    
+
       return { ...doc.val(), id: staffId } as TMember;
     },
-    enabled: !!inviting,
+    enabled: !!inviting?.staffId,
   });
 
+  const { mutate: rejectInvite } = useMutation({
+    mutationFn: async () => {
+      const invitingRef = ref(db, parseSegments("invites", invitingId));
+      const updates = initFirebaseUpdateVariable();
+
+      const staffStatusPath = parseSegments(
+        "restaurants",
+        inviting?.restaurantId,
+        "allStaffs",
+        inviting?.staffId,
+        "basicInfo",
+        "status"
+      );
+
+      updates[staffStatusPath] = "rejected";
+
+      return Promise.all([remove(invitingRef), update(ref(db), updates)]);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["invites", invitingId],
+      });
+      toast.success("Rejected successfully!");
+    },
+    onError: (err) => {
+      toast.error('Rejected error: ' + err.message)
+    }
+  });
   const mutation = useMutation({
     mutationFn: async (data: FormValues) => {
       const basicInfo = data.basicInfo;
+      if (!data.setup.password) {
+        throw new Error("Please provide your password!");
+      }
 
       const customerRes = await fetch(
         import.meta.env.VITE_BASE_URL + "/create-customer",
@@ -173,19 +212,43 @@ const StaffSetup = () => {
   });
 
   useEffect(() => {
-    if (staff)
+    if (staff) {
       form.reset({
         ...form.getValues(),
+        ...staff,
         basicInfo: {
+          ...form.getValues().basicInfo,
           ...staff.basicInfo,
         },
       });
-  }, [staff]);
+    }
+  }, [staff, form]);
 
   const onSubmit = (data: FormValues) => {
     mutation.mutate(data);
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner /> Loading Item...
+      </div>
+    );
+  }
+
+  if (!inviting?.staffId) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        This inviting does not exists!
+      </div>
+    );
+  }
+
+  console.log(
+    "check job",
+    staff?.basicInfo.job,
+    form.getValues("basicInfo.job")
+  );
   return (
     <Dialog open>
       <DialogContent
@@ -320,7 +383,7 @@ const StaffSetup = () => {
                       <FormLabel>Job</FormLabel>
                       <FormControl>
                         <StaffJobSelector
-                          restaurantId={inviting?.restaurantId ?? " "}
+                          restaurantId={inviting?.restaurantId ?? ""}
                           value={field.value}
                           onValueChange={(val) => field.onChange(val)}
                           disabled
@@ -371,7 +434,23 @@ const StaffSetup = () => {
                   )}
                 />
               </div>
-              <Button>{"DONE"}</Button>
+
+              <div className="flex items-center gap-8">
+                <Button className="flex-1">
+                  <Check /> {"DONE"}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    rejectInvite();
+                  }}
+                  variant={"destructive"}
+                  className="flex-1"
+                >
+                  <X />
+                  {"Reject"}
+                </Button>
+              </div>
             </form>
           </Form>
         </div>

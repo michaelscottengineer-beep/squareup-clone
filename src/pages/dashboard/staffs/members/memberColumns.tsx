@@ -14,11 +14,12 @@ import { db } from "@/firebase";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import { parseSegments } from "@/utils/helper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ref, remove } from "firebase/database";
+import { push, ref, remove, update } from "firebase/database";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/use-auth";
 import type { TMember } from "@/types/staff";
+import ActionsCell from "./components/ActionsCell";
 export const memberColumns: ColumnDef<TMember>[] = [
   {
     accessorKey: "id",
@@ -81,6 +82,8 @@ export const memberColumns: ColumnDef<TMember>[] = [
             {
               "bg-green-100 text-green-500": status === "accepted",
               "bg-yellow-100 text-yellow-500": status === "pending",
+              "bg-red-100 text-red-500": status === "rejected",
+              "bg-gray-100 text-gray-500": status === "canceled",
             }
           )}
         >
@@ -92,69 +95,7 @@ export const memberColumns: ColumnDef<TMember>[] = [
   {
     id: "actions",
     cell: function Actions({ row }) {
-      const navigate = useNavigate();
-      const queryClient = useQueryClient();
-      const { user } = useAuth();
-      const { id: staffId, basicInfo } = row.original;
-
-      const restaurantId = useCurrentRestaurantId((state) => state.id);
-
-      const { mutate: handleDelete } = useMutation({
-        mutationFn: async () => {
-          const staffPath = parseSegments(
-            "restaurants",
-            restaurantId,
-            "allStaffs",
-            staffId
-          );
-          const staffRestaurantPath = parseSegments(
-            "users",
-            basicInfo.userUID,
-            "restaurants",
-            restaurantId
-          );
-
-          return await Promise.all([
-            remove(ref(db, staffPath)),
-            remove(ref(db, staffRestaurantPath)),
-          ]);
-        },
-        onSuccess: () => {
-          toast.success("deleted successfully");
-          queryClient.invalidateQueries({
-            queryKey: ["restaurants", restaurantId, "allStaffs"],
-          });
-        },
-        onError: (err) => {
-          toast.error("deleted error", {
-            description: err.message,
-          });
-        },
-      });
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleDelete()}>
-              Delete
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={() =>
-                navigate("/dashboard/staffs/members/" + row.original.id)
-              }
-            >
-              Edit
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ActionsCell member={row.original} />;
     },
   },
 ];

@@ -30,7 +30,6 @@ const StaffJobSelector = ({
   value,
   onValueChange,
 }: StaffJobSelectorProps) => {
-  const navigate = useNavigate();
   const [curValue, setCurValue] = useState(value);
 
   const { data: jobs, isLoading } = useQuery({
@@ -53,12 +52,21 @@ const StaffJobSelector = ({
   });
 
   useEffect(() => {
-    setCurValue(value);
+    if (value) setCurValue(value);
   }, [value]);
+
+  console.log(jobs, curValue);
+  if (isLoading) return <div>loading</div>
   return (
     <Select
+      defaultValue={curValue}
       value={curValue}
-      onValueChange={(val) => onValueChange?.(val)}
+      onValueChange={(val) => {
+        if (!val) return;
+        onValueChange?.(val);
+        setCurValue(val);
+        console.log('change; vallue ', val)
+      }}
       disabled={disabled}
     >
       <SelectTrigger className="w-full">
