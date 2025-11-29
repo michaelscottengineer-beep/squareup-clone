@@ -124,8 +124,8 @@ const StaffSetup = () => {
       toast.success("Rejected successfully!");
     },
     onError: (err) => {
-      toast.error('Rejected error: ' + err.message)
-    }
+      toast.error("Rejected error: " + err.message);
+    },
   });
   const mutation = useMutation({
     mutationFn: async (data: FormValues) => {
@@ -133,7 +133,7 @@ const StaffSetup = () => {
       if (!data.setup.password) {
         throw new Error("Please provide your password!");
       }
-
+      const invitingRef = ref(db, parseSegments("invites", invitingId));
       const customerRes = await fetch(
         import.meta.env.VITE_BASE_URL + "/create-customer",
         {
@@ -171,6 +171,15 @@ const StaffSetup = () => {
         "basicInfo",
         "status"
       );
+
+      const staffInvitingIdPath = parseSegments(
+        "restaurants",
+        inviting?.restaurantId,
+        "allStaffs",
+        newStaffKey,
+        "basicInfo",
+        "invitingId"
+      );
       const staffUserUIDPath = parseSegments(
         "restaurants",
         inviting?.restaurantId,
@@ -182,6 +191,7 @@ const StaffSetup = () => {
 
       const updates: { [key: string]: any } = {};
       updates[staffStatusPath] = "accepted";
+      updates[staffInvitingIdPath] = "";
       updates[staffUserUIDPath] = userKey;
 
       await set(ref(db, parseSegments("users", userKey)), {
@@ -200,7 +210,7 @@ const StaffSetup = () => {
         staffId: newStaffKey,
       };
 
-      return await update(ref(db), updates);
+      return await Promise.all([remove(invitingRef), update(ref(db), updates)]);
     },
     onSuccess: () => {
       toast.success(`Setup member successfully`);
@@ -244,11 +254,6 @@ const StaffSetup = () => {
     );
   }
 
-  console.log(
-    "check job",
-    staff?.basicInfo.job,
-    form.getValues("basicInfo.job")
-  );
   return (
     <Dialog open>
       <DialogContent
