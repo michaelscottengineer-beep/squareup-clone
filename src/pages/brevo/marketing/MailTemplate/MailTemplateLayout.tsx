@@ -13,6 +13,10 @@ import type { TCampaign, TMailTemplate } from "@/types/brevo";
 import { CreateCampaignDrawer } from "@/components/MaketingCampaign";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { formatDate } from "date-fns";
+import { Edit2 } from "lucide-react";
 
 class MailTemplateLayout extends React.Component {
   state = {
@@ -62,7 +66,7 @@ const CreateButton = () => {
 
   return (
     <Button
-    className="rounded-full"
+      className="rounded-full"
       onClick={() => {
         navigate("/brevo/mail-templates/new");
       }}
@@ -72,6 +76,8 @@ const CreateButton = () => {
   );
 };
 const EmailListView = () => {
+  const navigate = useNavigate();
+
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const keys = useRestaurantFirebaseKey({ restaurantId });
 
@@ -79,11 +85,7 @@ const EmailListView = () => {
     queryKey: convertSegmentToQueryKey(keys.allMailTemplates()),
     queryFn: async () => {
       try {
-        const smsQuery = query(
-          keys.allCampaignsRef(),
-          orderByChild("basicInfo/type"),
-          equalTo("sms")
-        );
+        const smsQuery = query(keys.allMailTemplatesRef());
         const docs = await get(smsQuery);
 
         return convertFirebaseArrayData<TMailTemplate>(docs.val());
@@ -95,15 +97,36 @@ const EmailListView = () => {
 
   return (
     <TabsContent value="Email" className="space-y-4">
-      {/* {data?.map((item) => {
+      {data?.map((item) => {
         return (
-          <SmsCampaignListItem
-            key={item.id}
-            item={item.basicInfo}
-            id={item.id}
-          />
+          <Card className="flex flex-row  p-4 items-center gap-8">
+            <Checkbox />
+            <div className="info flex-1 flex flex-col gap-1">
+              <div className="name font-medium">{item.basicInfo.name}</div>
+              <div className="date last-edit text-muted-foreground text-sm">
+                {formatDate(
+                  new Date(item.basicInfo.updatedAt),
+                  "yyyy-MM-dd HH:mm"
+                )}
+              </div>
+              <div className="id text-xs text-muted-foreground">{item.id}</div>
+            </div>
+
+            <div className="actions">
+              <Button
+                onClick={() => {
+                  navigate("/brevo/sms-campaign/edit/" + item.id);
+                }}
+                className=""
+                variant={"ghost-primary"}
+                size={"icon-sm"}
+              >
+                <Edit2 />
+              </Button>
+            </div>
+          </Card>
         );
-      })} */}
+      })}
     </TabsContent>
   );
 };

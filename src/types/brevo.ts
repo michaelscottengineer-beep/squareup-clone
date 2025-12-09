@@ -65,6 +65,7 @@ export type TCampaign = {
 
 
 export type TMailTemplate = {
+  id: string;
   basicInfo: {
     name: string;
     createdAt: string;
