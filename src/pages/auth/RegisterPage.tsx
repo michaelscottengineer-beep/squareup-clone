@@ -17,6 +17,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
 
   const { mutate: addUser } = useMutation({
     mutationFn: async (data: UserCredential) => {
@@ -44,6 +45,7 @@ const RegisterPage = () => {
         avatar: "",
         displayName: fullName,
         customerId: customerRet.id,
+        sms: phone
       });
     },
     onSuccess: () => {
@@ -117,7 +119,17 @@ const RegisterPage = () => {
               onChange={(e) => setFullName(e.target.value)}
             />
           </Field>
-
+            <Field> 
+            <FieldLabel htmlFor="phone-input">Phone</FieldLabel>
+            <Input
+              id="phone-input"
+              type="tel"
+              placeholder="Enter phone number"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            </Field>
           <Button className="w-full">Create an account</Button>
 
           <div className="flex gap-1 items-center">

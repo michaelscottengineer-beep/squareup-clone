@@ -11,6 +11,9 @@ type TRestaurantFirebaseKey = {
   itemId?: string | null;
   categoryId?: string | null;
   optionId?: string | null;
+  customerId?: string | null;
+  listId?: string | null;
+  campaignId?: string | null;
 };
 
 export const useRestaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
@@ -32,6 +35,7 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
       return parseSegments(...[keys.root(), initKeys.restaurantId]);
     },
 
+    // #region allJobs
     jobs: () => parseSegments(...[keys.details(), "allJobs"]),
     job: () => {
       if (!initKeys.jobKey) throw new Error("missing jobKey");
@@ -45,6 +49,9 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
       return ref(db, keys.jobBasicInfo());
     },
 
+    // #endregion
+
+    // #region allPermission
     permissions: () => parseSegments(...[keys.details(), "allPermissions"]),
     permissionsRef: () => ref(db, keys.permissions()),
     permission: () => {
@@ -58,6 +65,8 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
     permissionBasicInfoRef: () => {
       return ref(db, keys.permissionBasicInfo());
     },
+    // #endregion
+
     // #region orders
     orders: () => parseSegments(...[keys.details(), "allOrders"]),
     ordersRef: () => ref(db, keys.orders()),
@@ -74,6 +83,21 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
     },
     // #endregion
 
+    // #region allCustomers
+    allCustomers: () => parseSegments(...[keys.details(), "allCustomers"]),
+    allCustomerRef: () => ref(db, keys.allCustomers()),
+    detailedCustomer: () => {
+      if (!keys.initKeys.customerId) throw new Error("missing customerId");
+      return parseSegments(...[keys.allCustomers(), keys.initKeys.customerId]);
+    },
+    detailedCustomerRef: () => ref(db, keys.detailedCustomer()),
+    customerBasicInfo: () => {
+      return parseSegments(...[keys.order(), "basicInfo"]);
+    },
+    customerBasicInfoRef: () => {
+      return ref(db, keys.customerBasicInfo());
+    },
+    // #endregion
     // #region allItems
     allItems: function () {
       return parseSegments(...[keys.details(), "allItems"]);
@@ -97,8 +121,6 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
 
     // #endregion
 
-
-    
     // #region allGroups
     allGroups: function () {
       return parseSegments(...[keys.details(), "allGroups"]);
@@ -122,7 +144,6 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
 
     // #endregion
 
-        
     // #region allOptions
     allOptions: function () {
       return parseSegments(...[keys.details(), "allOptions"]);
@@ -144,6 +165,58 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
       return ref(db, keys.optionBasicInfo());
     },
 
+    // #endregion
+
+    // #region allLists
+    allLists: function () {
+      return parseSegments(...[keys.details(), "allLists", "data"]);
+    },
+    allListsRef: function () {
+      return ref(db, keys.allLists());
+    },
+
+    allListStatistics: function () {
+      return parseSegments(...[keys.details(), "allLists", "statistics"]);
+    },
+    allListStatisticsRef: function () {
+      return ref(db, keys.allListStatistics());
+    },
+
+    detailedList: function () {
+      if (!keys.initKeys.listId) throw new Error("missing listId");
+      return parseSegments(...[keys.allLists(), keys.initKeys.listId]);
+    },
+    detailedListRef: function () {
+      return ref(db, keys.detailedList());
+    },
+
+    detailedListBasicInfo: function () {
+      return parseSegments(...[keys.detailedList(), "basicInfo"]);
+    },
+    detailedListBasicInfoRef: function () {
+      return ref(db, keys.detailedListBasicInfo());
+    },
+    contactsOfList: function () {
+      return parseSegments(...[keys.detailedList(), "contacts"]);
+    },
+    contactsOfListRef: function () {
+      return ref(db, keys.contactsOfList());
+    },
+    // #endregion
+
+    // #region campaign
+
+    allCampaigns: function () {
+      return parseSegments(...[keys.details(), "allCampaigns", "data"]);
+    },
+    allCampaignsRef: function () {
+      return ref(db, keys.allCampaigns());
+    },
+    detailedCampaign: function () {
+      if (!keys.initKeys.campaignId) throw new Error("missing campaignId");
+      return parseSegments(...[keys.allCampaigns(), keys.initKeys.campaignId]);
+    },
+    detailedCampaignRef: () => ref(db, keys.detailedCampaign()),
     // #endregion
   };
   return { ...keys };

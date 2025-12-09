@@ -56,6 +56,7 @@ export type TRestaurantCustomer = {
     id: string;
     fullName: string;
     email: string;
+    sms: string;
   };
   orders: {
     [id: string]: { id: string };

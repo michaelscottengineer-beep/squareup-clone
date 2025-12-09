@@ -34,6 +34,16 @@ import webBuilderRouter from "./routes/webBuilderRoute";
 import NotFound from "./components/NotFound";
 import experimentRoute from "./routes/experimentRoute";
 import posRoute from "./routes/posRoute";
+import BrevoLayout from "./pages/brevo/BrevoLayout";
+import ContactPage from "./pages/brevo/contact/ContactPage";
+import ListPage from "./pages/brevo/list/ListPage";
+import ListDetails from "./pages/brevo/list/ListDetails";
+import CampaignLayout from "./pages/brevo/marketing/campaign/CampaignLayout";
+import CreationSmsCampaignPage from "./pages/brevo/marketing/campaign/CreationSmsCampaignPage";
+import SmsCampaignEditionPage from "./pages/brevo/marketing/campaign/SmsCampaign/SmsCampaignEditionPage";
+import SmsCampaignDesignMessagePage from "./pages/brevo/marketing/campaign/SmsCampaign/SmsCampaignDesignMessagePage";
+import EmailCampaignCreationPage from "./pages/brevo/marketing/campaign/EmailCampaign/EmailCampaignCreationPage";
+import EmailCampaignEditorPage from "./pages/brevo/marketing/campaign/EmailCampaign/EmailCampaignEditorPage";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +98,49 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <RegisterPage />,
+  },
+
+  {
+    path: "/brevo",
+    element: <BrevoLayout />,
+    children: [
+      {
+        path: "/brevo/contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "/brevo/list",
+        element: <ListPage />,
+      },
+      {
+        path: "/brevo/list/:listId",
+        element: <ListDetails />,
+      },
+      {
+        path: "/brevo/campaign",
+        element: <CampaignLayout />,
+      },
+      {
+        path: "/brevo/email-campaign/campaign-setup",
+        element: <EmailCampaignCreationPage />,
+      },
+      {
+        path: "/brevo/email-campaign/edit/:campaignId",
+        element: <EmailCampaignEditorPage />,
+      },
+      {
+        path: "/brevo/sms-campaign/campaign-setup",
+        element: <CreationSmsCampaignPage />,
+      },
+      {
+        path: "/brevo/sms-campaign/edit/:campaignId",
+        element: <SmsCampaignEditionPage />,
+      },
+      {
+        path: "/brevo/sms-campaign/design/:campaignId",
+        element: <SmsCampaignDesignMessagePage />,
+      },
+    ],
   },
   {
     path: "*",

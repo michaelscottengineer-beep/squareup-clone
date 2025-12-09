@@ -15,4 +15,5 @@ export type TUser = {
   customerId: string;
   avatar: string;
   displayName: string;
+  sms: string;
 } & Omit<User, "displayName">;

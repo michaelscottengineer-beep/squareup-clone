@@ -101,13 +101,12 @@ html {
   --pos-header-height: 5rem;
 
   --table-status-reserved: #e9f4f5;
-  --table-status-reserved-foreground: #0B605D;
+  --table-status-reserved-foreground: #0b605d;
   --table-status-on-dine: #fae7e2;
-  --table-status-on-dine-foreground: #D44A0C;
+  --table-status-on-dine-foreground: #d44a0c;
   --table-status-free: #edeffe;
   --table-status-free-foreground: #b4b4b4;
 }
-
 
 /* 
 const statusBgColors: Record<string, string> = {
@@ -173,8 +172,17 @@ const statusBgColors: Record<string, string> = {
       opacity: 0;
     }
   }
-}
 
+  --animate-accordionUp: accordionUp 0.8s ease-in-out;
+  @keyframes accordionUp {
+    0% {
+      max-height: 'auto'
+    }
+    100% {
+      max-height: '0px'
+    }
+  }
+}
 
 .table-on-dine {
   @apply bg-table-status-on-dine text-table-status-on-dine-foreground;

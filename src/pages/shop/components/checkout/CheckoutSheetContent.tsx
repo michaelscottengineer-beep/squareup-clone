@@ -102,6 +102,11 @@ const CheckoutSheetContent = () => {
         },
       };
 
+      updates[restaurantCustomerPath.index() + "/basicInfo"] = {
+        email: user?.email,
+        sms: user?.sms,
+        fullName: user?.displayName,
+      };
       updates[restaurantCustomerPath.order()] = {
         id: newOrderRef.key,
         createdAt: new Date().toISOString(),
@@ -132,7 +137,6 @@ const CheckoutSheetContent = () => {
         });
       });
 
-  
       const promise2 = [
         await set(basicInfoRef, {
           ...orderInfo,
@@ -217,10 +221,10 @@ const CheckoutSheetContent = () => {
       toast.error("Shop have not opened yet! Please place an order later");
       return;
     }
-    if (!data?.paymentInfo?.methodId) {
-      toast.error("Please choose the payment method");
-      return;
-    }
+    // if (!data?.paymentInfo?.methodId) {
+    //   toast.error("Please choose the payment method");
+    //   return;
+    // }
 
     const obj = { ...data };
     if (data.shippingMethod === "Dine In") {
