@@ -62,3 +62,18 @@ export type TCampaign = {
     totalRecipient: number;
   };
 };
+
+
+export type TMailTemplate = {
+  basicInfo: {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    status: "active" | "inactive";
+  };
+  config: {
+    value: string;
+    subject: string;
+    html: string;
+  }
+}

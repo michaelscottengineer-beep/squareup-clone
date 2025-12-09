@@ -14,6 +14,7 @@ type TRestaurantFirebaseKey = {
   customerId?: string | null;
   listId?: string | null;
   campaignId?: string | null;
+  mailTemplateId?: string | null;
 };
 
 export const useRestaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
@@ -217,6 +218,25 @@ const restaurantFirebaseKey = (initKeys: TRestaurantFirebaseKey) => {
       return parseSegments(...[keys.allCampaigns(), keys.initKeys.campaignId]);
     },
     detailedCampaignRef: () => ref(db, keys.detailedCampaign()),
+    // #endregion
+
+    // #region MailTemplates
+
+    allMailTemplates: function () {
+      return parseSegments(...[keys.details(), "allMailTemplates", "data"]);
+    },
+    allMailTemplatesRef: function () {
+      return ref(db, keys.allMailTemplates());
+    },
+    detailedMailTemplate: function () {
+      if (!keys.initKeys.mailTemplateId)
+        throw new Error("missing mailTemplateId");
+      return parseSegments(
+        ...[keys.allMailTemplates(), keys.initKeys.mailTemplateId]
+      );
+    },
+    detailedMailTemplateRef: () => ref(db, keys.detailedMailTemplate()),
+
     // #endregion
   };
   return { ...keys };

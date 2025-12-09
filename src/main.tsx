@@ -44,6 +44,8 @@ import SmsCampaignEditionPage from "./pages/brevo/marketing/campaign/SmsCampaign
 import SmsCampaignDesignMessagePage from "./pages/brevo/marketing/campaign/SmsCampaign/SmsCampaignDesignMessagePage";
 import EmailCampaignCreationPage from "./pages/brevo/marketing/campaign/EmailCampaign/EmailCampaignCreationPage";
 import EmailCampaignEditorPage from "./pages/brevo/marketing/campaign/EmailCampaign/EmailCampaignEditorPage";
+import MailTemplateLayout from "./pages/brevo/marketing/MailTemplate/MailTemplateLayout";
+import MailTemplateCreationPage from "./pages/brevo/marketing/MailTemplate/MailTemplateCreationPage";
 
 const router = createBrowserRouter([
   {
@@ -119,6 +121,14 @@ const router = createBrowserRouter([
       {
         path: "/brevo/campaign",
         element: <CampaignLayout />,
+      },
+      {
+        path: "/brevo/mail-templates",
+        element: <MailTemplateLayout />,
+      },
+      {
+        path: "/brevo/mail-templates/new",
+        element: <MailTemplateCreationPage />,
       },
       {
         path: "/brevo/email-campaign/campaign-setup",

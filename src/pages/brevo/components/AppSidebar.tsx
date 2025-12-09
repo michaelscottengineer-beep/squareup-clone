@@ -52,6 +52,10 @@ const menuItems = [
         title: "Campaigns",
         url: "/brevo/campaign",
       },
+      {
+        title: "Mail Templates",
+        url: "/brevo/mail-templates",
+      },
     ],
   },
   { title: "Automations", icon: Cog },
