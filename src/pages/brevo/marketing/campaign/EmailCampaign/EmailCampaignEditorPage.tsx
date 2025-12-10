@@ -2,6 +2,7 @@ import {
   RecipientSetup,
   SubjectSetup,
 } from "@/components/MaketingCampaign/EmailCampaign";
+import ContentSetup from "@/components/MaketingCampaign/EmailCampaign/ContentSetup";
 import { Button } from "@/components/ui/button";
 import {
   InputGroupInput,
@@ -53,6 +54,7 @@ const EmailCampaignEditorPage = () => {
         <div className="overlay inset-0 absolute hidden group-has-data-[state='open']:bg-white/80 z-1 group-has-data-[state='open']:block w-full h-full"></div>
         <RecipientSetup />
         <SubjectSetup />
+        <ContentSetup />
       </div>
     </div>
   );
@@ -92,8 +94,8 @@ const SendMailButton = () => {
         },
         body: JSON.stringify({
           emails: contacts?.map((c) => c.email) ?? [],
-          subject: emailConfiguration?.subject.mainText,
-          content: `<div><strong>You are best</strong></div>`,
+          subject: emailConfiguration?.subject.mainText ?? "",
+          content: emailConfiguration?.html ?? "",
         }),
       });
     },

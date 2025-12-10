@@ -1,3 +1,4 @@
+import type { Value } from "platejs";
 import type { TRestaurantCustomer } from "./restaurant";
 
 export type TContact = {
@@ -19,23 +20,23 @@ export type TContactList = {
     topicArn: string;
     createdAt: string;
   };
-  contacts?: { [key: string]: TRestaurantCustomer['basicInfo'] };
+  contacts?: { [key: string]: TRestaurantCustomer["basicInfo"] };
   stats: {
     totalContact: number;
   };
 };
-
 
 export type TEmailSubject = {
   mainText: string;
   previewText: string;
 };
 
-
 export type TCampaignEmailConfig = {
-    recipients: TContactList[];
-    subject: TEmailSubject;
-  }
+  recipients: TContactList[];
+  subject: TEmailSubject;
+  html: string;
+  value: Value
+};
 
 export type TCampaign = {
   id: string;
@@ -63,7 +64,6 @@ export type TCampaign = {
   };
 };
 
-
 export type TMailTemplate = {
   id: string;
   basicInfo: {
@@ -76,5 +76,5 @@ export type TMailTemplate = {
     value: string;
     subject: string;
     html: string;
-  }
-}
+  };
+};
