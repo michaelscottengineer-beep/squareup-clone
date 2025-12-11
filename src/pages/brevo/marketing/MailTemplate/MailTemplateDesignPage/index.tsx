@@ -1,7 +1,9 @@
 import MailTemplate1 from "@/components/MaketingCampaign/MailTemplates/MailTemplate1";
+import MailTemplate2 from "@/components/MaketingCampaign/MailTemplates/Template2/MailTemplate2";
 import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 import { db } from "@/firebase";
 import useTemplate1Editor from "@/stores/template-editor/useTemplate1Editor";
+import useTemplate2Editor from "@/stores/template-editor/useTemplate2Editor";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import type { TRootMailTemplate } from "@/types/brevo";
 import {
@@ -16,8 +18,8 @@ import { useNavigate, useParams } from "react-router";
 const MailTemplateDesignPage = () => {
   const { mailTemplateId, designId } = useParams();
   const navigate = useNavigate();
-  const setIsEditing = useTemplate1Editor((state) => state.toggleEdit);
-  const setAllData = useTemplate1Editor((state) => state.setAllData);
+  const setIsEditing = useTemplate2Editor((state) => state.toggleEdit);
+  const setAllData = useTemplate2Editor((state) => state.setAllData);
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const keys = useRestaurantFirebaseKey({ restaurantId, mailTemplateId });
 
@@ -44,7 +46,6 @@ const MailTemplateDesignPage = () => {
       setIsEditing(true);
       setAllData({
         footer: data.rawData.footer,
-        header: data.rawData.header,
         sections: data.rawData.sections,
       });
     }
@@ -54,7 +55,7 @@ const MailTemplateDesignPage = () => {
     <div className="grid grid-cols-2">
       <div></div>
       <div>
-        <MailTemplate1 />
+        <MailTemplate2 />
       </div>
     </div>
   );

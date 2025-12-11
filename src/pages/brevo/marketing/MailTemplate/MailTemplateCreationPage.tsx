@@ -25,7 +25,6 @@ const MailTemplateCreationPage = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const html = await serializeHtml(value, {});
 
       const fb = push(keys.allMailTemplatesRef(), {
         basicInfo: {
@@ -34,7 +33,7 @@ const MailTemplateCreationPage = () => {
           updatedAt: new Date().toISOString(),
         },
         config: {
-          html,
+          html:"",
           subject,
         },
       } as TMailTemplate);
@@ -44,7 +43,7 @@ const MailTemplateCreationPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, subject, content: html }),
+        body: JSON.stringify({ name, subject, content: "" }),
       });
       return await Promise.all([fb, sv]);
     },
@@ -73,13 +72,7 @@ const MailTemplateCreationPage = () => {
         <Label className="mb-2">Your Subject</Label>
         <Input value={subject} onChange={(e) => setSubject(e.target.value)} />
       </div>
-      <div>
-        <Label className="mb-2">Your Content</Label>
-        <PlateEditor
-          initValue={value}
-          onValueChangeCallback={(value, editor) => setValue(editor)}
-        />
-      </div>
+  
     </div>
   );
 };

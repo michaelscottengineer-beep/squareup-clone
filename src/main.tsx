@@ -49,6 +49,7 @@ import MailTemplateCreationPage from "./pages/brevo/marketing/MailTemplate/MailT
 import MailTemplate1 from "./components/MaketingCampaign/MailTemplates/MailTemplate1";
 import MailTemplateEdit from "./pages/brevo/marketing/MailTemplate/MailTemplateEdit";
 import MailTemplateDesignPage from "./pages/brevo/marketing/MailTemplate/MailTemplateDesignPage";
+import MailTemplate2 from "./components/MaketingCampaign/MailTemplates/Template2/MailTemplate2";
 
 const router = createBrowserRouter([
   {
@@ -144,6 +145,10 @@ const router = createBrowserRouter([
       {
         path: "/brevo/mail-templates/m1",
         element: <MailTemplate1 />,
+      },
+      {
+        path: "/brevo/mail-templates/m2",
+        element: <MailTemplate2 />,
       },
       {
         path: "/brevo/email-campaign/campaign-setup",

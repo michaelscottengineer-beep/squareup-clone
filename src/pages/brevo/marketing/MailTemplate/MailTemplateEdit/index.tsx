@@ -75,7 +75,7 @@ const DesignTabs = () => {
     mutationFn: async (data: TRootMailTemplate) => {
       return await set(
         ref(db, keys.detailedMailTemplate() + "/rootMailTemplate"),
-        data
+        { ...data, id: mailTemplateId }
       );
     },
     onSuccess: (data, variables) => {
@@ -88,7 +88,7 @@ const DesignTabs = () => {
   });
 
   return (
-    <div>
+    <div className="flex items-center gap-4">
       {data?.map((item) => {
         return (
           <div
