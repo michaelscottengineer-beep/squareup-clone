@@ -115,7 +115,7 @@ const EmailListView = () => {
             <div className="actions">
               <Button
                 onClick={() => {
-                  navigate("/brevo/sms-campaign/edit/" + item.id);
+                  navigate("/brevo/mail-templates/" + item.id);
                 }}
                 className=""
                 variant={"ghost-primary"}

@@ -3,6 +3,7 @@ import {
   SubjectSetup,
 } from "@/components/MaketingCampaign/EmailCampaign";
 import ContentSetup from "@/components/MaketingCampaign/EmailCampaign/ContentSetup";
+import TemplateSetup from "@/components/MaketingCampaign/EmailCampaign/TemplateSetup";
 import { Button } from "@/components/ui/button";
 import {
   InputGroupInput,
@@ -54,7 +55,8 @@ const EmailCampaignEditorPage = () => {
         <div className="overlay inset-0 absolute hidden group-has-data-[state='open']:bg-white/80 z-1 group-has-data-[state='open']:block w-full h-full"></div>
         <RecipientSetup />
         <SubjectSetup />
-        <ContentSetup />
+        {/* <ContentSetup /> */}
+        <TemplateSetup />
       </div>
     </div>
   );
@@ -95,7 +97,7 @@ const SendMailButton = () => {
         body: JSON.stringify({
           emails: contacts?.map((c) => c.email) ?? [],
           subject: emailConfiguration?.subject.mainText ?? "",
-          content: emailConfiguration?.html ?? "",
+          content: emailConfiguration?.template.rootMailTemplate?.html ?? "",
         }),
       });
     },

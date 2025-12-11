@@ -35,7 +35,8 @@ export type TCampaignEmailConfig = {
   recipients: TContactList[];
   subject: TEmailSubject;
   html: string;
-  value: Value
+  value: Value;
+  template: TMailTemplate
 };
 
 export type TCampaign = {
@@ -77,4 +78,12 @@ export type TMailTemplate = {
     subject: string;
     html: string;
   };
+  rootMailTemplate: TRootMailTemplate
+};
+
+export type TRootMailTemplate = {
+  id: string;
+  rawData: any;
+  html: string;
+  imgUrl: string;
 };
