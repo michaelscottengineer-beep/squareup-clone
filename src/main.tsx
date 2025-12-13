@@ -1,40 +1,43 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import RootPage from "./pages/Root";
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import { Toaster } from "./components/ui/sonner";
-import AuthProvider from "./contexts/auth";
-import HomePage from "./pages/home/HomePage";
+import RootPage from "./pages/Root.js";
+import LoginPage from "./pages/auth/LoginPage.js";
+import RegisterPage from "./pages/auth/RegisterPage.js";
+import { Toaster } from "./components/ui/sonner.js";
+import AuthProvider from "./contexts/auth.js";
+import HomePage from "./pages/home/HomePage.js";
 
-import ShopLayout from "./pages/shop/ShopLayout";
-import SuccessPay from "./pages/checkout/SuccessPage";
-import TestUploadImage from "./pages/experiments/TestUploadImage";
-import NotificationBellRingMp3 from "./components/NotificationBellRingMp3";
-import A from "./pages/experiments/test-use-state/A";
-import PrefetchRestaurantIds from "./PrefetchRestaurantIds";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant";
-import DropdownMenuTest from "./pages/experiments/DropdownMenuTest";
-import UserOrderHistory from "./pages/orders/UserOrderHistory";
-import BillingLayout from "./pages/billings/BillingLayout";
-import BillingTransaction from "./pages/billings/trasaction/BillingTransaction";
-import BillingListCards from "./pages/billings/cards/BillingListCards";
-import dashboardRoute from "./routes/dashboard";
-import StaffSetup from "./pages/staff-setup/StaffSetup";
-import PosLayout from "./pages/pos/PosLayout";
-import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout";
-import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayout";
-import ScreenInvoicePreviewPage from "./pages/screen-invoice-preview/ScreenInvoicePreviewPage";
-import webBuilderRouter from "./routes/webBuilderRoute";
-import NotFound from "./components/NotFound";
-import experimentRoute from "./routes/experimentRoute";
-import posRoute from "./routes/posRoute";
-import brevoRoute from "./routes/brevoRoute";
+import ShopLayout from "./pages/shop/ShopLayout.js";
+import SuccessPay from "./pages/checkout/SuccessPage.js";
+import TestUploadImage from "./pages/experiments/TestUploadImage.js";
+import NotificationBellRingMp3 from "./components/NotificationBellRingMp3.js";
+import A from "./pages/experiments/test-use-state/A.js";
+import PrefetchRestaurantIds from "./PrefetchRestaurantIds.js";
+import AdminLayout from "./pages/admin/AdminLayout.js";
+import AdminRestaurant from "./pages/admin/restaurants/AdminRestaurant.js";
+import DropdownMenuTest from "./pages/experiments/DropdownMenuTest.js";
+import UserOrderHistory from "./pages/orders/UserOrderHistory.js";
+import BillingLayout from "./pages/billings/BillingLayout.js";
+import BillingTransaction from "./pages/billings/trasaction/BillingTransaction.js";
+import BillingListCards from "./pages/billings/cards/BillingListCards.js";
+import dashboardRoute from "./routes/dashboard.js";
+import StaffSetup from "./pages/staff-setup/StaffSetup.js";
+import PosLayout from "./pages/pos/PosLayout.js";
+import OrderLineLayout from "./pages/pos/order-line/OrderLineLayout.js";
+import TableManagementLayout from "./pages/pos/manage-table/TableManagementLayout.js";
+import ScreenInvoicePreviewPage from "./pages/screen-invoice-preview/ScreenInvoicePreviewPage.js";
+import webBuilderRouter from "./routes/webBuilderRoute.js";
+import NotFound from "./components/NotFound.js";
+import experimentRoute from "./routes/experimentRoute.js";
+import posRoute from "./routes/posRoute.js";
+import brevoRoute from "./routes/brevoRoute.js";
+import MailTemplateBuilderEditor from "./pages/mailTemplateBuilder/MailTemplateBuilderEditor/index.js";
+import { AppRouterProvider } from "./contexts/appRouterContext.js";
+import MailTemplateBuilder1 from "./pages/mailTemplateBuilder/MailTemplateBuilder1.js";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +95,36 @@ const router = createBrowserRouter([
   },
 
   { ...brevoRoute },
+  {
+    path: "/mail-template-builder",
+
+    children: [
+      {
+        index: true,
+        element: (
+          <AppRouterProvider>
+            <Outlet />
+          </AppRouterProvider>
+        ),
+      },
+      {
+        path: "template1",
+        element: (
+          <AppRouterProvider>
+            <MailTemplateBuilder1 />
+          </AppRouterProvider>
+        ),
+      },
+      {
+        path: "editor/:mailTemplateId",
+        element: (
+          <AppRouterProvider>
+            <MailTemplateBuilderEditor />
+          </AppRouterProvider>
+        ),
+      },
+    ],
+  },
   {
     path: "*",
     element: <NotFound />,

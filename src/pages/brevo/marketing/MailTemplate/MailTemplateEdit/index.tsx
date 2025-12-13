@@ -12,14 +12,17 @@ import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRestaurantFirebaseKey } from "@/factory/restaurant/restaurant.firebasekey";
 import { db } from "@/firebase";
+import useAuth from "@/hooks/use-auth";
 import useCurrentRestaurantId from "@/stores/use-current-restaurant-id.store";
 import type { TMailTemplate, TRootMailTemplate } from "@/types/brevo";
+import type { TSystemMailTemplate } from "@/types/mailTemplate";
 import {
   convertFirebaseArrayData,
   convertSegmentToQueryKey,
+  initFirebaseUpdateVariable,
 } from "@/utils/helper";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { get, push, query, ref, set } from "firebase/database";
+import { get, push, query, ref, set, update } from "firebase/database";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
@@ -52,19 +55,20 @@ const MailTemplateEdit = () => {
 
 const DesignTabs = () => {
   const { mailTemplateId } = useParams();
+  const { user } = useAuth();
 
   const restaurantId = useCurrentRestaurantId((state) => state.id);
   const keys = useRestaurantFirebaseKey({ restaurantId, mailTemplateId });
   const navigate = useNavigate();
 
   const { data } = useQuery({
-    queryKey: convertSegmentToQueryKey("/allMailTemplates"),
+    queryKey: convertSegmentToQueryKey("systemMailTemplates"),
     queryFn: async () => {
       try {
-        const tlqr = query(ref(db, "/allMailTemplates"));
+        const tlqr = query(ref(db, "systemMailTemplates"));
         const docs = await get(tlqr);
 
-        return convertFirebaseArrayData<TRootMailTemplate>(docs.val() ?? {});
+        return convertFirebaseArrayData<TSystemMailTemplate>(docs.val() ?? {});
       } catch (err) {
         console.log(err);
       }
@@ -72,15 +76,26 @@ const DesignTabs = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: TRootMailTemplate) => {
-      return await set(
-        ref(db, keys.detailedMailTemplate() + "/rootMailTemplate"),
-        { ...data, id: mailTemplateId }
-      );
+    mutationFn: async (data: TSystemMailTemplate) => {
+      const updates = initFirebaseUpdateVariable();
+
+      // update template to user's mail template campaign
+      updates[keys.detailedMailTemplate() + "/mailTemplate"] = {
+        ...data,
+        id: mailTemplateId,
+      };
+      updates["/allEmailTemplates"] = {
+        ...data,
+        authorInfo: {
+          createdByUserId: user?.uid,
+        },
+        id: mailTemplateId,
+      };
+      return await update(ref(db), updates);
     },
     onSuccess: (data, variables) => {
       toast.success("Used successfully!");
-      navigate("/brevo/mail-templates/" + mailTemplateId + "/design");
+      navigate("/mail-template-builder/editor/" + mailTemplateId + "");
     },
     onError: (err) => {
       toast.error("Used error: " + err.message);
@@ -96,7 +111,7 @@ const DesignTabs = () => {
             className="p-2 max-w-[300px] border border-border rounded-md"
           >
             <img
-              src={item.imgUrl}
+              src={item.basicInfo.previewImageUrl}
               className=""
               style={{ aspectRatio: 3 / 4 }}
             />

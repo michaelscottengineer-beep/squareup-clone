@@ -82,6 +82,8 @@ const SendMailButton = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
+      const htmlContent = emailConfiguration?.template.mailTemplate.data.html;
+
       const contacts = emailConfiguration?.recipients
         ?.map((r) =>
           Object.entries(r.contacts ?? {}).map(([key, val]) => {
@@ -97,7 +99,7 @@ const SendMailButton = () => {
         body: JSON.stringify({
           emails: contacts?.map((c) => c.email) ?? [],
           subject: emailConfiguration?.subject.mainText ?? "",
-          content: emailConfiguration?.template.rootMailTemplate?.html ?? "",
+          content: htmlContent ?? "",
         }),
       });
     },

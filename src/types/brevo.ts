@@ -1,5 +1,6 @@
 import type { Value } from "platejs";
 import type { TRestaurantCustomer } from "./restaurant";
+import type { TSystemMailTemplate } from "./mailTemplate";
 
 export type TContact = {
   basicInfo: {
@@ -78,6 +79,7 @@ export type TMailTemplate = {
     subject: string;
     html: string;
   };
+  mailTemplate: TSystemMailTemplate
   rootMailTemplate: TRootMailTemplate
 };
 
